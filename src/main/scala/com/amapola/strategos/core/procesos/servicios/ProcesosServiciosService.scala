@@ -1,7 +1,9 @@
 package com.amapola.strategos.core.procesos.servicios
 
-trait ProcesosServiciosService {
+import com.amapola.strategos.core.procesos.http.json.ProcesoProcedimientoRequest
 
-  def guardarProcesos
+sealed trait ProcesosServiciosService {
+
+  def crearProcesos(request: ProcesoProcedimientoRequest)
 
 }

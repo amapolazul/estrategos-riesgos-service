@@ -1,4 +1,4 @@
-package me.archdev.restapi.utils.db
+package com.amapola.strategos.utils.db
 
 import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 

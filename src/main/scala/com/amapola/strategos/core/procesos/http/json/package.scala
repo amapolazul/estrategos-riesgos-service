@@ -26,7 +26,7 @@ package object json {
   )
 
   case class DocumentoCaracterizacion(
-      documentoAnexo: String,
+      nombreDocumento: String,
       codigoDocumento: String,
       descripcion: String,
       anexo: String
