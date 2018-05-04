@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXIST Responsables(
 
 CREATE TABLE IF NOT EXISTS Procesos (
     "Proceso_Id" BIGSERIAL PRIMARY KEY,
-    "Proceso_Padre_Id" VARCHAR,
+    "Proceso_Padre_Id" INT,
     "Proceso_Nombre" VARCHAR NOT NULL,
     "Proceso_Codigo" VARCHAR NOT NULL,
     "Proceso_Tipo" VARCHAR NOT NULL,

@@ -4,19 +4,39 @@ import akka.http.scaladsl.model.Multipart
 import akka.http.scaladsl.server.Directives._
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import akka.http.scaladsl.server.{Directive1, MissingFormFieldRejection}
-import akka.http.scaladsl.server.directives.BasicDirectives.{extractRequestContext, provide}
+import akka.http.scaladsl.server.directives.BasicDirectives.{
+  extractRequestContext,
+  provide
+}
 import akka.http.scaladsl.server.directives.FileInfo
 import akka.http.scaladsl.server.directives.FutureDirectives.onSuccess
 import akka.http.scaladsl.server.directives.MarshallingDirectives.{as, entity}
 import akka.http.scaladsl.server.directives.RouteDirectives.reject
 import akka.stream.scaladsl.{Sink, Source}
 import akka.util.ByteString
+import com.amapola.strategos.core.procesos.http.json.ProcesoProcedimientoRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ProcesosRutas(implicit executionContext: ExecutionContext) {
+import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
+import io.circe.generic.auto._
+import io.circe.syntax._
+
+class ProcesosRutas(implicit executionContext: ExecutionContext)
+    extends FailFastCirceSupport {
 
   def getPaths = crearProcesosSubProcesos
+
+  def crearProcesos = {
+    pathPrefix("procesos") {
+      post {
+        entity(as[ProcesoProcedimientoRequest]) { entity =>
+          println()
+          complete("mas bien lokita")
+        }
+      }
+    }
+  }
 
   def crearProcesosSubProcesos = {
     cors() {
@@ -29,7 +49,9 @@ class ProcesosRutas(implicit executionContext: ExecutionContext) {
 //        }
         fileUploadNew() {
           case (metadata, byteSource) =>
-            onSuccess(Future.successful(true)) { v => complete(s"Mas bien lokita") }
+            onSuccess(Future.successful(true)) { v =>
+              complete(s"Mas bien lokita")
+            }
         }
       }
     }
@@ -44,10 +66,11 @@ class ProcesosRutas(implicit executionContext: ExecutionContext) {
     * @group fileupload
     */
   def fileUploadNew(): Directive1[(FileInfo, Source[ByteString, Any])] =
-    entity(as[Multipart.FormData]).flatMap { formData =>
-      extractRequestContext.flatMap { ctx =>
-        implicit val mat = ctx.materializer
-        implicit val ec = ctx.executionContext
+    entity(as[Multipart.FormData])
+      .flatMap { formData =>
+        extractRequestContext.flatMap { ctx =>
+          implicit val mat = ctx.materializer
+          implicit val ec = ctx.executionContext
 
 //        val onePartSource: Source[(FileInfo, Source[ByteString, Any]), Any] = formData.parts
 //          .map(part => {
@@ -55,24 +78,28 @@ class ProcesosRutas(implicit executionContext: ExecutionContext) {
 //            (FileInfo(part.name, part.filename.get, part.entity.contentType), part.entity.dataBytes)
 //          }).take(1)
 
-        val parameters: Source[(FileInfo, Null), Any] = formData.parts
-          .filter(!_.filename.isDefined)
-          .map(z => {
-            println(z.contentDispositionHeader.value)
-            z.entity.dataBytes.map(_.utf8String).runWith(Sink.foreach(println(_)))
-            println(z.dispositionParams.get("name").get)
-            (FileInfo(null,null,null), null)
-          })
+          val parameters: Source[(FileInfo, Null), Any] = formData.parts
+            .filter(!_.filename.isDefined)
+            .map(z => {
+              println(z.contentDispositionHeader.value)
+              z.entity.dataBytes
+                .map(_.utf8String)
+                .runWith(Sink.foreach(println(_)))
+              println(z.dispositionParams.get("name").get)
+              (FileInfo(null, null, null), null)
+            })
 
-        val a = parameters.runWith(Sink.headOption[(FileInfo, Source[ByteString, Any])])
+          val a = parameters.runWith(
+            Sink.headOption[(FileInfo, Source[ByteString, Any])])
 
-        //val onePartF = onePartSource.runWith(Sink.headOption[(FileInfo, Source[ByteString, Any])])
+          //val onePartF = onePartSource.runWith(Sink.headOption[(FileInfo, Source[ByteString, Any])])
 
-        onSuccess(a)
+          onSuccess(a)
+        }
+
       }
-
-    }.flatMap {
-      case Some(tuple) ⇒ provide(tuple)
-      case None        ⇒ reject(MissingFormFieldRejection(""))
-    }
+      .flatMap {
+        case Some(tuple) ⇒ provide(tuple)
+        case None ⇒ reject(MissingFormFieldRejection(""))
+      }
 }

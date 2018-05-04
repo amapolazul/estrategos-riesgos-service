@@ -35,6 +35,24 @@ sealed trait ProcesosDao {
     * @return
     */
   def guardarProceso(procesosEntidad: ProcesosEntidad): Future[Long]
+
+  /**
+    * Actualiza el proceso dado un procesoId y una entidad que contiene los nuevos datos
+    * @param idProceso
+    * @param entidad
+    * @return
+    */
+  def actualizarProceso(idProceso: Long,
+                        entidad: ProcesosEntidad): Future[Boolean]
+
+  /**
+    * Borra el proceso dado un procesoId. Esta funcion debería borrar todos los datos
+    * relacionados al proceso como productos y caracterizaciones
+    *
+    * @param idProceso
+    * @return
+    */
+  def borrarProceso(idProceso: Long) : Future[Boolean] = ???
 }
 
 class ProcesosDaoImpl(val databaseConnector: DatabaseConnector)(
@@ -81,4 +99,22 @@ class ProcesosDaoImpl(val databaseConnector: DatabaseConnector)(
     */
   override def guardarProceso(procesosEntidad: ProcesosEntidad): Future[Long] =
     db.run(procesos returning procesos.map(_.procesoId) += procesosEntidad)
+
+  /**
+    * Actualiza el proceso dado un procesoId y una entidad que contiene los nuevos datos
+    *
+    * @param idProceso
+    * @param entidad
+    * @return
+    */
+  override def actualizarProceso(idProceso: Long,
+                                 entidad: ProcesosEntidad): Future[Boolean] = {
+    getProcesoPorId(idProceso) flatMap {
+      case Some(procesoAnterior) =>
+        val actualizado = procesoAnterior.merge(entidad)
+        db.run(procesos.filter(_.procesoId === idProceso).update(actualizado))
+          .map(_ == 1)
+      case None => Future.successful(false)
+    }
+  }
 }

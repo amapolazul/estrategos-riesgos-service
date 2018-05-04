@@ -45,14 +45,14 @@ trait CaracterizacionDao {
     */
   def actualizarCaracterizacion(
       caracterizacionId: Long,
-      entidad: ProcesoCaracterizacionesEntidad): Future[Long]
+      entidad: ProcesoCaracterizacionesEntidad): Future[Boolean]
 
   /**
     * Borra un registro de caracterizacion por su identificador
     * @param caracterizacionId
     * @return
     */
-  def borrarCaracterizacionPorId(caracterizacionId: Long): Future[Long]
+  def borrarCaracterizacionPorId(caracterizacionId: Long): Future[Boolean]
 }
 
 class CaracterizacionDaoImpl(val databaseConnector: DatabaseConnector)(
@@ -119,9 +119,16 @@ class CaracterizacionDaoImpl(val databaseConnector: DatabaseConnector)(
     */
   override def actualizarCaracterizacion(
       caracterizacionId: Long,
-      entidad: ProcesoCaracterizacionesEntidad): Future[Long] = {
+      entidad: ProcesoCaracterizacionesEntidad): Future[Boolean] = {
     darCaracterizacionPorId(caracterizacionId).flatMap {
-      case Some(caracterizacionViejo) => entidad.merge(caracterizacionViejo)
+      case Some(caracterizacionViejo) =>
+        val actualizado = entidad.merge(caracterizacionViejo)
+        db.run(
+            caracterizaciones
+              .filter(_.caracterizacionId === caracterizacionId)
+              .update(actualizado))
+          .map(_ == 1)
+      case None => Future.successful(false)
     }
   }
 
@@ -132,5 +139,10 @@ class CaracterizacionDaoImpl(val databaseConnector: DatabaseConnector)(
     * @return
     */
   override def borrarCaracterizacionPorId(
-      caracterizacionId: Long): Future[Long] = ???
+      caracterizacionId: Long): Future[Boolean] =
+    db.run(
+        caracterizaciones
+          .filter(_.caracterizacionId === caracterizacionId)
+          .delete)
+      .map(_ == 1)
 }
