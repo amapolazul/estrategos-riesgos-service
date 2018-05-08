@@ -4,11 +4,16 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import com.amapola.strategos.core.procesos.http.rutas.ProcesosRutas
-import me.archdev.restapi.core.auth.{AuthService, JdbcAuthDataStorage}
-import me.archdev.restapi.core.profiles.{JdbcUserProfileStorage, UserProfileService}
-import me.archdev.restapi.http.HttpRoute
+import com.amapola.strategos.core.procesos.persistencia.daos.{
+  CaracterizacionDaoImpl,
+  DocumentosCaracterizacionDaoImpl,
+  ProcesosDaoImpl,
+  ProductosServiciosDaoImpl
+}
+import com.amapola.strategos.core.procesos.servicios.ProcesosServiciosImpl
+import com.amapola.strategos.utils.db.DatabaseConnector
 import me.archdev.restapi.utils.Config
-import me.archdev.restapi.utils.db.{DatabaseConnector, DatabaseMigrationManager}
+import me.archdev.restapi.utils.db.DatabaseMigrationManager
 
 import scala.concurrent.ExecutionContext
 
@@ -33,15 +38,23 @@ object Boot extends App {
       config.database.password
     )
 
-    val userProfileStorage = new JdbcUserProfileStorage(databaseConnector)
-    val authDataStorage = new JdbcAuthDataStorage(databaseConnector)
+    val caracterizacionDao = new CaracterizacionDaoImpl(databaseConnector)
+    val procesosDao = new ProcesosDaoImpl(databaseConnector)
+    val productosServiciosDao = new ProductosServiciosDaoImpl(databaseConnector)
+    val documentosCaracterizacionDao = new DocumentosCaracterizacionDaoImpl(
+      databaseConnector)
 
-    val usersService = new UserProfileService(userProfileStorage)
-    val authService = new AuthService(authDataStorage, config.secretKey)
-    val httpRoute = new HttpRoute(usersService, authService, config.secretKey)
-    val procesosRutes = new ProcesosRutas()
+    val procesosService = new ProcesosServiciosImpl(
+      caracterizacionDao,
+      procesosDao,
+      productosServiciosDao,
+      documentosCaracterizacionDao)
 
-    Http().bindAndHandle(procesosRutes.getPaths, config.http.host, config.http.port)
+    val procesosRutes = new ProcesosRutas(procesosService)
+
+    Http().bindAndHandle(procesosRutes.getPaths,
+                         config.http.host,
+                         config.http.port)
   }
 
   startApplication()

@@ -1,38 +1,43 @@
 package com.amapola.strategos.core.procesos.http.rutas
 
-import akka.http.scaladsl.model.Multipart
+import akka.http.scaladsl.model.{Multipart, StatusCodes}
 import akka.http.scaladsl.server.Directives._
-import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
-import akka.http.scaladsl.server.{Directive1, MissingFormFieldRejection}
-import akka.http.scaladsl.server.directives.BasicDirectives.{
-  extractRequestContext,
-  provide
-}
+import akka.http.scaladsl.server.directives.BasicDirectives.{extractRequestContext, provide}
 import akka.http.scaladsl.server.directives.FileInfo
 import akka.http.scaladsl.server.directives.FutureDirectives.onSuccess
 import akka.http.scaladsl.server.directives.MarshallingDirectives.{as, entity}
 import akka.http.scaladsl.server.directives.RouteDirectives.reject
+import akka.http.scaladsl.server.{Directive1, MissingFormFieldRejection}
 import akka.stream.scaladsl.{Sink, Source}
 import akka.util.ByteString
+import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import com.amapola.strategos.core.procesos.http.json.ProcesoProcedimientoRequest
-
-import scala.concurrent.{ExecutionContext, Future}
-
+import com.amapola.strategos.core.procesos.servicios.ProcesosServiciosService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
-import io.circe.syntax._
 
-class ProcesosRutas(implicit executionContext: ExecutionContext)
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
+
+class ProcesosRutas(procesosService: ProcesosServiciosService)(implicit executionContext: ExecutionContext)
     extends FailFastCirceSupport {
 
-  def getPaths = crearProcesosSubProcesos
+  def getPaths = crearProcesos
 
+  /**
+    * Define la ruta del servicio rest encargado de recibir el objeto JSON con la información
+    * de un proceso
+    *
+    * @return
+    */
   def crearProcesos = {
     pathPrefix("procesos") {
       post {
         entity(as[ProcesoProcedimientoRequest]) { entity =>
-          println()
-          complete("mas bien lokita")
+          onComplete(procesosService.crearProcesos(entity)) {
+            case Success(_) => complete(StatusCodes.Created, "Proceso creado correctamente")
+            case Failure(ex) => complete(StatusCodes.InternalServerError, s"Ocurrio un error: ${ex.getMessage}")
+          }
         }
       }
     }
