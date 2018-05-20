@@ -2,7 +2,7 @@ package me.archdev.restapi.utils
 
 import pureconfig.loadConfig
 
-case class Config(secretKey: String, http: HttpConfig, database: DatabaseConfig)
+case class Config(secretKey: String, http: HttpConfig, database: DatabaseConfig, archivos: Archivos)
 
 object Config {
   def load() =
@@ -13,5 +13,6 @@ object Config {
     }
 }
 
+private[utils] case class Archivos(directorio: String)
 private[utils] case class HttpConfig(host: String, port: Int)
 private[utils] case class DatabaseConfig(jdbcUrl: String, username: String, password: String)

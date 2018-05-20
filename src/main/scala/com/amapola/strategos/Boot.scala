@@ -50,7 +50,7 @@ object Boot extends App {
       productosServiciosDao,
       documentosCaracterizacionDao)
 
-    val procesosRutes = new ProcesosRutas(procesosService)
+    val procesosRutes = new ProcesosRutas(procesosService, config.archivos.directorio)
 
     Http().bindAndHandle(procesosRutes.getPaths,
                          config.http.host,
