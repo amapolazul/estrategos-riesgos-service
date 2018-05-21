@@ -19,7 +19,7 @@ class ProcesosRutas(procesosService: ProcesosServiciosService, directorioDestino
     extends FailFastCirceSupport with FileUploadDirectives {
 
   def getPaths = cors() {
-    crearProcesos
+    crearProcesos ~ crearProcesosSubProcesos
   }
 
   /**
@@ -42,19 +42,20 @@ class ProcesosRutas(procesosService: ProcesosServiciosService, directorioDestino
   }
 
   def crearProcesosSubProcesos: Route = {
-    cors() {
       pathPrefix("upload") {
-        FileUploadDirectives.customStoreUploadedFiles(tempDestination) { files =>
-          val finalStatus = files.foldLeft(StatusCodes.OK) {
-            case (status, (metadata, file)) =>
-              AdministradorArchivosServiceImpl.crearArchivo(file, directorioDestino)
-              file.delete()
-              status
-          }
+        post {
+          FileUploadDirectives.customStoreUploadedFiles(tempDestination) { files =>
+            val finalStatus = files.foldLeft(StatusCodes.OK) {
+              case (status, (metadata, file)) =>
+                AdministradorArchivosServiceImpl.crearArchivo(file, directorioDestino)
+                file.delete()
+                status
+            }
 
-          complete(finalStatus)
+            complete(finalStatus)
+          }
         }
       }
-    }
+
   }
 }

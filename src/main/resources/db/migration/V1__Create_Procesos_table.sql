@@ -1,37 +1,37 @@
-CREATE TABLE IF NOT EXIST Responsables(
+CREATE TABLE IF NOT EXISTS responsables(
     "id" BIGSERIAL PRIMARY KEY,
     "email" VARCHAR NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Procesos (
-    "Proceso_Id" BIGSERIAL PRIMARY KEY,
-    "Proceso_Padre_Id" INT,
-    "Proceso_Nombre" VARCHAR NOT NULL,
-    "Proceso_Codigo" VARCHAR NOT NULL,
-    "Proceso_Tipo" VARCHAR NOT NULL,
-    "Proceso_Responsable_Id" BIGSERIAL NOT NULL REFERENCES Responsables(id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "Proceso_Documento" VARCHAR NOT NULL
+CREATE TABLE IF NOT EXISTS procesos (
+    "proceso_id" BIGSERIAL PRIMARY KEY,
+    "proceso_padre_id" INT,
+    "proceso_nombre" VARCHAR NOT NULL,
+    "proceso_codigo" VARCHAR NOT NULL,
+    "proceso_tipo" VARCHAR NOT NULL,
+    "proceso_responsable_id" BIGSERIAL NOT NULL REFERENCES responsables(id) ON UPDATE RESTRICT ON DELETE CASCADE,
+    "proceso_cocumento" VARCHAR NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Productos_Servicios (
-    "Producto_Servicio_Id" BIGSERIAL PRIMARY KEY,
-    "Proceso_Id" BIGSERIAL NOT NULL REFERENCES Procesos(Proceso_Id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "Producto_Servicio_Nombre" VARCHAR NOT NULL,
-    "Producto_Caracteristicas" VARCHAR NOT NULL
+CREATE TABLE IF NOT EXISTS productos_servicios (
+    "producto_servicio_id" BIGSERIAL PRIMARY KEY,
+    "proceso_id" BIGSERIAL NOT NULL REFERENCES procesos(proceso_id) ON UPDATE RESTRICT ON DELETE CASCADE,
+    "producto_servicio_nombre" VARCHAR NOT NULL,
+    "producto_caracteristicas" VARCHAR NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Proceso_Caracterizaciones(
-    "Caraceterizacion_id" BIGSERIAL PRIMARY KEY,
-    "Proceso_Id" BIGSERIAL NOT NULL REFERENCES Procesos(Proceso_Id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "Procedimiento_Nombre" VARCHAR NOT NULL,
-    "Procedimiento_Codigo" VARCHAR NOT NULL
+CREATE TABLE IF NOT EXISTS proceso_caracterizaciones(
+    "caraceterizacion_id" BIGSERIAL PRIMARY KEY,
+    "proceso_id" BIGSERIAL NOT NULL REFERENCES procesos(proceso_id) ON UPDATE RESTRICT ON DELETE CASCADE,
+    "Procedimiento_nombre" VARCHAR NOT NULL,
+    "Procedimiento_codigo" VARCHAR NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Proceso_Documentos(
-    "Procedimiento_Documento_Id" BIGSERIAL PRIMARY KEY,
-    "Caraceterizacion_id" BIGSERIAL NOT NULL REFERENCES Proceso_Caracterizaciones(Caraceterizacion_id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "Procedimiento_Documento_Nombre" VARCHAR NOT NULL,
-    "Procedimiento_Documento_Descripcion" VARCHAR NOT NULL,
-    "Procedimiento_Documento_Codigo" VARCHAR NOT NULL,
-    "Procedimiento_Documento_Arch" VARCHAR NOT NULL
+CREATE TABLE IF NOT EXISTS proceso_documentos(
+    "procedimiento_documento_id" BIGSERIAL PRIMARY KEY,
+    "caraceterizacion_id" BIGSERIAL NOT NULL REFERENCES proceso_caracterizaciones(caraceterizacion_id) ON UPDATE RESTRICT ON DELETE CASCADE,
+    "procedimiento_documento_nombre" VARCHAR NOT NULL,
+    "procedimiento_documento_descripcion" VARCHAR NOT NULL,
+    "procedimiento_documento_codigo" VARCHAR NOT NULL,
+    "procedimiento_documento_arch" VARCHAR NOT NULL
 );

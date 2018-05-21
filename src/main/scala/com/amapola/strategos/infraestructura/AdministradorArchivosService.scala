@@ -28,16 +28,9 @@ object AdministradorArchivosServiceImpl extends AdministradorArchivosService {
 
     val archivoFinalD = new File(directorio, archivo.getName)
 
-    val archivoActual = Files.newInputStream(archivo.toPath)
     val archivoFinal = Files.newOutputStream(archivoFinalD.toPath)
 
-    val buffer = new Array[Byte](1024)
-    var bytesRead = 0
+    Files.copy(archivo.toPath, archivoFinal)
 
-    while ({
-      (bytesRead = archivoActual.read(buffer)) != -1
-    }) archivoFinal.write(buffer, 0, bytesRead)
-    archivoActual.close
-    archivoFinal.flush
   }
 }
