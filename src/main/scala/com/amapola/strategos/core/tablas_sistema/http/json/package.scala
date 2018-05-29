@@ -1,6 +1,11 @@
 package com.amapola.strategos.core.tablas_sistema.http
 
-import com.amapola.strategos.core.tablas_sistema.persistencia.entidades.{CausasRiesgosEntidad, ImpactoRiesgosEntidad, ProbabilidadRiesgosEntidad, TipoRiesgosEntidad}
+import com.amapola.strategos.core.tablas_sistema.persistencia.entidades.{
+  CausasRiesgosEntidad,
+  ImpactoRiesgosEntidad,
+  ProbabilidadRiesgosEntidad,
+  TipoRiesgosEntidad
+}
 
 package object json {
 
@@ -76,7 +81,8 @@ package object json {
   }
 
   object ProbabilidadRiesgosJson {
-    def toEntity(entidad: ProbabilidadRiesgosJson): ProbabilidadRiesgosEntidad = {
+    def toEntity(
+        entidad: ProbabilidadRiesgosJson): ProbabilidadRiesgosEntidad = {
       ProbabilidadRiesgosEntidad(
         id = entidad.id,
         probabilidad = entidad.probabilidad,
