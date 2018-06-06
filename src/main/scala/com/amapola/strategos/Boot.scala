@@ -90,7 +90,7 @@ object Boot extends App {
 
     val tiposRiesgosRoute = new TiposRiesgosRoute(tipoRiesgosService)
 
-    val routes = causasRiesgosRoute.getPaths ~ impactoRiesgosRoute.getPaths ~ probabilidadRiesgoRoute.getPaths ~ tiposRiesgosRoute.getPaths
+    val routes = causasRiesgosRoute.getPaths ~ impactoRiesgosRoute.getPaths ~ probabilidadRiesgoRoute.getPaths ~ tiposRiesgosRoute.getPaths ~ procesosRutes.getPaths
 
     Http().bindAndHandle(routes, config.http.host, config.http.port)
   }

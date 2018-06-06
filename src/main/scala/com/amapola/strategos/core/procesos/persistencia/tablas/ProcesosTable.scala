@@ -11,14 +11,14 @@ private[procesos] trait ProcesosTable {
   protected val databaseConnector: DatabaseConnector
   import databaseConnector.profile.api._
 
-  class Procesos(tag: Tag) extends Table[ProcesosEntidad](tag, "Procesos") {
-    def procesoId = column[Long]("Proceso_Id", O.PrimaryKey, O.AutoInc)
-    def procesoPadreId = column[Long]("Proceso_Padre_Id")
-    def procesoNombre = column[String]("Proceso_Nombre")
-    def procesoCodigo = column[String]("Proceso_Codigo")
-    def procesoTipo = column[Long]("Proceso_Tipo")
-    def procesoResponsable = column[Long]("Proceso_Responsable_Id")
-    def procesoDocumento = column[String]("Proceso_Documento")
+  class Procesos(tag: Tag) extends Table[ProcesosEntidad](tag, "procesos") {
+    def procesoId = column[Long]("proceso_id", O.PrimaryKey, O.AutoInc)
+    def procesoPadreId = column[Long]("proceso_padre_id")
+    def procesoNombre = column[String]("proceso_nombre")
+    def procesoCodigo = column[String]("proceso_codigo")
+    def procesoTipo = column[Long]("proceso_tipo")
+    def procesoResponsable = column[Long]("proceso_responsable_id")
+    def procesoDocumento = column[String]("proceso_documento")
 
     def * =
       (procesoId.?,

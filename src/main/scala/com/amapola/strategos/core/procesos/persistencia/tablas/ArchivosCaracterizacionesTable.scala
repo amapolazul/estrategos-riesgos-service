@@ -13,13 +13,13 @@ private[procesos] trait ArchivosCaracterizacionesTable extends Caracterizaciones
   protected val databaseConnector: DatabaseConnector
   import databaseConnector.profile.api._
 
-  class ProcesoDocumentos(tag: Tag) extends Table[ProcesoDocumentosEntidad](tag, "Proceso_Documentos") {
-    def procedimientoDocumentoId = column[Long]("Procedimiento_Documento_Id", O.PrimaryKey, O.AutoInc)
-    def caracterizacionId = column[Long]("Caraceterizacion_id")
-    def procDocumentoNombre = column[String]("Procedimiento_Documento_Nombre")
-    def procDocumentoDesc = column[String]("Procedimiento_Documento_Descripcion")
-    def procDocumentoCodigo = column[String]("Procedimiento_Documento_Codigo")
-    def procDocumentoArchivo = column[String]("Procedimiento_Documento_Arch")
+  class ProcesoDocumentos(tag: Tag) extends Table[ProcesoDocumentosEntidad](tag, "proceso_documentos") {
+    def procedimientoDocumentoId = column[Long]("procedimiento_documento_id", O.PrimaryKey, O.AutoInc)
+    def caracterizacionId = column[Long]("caraceterizacion_id")
+    def procDocumentoNombre = column[String]("procedimiento_documento_nombre")
+    def procDocumentoDesc = column[String]("procedimiento_documento_descripcion")
+    def procDocumentoCodigo = column[String]("procedimiento_documento_codigo")
+    def procDocumentoArchivo = column[String]("procedimiento_documento_arch")
 
     def procesoProductoFk: ForeignKeyQuery[Caracterizaciones, ProcesoCaracterizacionesEntidad] =
       foreignKey("DOCUMENTO_CARACTERIZACION_FK", caracterizacionId, caracterizaciones)(

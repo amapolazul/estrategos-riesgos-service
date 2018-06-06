@@ -13,12 +13,12 @@ private[procesos] trait ProductosServiciosTable extends ProcesosTable {
   protected val databaseConnector: DatabaseConnector
   import databaseConnector.profile.api._
 
-  class ProductosServicios(tag: Tag) extends Table[ProductosServiciosEntidad](tag, "Procesos") {
+  class ProductosServicios(tag: Tag) extends Table[ProductosServiciosEntidad](tag, "productos_servicios") {
 
-    def productoServicioId = column[Long]("Producto_Servicio_Id", O.PrimaryKey, O.AutoInc)
-    def procesoId = column[Long]("Proceso_Id")
-    def productoServicioNombre = column[String]("Producto_Servicio_Nombre")
-    def productoCaracteristicas = column[String]("Producto_Caracteristicas")
+    def productoServicioId = column[Long]("producto_servicio_id", O.PrimaryKey, O.AutoInc)
+    def procesoId = column[Long]("proceso_id")
+    def productoServicioNombre = column[String]("producto_servicio_nombre")
+    def productoCaracteristicas = column[String]("producto_caracteristicas")
 
     def procesoProductoFk: ForeignKeyQuery[Procesos, ProcesosEntidad] =
       foreignKey("PROCESO_FK", procesoId, procesos)(

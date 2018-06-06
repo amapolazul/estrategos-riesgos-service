@@ -3,6 +3,8 @@ CREATE TABLE IF NOT EXISTS responsables(
     "email" VARCHAR NOT NULL
 );
 
+INSERT INTO responsables (id, email) values (1, 'test@test.com.co');
+
 CREATE TABLE IF NOT EXISTS procesos (
     "proceso_id" BIGSERIAL PRIMARY KEY,
     "proceso_padre_id" INT,
@@ -10,7 +12,7 @@ CREATE TABLE IF NOT EXISTS procesos (
     "proceso_codigo" VARCHAR NOT NULL,
     "proceso_tipo" VARCHAR NOT NULL,
     "proceso_responsable_id" BIGSERIAL NOT NULL REFERENCES responsables(id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "proceso_cocumento" VARCHAR NOT NULL
+    "proceso_documento" VARCHAR NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS productos_servicios (
@@ -23,8 +25,8 @@ CREATE TABLE IF NOT EXISTS productos_servicios (
 CREATE TABLE IF NOT EXISTS proceso_caracterizaciones(
     "caraceterizacion_id" BIGSERIAL PRIMARY KEY,
     "proceso_id" BIGSERIAL NOT NULL REFERENCES procesos(proceso_id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "Procedimiento_nombre" VARCHAR NOT NULL,
-    "Procedimiento_codigo" VARCHAR NOT NULL
+    "procedimiento_nombre" VARCHAR NOT NULL,
+    "procedimiento_codigo" VARCHAR NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS proceso_documentos(

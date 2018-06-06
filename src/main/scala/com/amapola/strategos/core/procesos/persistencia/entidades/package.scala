@@ -11,12 +11,9 @@ package object entidades {
       proceso_Responsable_Id: Long,
       proceso_Documento: String
   ) {
-    require(proceso_Nombre.isEmpty, "El campo proceso_Nombre es requerido")
-    require(proceso_Codigo.isEmpty, "El campo proceso_Codigo es requerido")
-    require(proceso_Tipo < 0, "El campo proceso_Tipo es requerido")
-    require(proceso_Responsable_Id == null,
-            "El campo proceso_Responsable_Id es requerido")
-    require(proceso_Documento.isEmpty,
+    require(!proceso_Nombre.isEmpty, "El campo proceso_Nombre es requerido")
+    require(!proceso_Codigo.isEmpty, "El campo proceso_Codigo es requerido")
+    require(!proceso_Documento.isEmpty,
             "El campo proceso_Documento es requerido")
 
     def merge(porActualizar: ProcesosEntidad) = {
@@ -36,11 +33,9 @@ package object entidades {
       producto_Servicio_nombre: String,
       producto_Caracteristicas: String
   ) {
-    require(proceso_Id == null || proceso_Id <= 0,
-            "El campo proceso_Id es requerido")
-    require(producto_Servicio_nombre.isEmpty,
+    require(!producto_Servicio_nombre.isEmpty,
             "El campo producto_Servicio_Nombre es requerido")
-    require(producto_Caracteristicas.isEmpty,
+    require(!producto_Caracteristicas.isEmpty,
             "El campo producto_Caracteristicas es requerido")
 
     def merge(porActualizar: ProductosServiciosEntidad) = {
@@ -58,11 +53,9 @@ package object entidades {
       procedimiento_Codigo: String
   ) {
 
-    require(proceso_Id == null || proceso_Id <= 0,
-            "El campo proceso_Id es requerido")
-    require(procedimiento_Nombre.isEmpty,
+    require(!procedimiento_Nombre.isEmpty,
             "El campo procedimiento_Nombre es requerido")
-    require(procedimiento_Codigo.isEmpty,
+    require(!procedimiento_Codigo.isEmpty,
             "El campo procedimiento_Codigo es requerido")
 
     def merge(porActualizar: ProcesoCaracterizacionesEntidad)
@@ -83,15 +76,13 @@ package object entidades {
       procedimiento_Documento_Codigo: String,
       procedimiento_Documento_Arch: String
   ) {
-    require(caraceterizacion_id == null || caraceterizacion_id <= 0,
-            "El campo caraceterizacion_id es requerido")
-    require(procedimiento_Documento_Nombre.isEmpty,
+    require(!procedimiento_Documento_Nombre.isEmpty,
             "El campo procedimiento_Documento_Nombre es requerido")
-    require(procedimiento_Documento_Descripcion.isEmpty,
+    require(!procedimiento_Documento_Descripcion.isEmpty,
             "El campo procedimiento_Documento_Descripcion es requerido")
-    require(procedimiento_Documento_Codigo.isEmpty,
+    require(!procedimiento_Documento_Codigo.isEmpty,
             "El campo procedimiento_Documento_Codigo es requerido")
-    require(procedimiento_Documento_Arch.isEmpty,
+    require(!procedimiento_Documento_Arch.isEmpty,
             "El campo procedimiento_Documento_Arch es requerido")
 
     def merge(porActualizar: ProcesoDocumentosEntidad) = {

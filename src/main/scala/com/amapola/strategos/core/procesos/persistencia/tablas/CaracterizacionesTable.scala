@@ -13,11 +13,11 @@ private[procesos] trait CaracterizacionesTable extends ProcesosTable{
   protected val databaseConnector: DatabaseConnector
   import databaseConnector.profile.api._
 
-  class Caracterizaciones(tag: Tag) extends Table[ProcesoCaracterizacionesEntidad](tag, "Proceso_Caracterizaciones") {
-    def caracterizacionId = column[Long]("Caraceterizacion_id", O.PrimaryKey, O.AutoInc)
-    def procesoId = column[Long]("Proceso_Id")
-    def procedimientoNombre = column[String]("Procedimiento_Nombre")
-    def procedimientoCodigo = column[String]("Procedimiento_Codigo")
+  class Caracterizaciones(tag: Tag) extends Table[ProcesoCaracterizacionesEntidad](tag, "proceso_caracterizaciones") {
+    def caracterizacionId = column[Long]("caraceterizacion_id", O.PrimaryKey, O.AutoInc)
+    def procesoId = column[Long]("proceso_id")
+    def procedimientoNombre = column[String]("procedimiento_nombre")
+    def procedimientoCodigo = column[String]("procedimiento_codigo")
 
     def procesoCaracterizacionFk: ForeignKeyQuery[Procesos, ProcesosEntidad] =
       foreignKey("PROCESO_CARACTERIZACION_FK", procesoId, procesos)(
