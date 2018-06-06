@@ -1,0 +1,305 @@
+{
+	"id": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
+	"name": "estrategos-endpoints",
+	"description": "",
+	"order": [],
+	"folders": [
+		{
+			"name": "Tablas de sistema",
+			"description": "",
+			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
+			"order": [],
+			"owner": "4440155",
+			"folders_order": [
+				"56d0118f-6eeb-4a13-b500-e068e448debd",
+				"d603744a-66c6-14b2-9c99-1ffbf35a3fc9"
+			],
+			"id": "4dab48d0-d4ff-3372-dc08-3512deb5150a"
+		},
+		{
+			"name": "probabilidad-riesgo",
+			"description": "",
+			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
+			"order": [],
+			"owner": "4440155",
+			"folder": "4dab48d0-d4ff-3372-dc08-3512deb5150a",
+			"folders_order": [],
+			"id": "d603744a-66c6-14b2-9c99-1ffbf35a3fc9"
+		},
+		{
+			"name": "procesos",
+			"description": "",
+			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
+			"order": [
+				"9d579f92-f217-6247-649e-623f890c46b3",
+				"10a7b4e3-cc43-42b0-2289-44ee93aa704c",
+				"2c33df87-756a-ad63-8c9f-3c5c06a52acb"
+			],
+			"owner": "4440155",
+			"folders_order": [],
+			"id": "ec7b474f-5198-8d86-7b3f-b2d8f603a09b"
+		},
+		{
+			"name": "tipo-riesgo",
+			"description": "",
+			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
+			"order": [
+				"bc128a3f-fc9e-36b2-3f7f-951d7519535a",
+				"e2dc28d2-7904-45fc-bbee-ea6448bf7040",
+				"9db86788-f512-fa42-249d-b46c6efac157",
+				"b9bb8ae2-c357-350d-6c0d-789120d72976",
+				"a416545e-3e77-3df6-8d15-44c53f140e5b"
+			],
+			"owner": "4440155",
+			"folder": "4dab48d0-d4ff-3372-dc08-3512deb5150a",
+			"folders_order": [],
+			"id": "56d0118f-6eeb-4a13-b500-e068e448debd"
+		}
+	],
+	"folders_order": [
+		"4dab48d0-d4ff-3372-dc08-3512deb5150a",
+		"ec7b474f-5198-8d86-7b3f-b2d8f603a09b"
+	],
+	"timestamp": 1527571088075,
+	"owner": "4440155",
+	"public": false,
+	"requests": [
+		{
+			"id": "10a7b4e3-cc43-42b0-2289-44ee93aa704c",
+			"headers": "",
+			"headerData": [],
+			"url": "localhost:9000/procesos/1/sub-procesos",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "GET",
+			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
+			"data": null,
+			"dataMode": "params",
+			"name": "localhost:9000/procesos/1/sub-procesos",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1528261861442,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"folder": "ec7b474f-5198-8d86-7b3f-b2d8f603a09b"
+		},
+		{
+			"id": "2c33df87-756a-ad63-8c9f-3c5c06a52acb",
+			"headers": "",
+			"headerData": [],
+			"url": "localhost:9000/procesos/1",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "GET",
+			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
+			"data": null,
+			"dataMode": "params",
+			"name": "localhost:9000/procesos/1",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1528265958314,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"folder": "ec7b474f-5198-8d86-7b3f-b2d8f603a09b"
+		},
+		{
+			"id": "9d579f92-f217-6247-649e-623f890c46b3",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:9000/procesos",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1528261640960,
+			"name": "localhost:9000/procesos",
+			"description": "",
+			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
+			"responses": [],
+			"rawModeData": "{\n\t\"proceso\": {\n\t\t\"proceso_Nombre\": \"asdfdsf\",\n\t\t\"proceso_Codigo\": \"asdf\",\n\t\t\"proceso_Tipo\": 1,\n\t\t\"proceso_Responsable_Id\": 1,\n\t\t\"proceso_Documento\": \"asdf\"\n\t},\n\t\"productoServicios\": [{\n\t\t\"proceso\": \"asdf\",\n\t\t\"productoServicio\": \"adsf\",\n\t\t\"caracteristicas\": \"asdf\"\n\t}],\n\t\"caracterizaciones\": [{\n\t\t\"proceso\": \"asdf\",\n\t\t\"procedimiento\": \"sdf\",\n\t\t\"codigoProcedimiento\": \"sadf\",\n\t\t\"documentoSoporte\": \"asdf\",\n\t\t\"documentosCaracterizacion\": [{\n\t\t\t\"nombreDocumento\": \"asdf\",\n\t\t\t\"codigoDocumento\": \"asdf\",\n\t\t\t\"descripcion\": \"asdf\",\n\t\t\t\"anexo\": \"sadf\"\n\t\t}]\n\t}]\n}"
+		},
+		{
+			"id": "9db86788-f512-fa42-249d-b46c6efac157",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:9000/tipo-riesgo/1",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "DELETE",
+			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Borrar tipo riesgo",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1527571261750,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"folder": "56d0118f-6eeb-4a13-b500-e068e448debd",
+			"rawModeData": "{\n\"tipo_riesgo\" : \"ewwrdfdsfsdfds\"\n}"
+		},
+		{
+			"id": "a416545e-3e77-3df6-8d15-44c53f140e5b",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:9000/tipo-riesgo/",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Crear tipo riesgo",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1527571300476,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"folder": "56d0118f-6eeb-4a13-b500-e068e448debd",
+			"rawModeData": "{\n\"tipo_riesgo\" : \"ewwr\"\n}"
+		},
+		{
+			"id": "b9bb8ae2-c357-350d-6c0d-789120d72976",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:9000/tipo-riesgo/1",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "PUT",
+			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Modificar tipo riesgo",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1527571284791,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"folder": "56d0118f-6eeb-4a13-b500-e068e448debd",
+			"rawModeData": "{\n\"tipo_riesgo\" : \"ewwrdfdsfsdfds\"\n}"
+		},
+		{
+			"id": "bc128a3f-fc9e-36b2-3f7f-951d7519535a",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:9000/tipo-riesgo/1",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Get tipo riesgo",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1527571187303,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"folder": "56d0118f-6eeb-4a13-b500-e068e448debd",
+			"rawModeData": "{\n\"tipo_riesgo\" : \"ewwrdfdsfsdfds\"\n}"
+		},
+		{
+			"id": "e2dc28d2-7904-45fc-bbee-ea6448bf7040",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:9000/tipo-riesgo/",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Traer todos tipo riesgos",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1527571466685,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"folder": "56d0118f-6eeb-4a13-b500-e068e448debd",
+			"rawModeData": "{\n\"probabilidad\":\"test2\",\n\"puntaje\":\"1\",\n\"descripcion\":\"test\"\n}"
+		}
+	]
+}
