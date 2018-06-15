@@ -23,4 +23,11 @@ CREATE TABLE IF NOT EXISTS tipo_riesgos (
     "tipo_riesgo" VARCHAR NOT NULL
 );
 
-
+CREATE TABLE IF NOT EXISTS calificacion_riesgos (
+    "id" BIGSERIAL PRIMARY KEY,
+    "nombre_calificacion_riesgo" VARCHAR NOT NULL,
+    "rango_minimo" INTEGER NOT NULL,
+    "rango_maximo" INTEGER NOT NULL ,
+    "color" VARCHAR NOT NULL,
+    "accion_tomar" VARCHAR NOT NULL
+);

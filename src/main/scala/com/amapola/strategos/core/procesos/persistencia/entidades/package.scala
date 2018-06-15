@@ -7,6 +7,7 @@ package object entidades {
       proceso_Padre_Id: Option[Long] = None,
       proceso_Nombre: String,
       proceso_Codigo: String,
+      proceso_Descripcion: String,
       proceso_Tipo: Long,
       proceso_Responsable_Id: Long,
       proceso_Documento: String
@@ -20,6 +21,7 @@ package object entidades {
       porActualizar.copy(
         proceso_Nombre = this.proceso_Nombre,
         proceso_Codigo = this.proceso_Codigo,
+        proceso_Descripcion = this.proceso_Descripcion,
         proceso_Tipo = this.proceso_Tipo,
         proceso_Responsable_Id = this.proceso_Responsable_Id,
         proceso_Documento = this.proceso_Documento

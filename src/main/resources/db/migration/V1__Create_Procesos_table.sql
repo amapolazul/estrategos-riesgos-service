@@ -3,12 +3,13 @@ CREATE TABLE IF NOT EXISTS responsables(
     "email" VARCHAR NOT NULL
 );
 
-INSERT INTO responsables (id, email) values (1, 'test@test.com.co');
+INSERT INTO responsables (id, email) va lues (1, 'test@test.com.co');
 
 CREATE TABLE IF NOT EXISTS procesos (
     "proceso_id" BIGSERIAL PRIMARY KEY,
     "proceso_padre_id" INT,
     "proceso_nombre" VARCHAR NOT NULL,
+    "proceso_Descripcion" VARCHAR NOT NULL,
     "proceso_codigo" VARCHAR NOT NULL,
     "proceso_tipo" VARCHAR NOT NULL,
     "proceso_responsable_id" BIGSERIAL NOT NULL REFERENCES responsables(id) ON UPDATE RESTRICT ON DELETE CASCADE,

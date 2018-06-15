@@ -28,6 +28,9 @@ import com.amapola.strategos.utils.db.DatabaseConnector
 import me.archdev.restapi.utils.Config
 import me.archdev.restapi.utils.db.DatabaseMigrationManager
 import akka.http.scaladsl.server.Directives._
+import com.amapola.strategos.core.responsables.http.rutas.ResponsablesRutas
+import com.amapola.strategos.core.responsables.persistencia.daos.ResponsablesDaoImpl
+import com.amapola.strategos.core.responsables.servicios.ResponsablesServiceImpl
 
 import scala.concurrent.ExecutionContext
 
@@ -63,6 +66,8 @@ object Boot extends App {
       databaseConnector)
     val tipoRiesgosDao = new TipoRiesgosDaoImpl(databaseConnector)
 
+    val responsablesDao = new ResponsablesDaoImpl(databaseConnector)
+
     val procesosService = new ProcesosServiciosImpl(
       caracterizacionDao,
       procesosDao,
@@ -81,6 +86,8 @@ object Boot extends App {
     val procesosRutes =
       new ProcesosRutas(procesosService, config.archivos.directorio)
 
+    val responsablesService = new ResponsablesServiceImpl(responsablesDao)
+
     val causasRiesgosRoute = new CausasRiesgosRoute(causasRiesgosServiceImpl)
 
     val impactoRiesgosRoute = new ImpactoRiesgosRoute(impactoRiesgoService)
@@ -88,9 +95,16 @@ object Boot extends App {
     val probabilidadRiesgoRoute = new ProbabilidadRiesgosRoute(
       probabildadRiesgoService)
 
+    val responsablesRoute = new ResponsablesRutas(responsablesService)
+
     val tiposRiesgosRoute = new TiposRiesgosRoute(tipoRiesgosService)
 
-    val routes = causasRiesgosRoute.getPaths ~ impactoRiesgosRoute.getPaths ~ probabilidadRiesgoRoute.getPaths ~ tiposRiesgosRoute.getPaths ~ procesosRutes.getPaths
+    val routes = causasRiesgosRoute.getPaths ~
+      impactoRiesgosRoute.getPaths ~
+      probabilidadRiesgoRoute.getPaths ~
+      tiposRiesgosRoute.getPaths ~
+      procesosRutes.getPaths ~
+      responsablesRoute.getPaths
 
     Http().bindAndHandle(routes, config.http.host, config.http.port)
   }

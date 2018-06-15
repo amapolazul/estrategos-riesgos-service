@@ -8,6 +8,7 @@ package object json {
       proceso_Id: Option[Long] = None,
       proceso_Padre_Id: Option[Long] = None,
       proceso_Nombre: String,
+      proceso_Descripcion: String,
       proceso_Codigo: String,
       proceso_Tipo: Long,
       proceso_Responsable_Id: Long,
@@ -18,6 +19,7 @@ package object json {
       ProcesosEntidad(
         proceso_Padre_Id = proceso.proceso_Padre_Id,
         proceso_Nombre = proceso.proceso_Nombre,
+        proceso_Descripcion = proceso.proceso_Descripcion,
         proceso_Codigo = proceso.proceso_Codigo,
         proceso_Tipo = proceso.proceso_Tipo,
         proceso_Responsable_Id = proceso.proceso_Responsable_Id,
@@ -30,6 +32,7 @@ package object json {
         proceso_Id = procesoEntidad.proceso_Id,
         proceso_Padre_Id = procesoEntidad.proceso_Padre_Id,
         proceso_Nombre = procesoEntidad.proceso_Nombre,
+        proceso_Descripcion = procesoEntidad.proceso_Descripcion,
         proceso_Codigo = procesoEntidad.proceso_Codigo,
         proceso_Tipo = procesoEntidad.proceso_Tipo,
         proceso_Responsable_Id = procesoEntidad.proceso_Responsable_Id,
