@@ -15,7 +15,7 @@ private[procesos] trait ProcesosTable {
     def procesoId = column[Long]("proceso_id", O.PrimaryKey, O.AutoInc)
     def procesoPadreId = column[Long]("proceso_padre_id")
     def procesoNombre = column[String]("proceso_nombre")
-    def procesoDescripcion = column[String]("proceso_Descripcion")
+    def procesoDescripcion = column[String]("proceso_descripcion")
     def procesoCodigo = column[String]("proceso_codigo")
     def procesoTipo = column[Long]("proceso_tipo")
     def procesoResponsable = column[Long]("proceso_responsable_id")

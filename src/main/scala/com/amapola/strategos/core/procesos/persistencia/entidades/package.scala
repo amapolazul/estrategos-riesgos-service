@@ -52,7 +52,8 @@ package object entidades {
       caraceterizacion_id: Option[Long] = None,
       proceso_Id: Long,
       procedimiento_Nombre: String,
-      procedimiento_Codigo: String
+      procedimiento_Codigo: String,
+      procedimiento_Objetivo: String
   ) {
 
     require(!procedimiento_Nombre.isEmpty,

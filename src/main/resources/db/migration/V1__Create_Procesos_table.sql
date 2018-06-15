@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS procesos (
     "proceso_id" BIGSERIAL PRIMARY KEY,
     "proceso_padre_id" INT,
     "proceso_nombre" VARCHAR NOT NULL,
-    "proceso_Descripcion" VARCHAR NOT NULL,
+    "proceso_descripcion" VARCHAR NOT NULL,
     "proceso_codigo" VARCHAR NOT NULL,
     "proceso_tipo" VARCHAR NOT NULL,
     "proceso_responsable_id" BIGSERIAL NOT NULL REFERENCES responsables(id) ON UPDATE RESTRICT ON DELETE CASCADE,
@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS proceso_caracterizaciones(
     "caraceterizacion_id" BIGSERIAL PRIMARY KEY,
     "proceso_id" BIGSERIAL NOT NULL REFERENCES procesos(proceso_id) ON UPDATE RESTRICT ON DELETE CASCADE,
     "procedimiento_nombre" VARCHAR NOT NULL,
+    "procedimiento_objetivo" VARCHAR NOT NULL,
     "procedimiento_codigo" VARCHAR NOT NULL
 );
 

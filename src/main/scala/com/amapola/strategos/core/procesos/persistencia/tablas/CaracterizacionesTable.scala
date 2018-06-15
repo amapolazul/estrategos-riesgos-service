@@ -18,6 +18,7 @@ private[procesos] trait CaracterizacionesTable extends ProcesosTable{
     def procesoId = column[Long]("proceso_id")
     def procedimientoNombre = column[String]("procedimiento_nombre")
     def procedimientoCodigo = column[String]("procedimiento_codigo")
+    def procedimientoObjetivo = column[String]("procedimiento_objetivo")
 
     def procesoCaracterizacionFk: ForeignKeyQuery[Procesos, ProcesosEntidad] =
       foreignKey("PROCESO_CARACTERIZACION_FK", procesoId, procesos)(
@@ -29,7 +30,8 @@ private[procesos] trait CaracterizacionesTable extends ProcesosTable{
       (caracterizacionId.?,
         procesoId,
         procedimientoNombre,
-        procedimientoCodigo) <> ((ProcesoCaracterizacionesEntidad.apply _).tupled, ProcesoCaracterizacionesEntidad.unapply)
+        procedimientoCodigo,
+        procedimientoObjetivo) <> ((ProcesoCaracterizacionesEntidad.apply _).tupled, ProcesoCaracterizacionesEntidad.unapply)
   }
 
   val caracterizaciones = TableQuery[Caracterizaciones]

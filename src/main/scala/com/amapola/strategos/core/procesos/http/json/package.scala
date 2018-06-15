@@ -73,6 +73,7 @@ package object json {
       proceso_Id: Long,
       procedimiento_Nombre: String,
       procedimiento_Codigo: String,
+      procedimiento_Objetivo: String,
       documentosCaracterizacion: List[DocumentoCaracterizacion]
   )
 
@@ -84,6 +85,7 @@ package object json {
         proceso_Id = entity.proceso_Id,
         procedimiento_Nombre = entity.procedimiento_Nombre,
         procedimiento_Codigo = entity.procedimiento_Codigo,
+        procedimiento_Objetivo = entity.procedimiento_Objetivo,
         documentosCaracterizacion =
           list.map(DocumentoCaracterizacion.fromEntity(_))
       )
@@ -94,7 +96,8 @@ package object json {
         caraceterizacion_id = json.caraceterizacion_id,
         proceso_Id = json.proceso_Id,
         procedimiento_Nombre = json.procedimiento_Nombre,
-        procedimiento_Codigo = json.procedimiento_Codigo
+        procedimiento_Codigo = json.procedimiento_Codigo,
+        procedimiento_Objetivo = json.procedimiento_Objetivo
       )
     }
   }
