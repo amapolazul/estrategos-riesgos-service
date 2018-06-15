@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS responsables(
     "email" VARCHAR NOT NULL
 );
 
-INSERT INTO responsables (id, email) va lues (1, 'test@test.com.co');
+INSERT INTO responsables (id, email) values (1, 'test@test.com.co');
 
 CREATE TABLE IF NOT EXISTS procesos (
     "proceso_id" BIGSERIAL PRIMARY KEY,

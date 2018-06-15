@@ -1,11 +1,6 @@
 package com.amapola.strategos.core.tablas_sistema.http
 
-import com.amapola.strategos.core.tablas_sistema.persistencia.entidades.{
-  CausasRiesgosEntidad,
-  ImpactoRiesgosEntidad,
-  ProbabilidadRiesgosEntidad,
-  TipoRiesgosEntidad
-}
+import com.amapola.strategos.core.tablas_sistema.persistencia.entidades._
 
 package object json {
 
@@ -121,6 +116,47 @@ package object json {
       TipoRiesgosJson(
         id = entidad.id,
         tipo_riesgo = entidad.tipo_riesgo
+      )
+    }
+  }
+
+  case class CalificacionRiesgosJson(
+      id: Option[Long] = None,
+      nombre_calificacion_riesgo: String,
+      rango_minimo: Long,
+      rango_maximo: Long,
+      color: String,
+      accion_tomar: String
+  ) {
+
+    require(!nombre_calificacion_riesgo.isEmpty, "El nombre no puede ser vacio")
+    require(rango_minimo < rango_maximo,
+            "El rango minimo debe ser menor al rango máximo")
+    require(!color.isEmpty, "Debe seleccionar un color")
+    require(!accion_tomar.isEmpty, "El campo accion a tomar no puede ser vacio")
+  }
+
+  object CalificacionRiesgosJson {
+    def toEntity(json: CalificacionRiesgosJson): CalificacionRiesgosEntidad = {
+      CalificacionRiesgosEntidad(
+        id = json.id,
+        nombre_calificacion_riesgo = json.nombre_calificacion_riesgo,
+        rango_minimo = json.rango_minimo,
+        rango_maximo = json.rango_maximo,
+        color = json.color,
+        accion_tomar = json.accion_tomar
+      )
+    }
+
+    def fromEntity(
+        entidad: CalificacionRiesgosEntidad): CalificacionRiesgosJson = {
+      CalificacionRiesgosJson(
+        id = entidad.id,
+        nombre_calificacion_riesgo = entidad.nombre_calificacion_riesgo,
+        rango_minimo = entidad.rango_minimo,
+        rango_maximo = entidad.rango_maximo,
+        color = entidad.color,
+        accion_tomar = entidad.accion_tomar
       )
     }
   }

@@ -1,11 +1,12 @@
 package com.amapola.strategos.core.tablas_sistema.http.rutas
 
 import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.server.Directives.{as, complete, delete, entity, get, onComplete, pathEndOrSingleSlash, pathPrefix, post, put, _}
+import akka.http.scaladsl.server.PathMatchers.LongNumber
 import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.server.Directives.{entity, _}
-import com.amapola.strategos.core.tablas_sistema.http.json._
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
-import com.amapola.strategos.core.tablas_sistema.servicios.TipoRiesgosService
+import com.amapola.strategos.core.tablas_sistema.http.json.CalificacionRiesgosJson
+import com.amapola.strategos.core.tablas_sistema.servicios.CalificacionRiesgosService
 import com.amapola.strategos.utils.http.FileUploadDirectives
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
@@ -14,26 +15,28 @@ import io.circe.syntax._
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
-class TiposRiesgosRoute(tipoRiesgosServie: TipoRiesgosService)(
+class CalificacionRiesgosRoute(
+    calificacionRiesgosService: CalificacionRiesgosService)(
     implicit executionContext: ExecutionContext)
     extends FailFastCirceSupport
     with FileUploadDirectives {
 
   def getPaths: Route = cors() {
-    pathPrefix("tipo-riesgo") {
-      traerTipoRiesgoPorId ~
-        traerTipoRiesgo ~
-        crearTipoRiesgo ~
-        actualizarTipoRiesgo ~
-        borrarTipoRiesgo
+    pathPrefix("calificacion-riesgo") {
+      traerCalificacionRiesgoPorId ~
+        traerCalificacionRiesgo ~
+        crearCalificacionRiesgo ~
+        actualizarCalificacionRiesgo ~
+        borrarCalificacionRiesgo
     }
   }
 
-  private def traerTipoRiesgoPorId = {
+  private def traerCalificacionRiesgoPorId = {
     pathPrefix(LongNumber) { id =>
       pathEndOrSingleSlash {
         get {
-          onComplete(tipoRiesgosServie.traerTipoRiesgosPorId(id)) {
+          onComplete(
+            calificacionRiesgosService.traerCalificacionRiesgoPorId(id)) {
             case Success(result) =>
               result
                 .map(x => {
@@ -49,10 +52,10 @@ class TiposRiesgosRoute(tipoRiesgosServie: TipoRiesgosService)(
     }
   }
 
-  private def traerTipoRiesgo = {
+  private def traerCalificacionRiesgo = {
     pathEndOrSingleSlash {
       get {
-        onComplete(tipoRiesgosServie.traerTipoRiesgos()) {
+        onComplete(calificacionRiesgosService.traerCalificacionRiesgo()) {
           case Success(result) => complete(StatusCodes.OK, result.asJson)
           case Failure(ex) =>
             complete(StatusCodes.InternalServerError, ex.getMessage)
@@ -61,11 +64,11 @@ class TiposRiesgosRoute(tipoRiesgosServie: TipoRiesgosService)(
     }
   }
 
-  private def crearTipoRiesgo = {
+  private def crearCalificacionRiesgo = {
     pathEndOrSingleSlash {
       post {
-        entity(as[TipoRiesgosJson]) { entity =>
-          onComplete(tipoRiesgosServie.crearTipoRiesgos(entity)) {
+        entity(as[CalificacionRiesgosJson]) { entity =>
+          onComplete(calificacionRiesgosService.crearCalificacionRiesgo(entity)) {
             case Success(_) =>
               complete(StatusCodes.OK, "Registro creado correctamente")
             case Failure(ex) =>
@@ -76,14 +79,14 @@ class TiposRiesgosRoute(tipoRiesgosServie: TipoRiesgosService)(
     }
   }
 
-  private def actualizarTipoRiesgo = {
+  private def actualizarCalificacionRiesgo = {
     pathPrefix(LongNumber) { id =>
       pathEndOrSingleSlash {
         put {
-          entity(as[TipoRiesgosJson]) { entity =>
+          entity(as[CalificacionRiesgosJson]) { entity =>
             onComplete(
-              tipoRiesgosServie
-                .actualizarTipoRiesgos(id, entity)) {
+              calificacionRiesgosService
+                .actualizarCalificacionRiesgo(id, entity)) {
               case Success(result) =>
                 if (result)
                   complete(StatusCodes.OK, "Registro actualizado correctamente")
@@ -97,11 +100,11 @@ class TiposRiesgosRoute(tipoRiesgosServie: TipoRiesgosService)(
     }
   }
 
-  private def borrarTipoRiesgo = {
+  private def borrarCalificacionRiesgo = {
     pathPrefix(LongNumber) { id =>
       pathEndOrSingleSlash {
         delete {
-          onComplete(tipoRiesgosServie.borrarTipoRiesgos(id)) {
+          onComplete(calificacionRiesgosService.borrarCalificacionRiesgo(id)) {
             case Success(result) =>
               if (result)
                 complete(StatusCodes.OK, "Registro borrado correctamente")

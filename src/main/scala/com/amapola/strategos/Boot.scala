@@ -4,25 +4,10 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import com.amapola.strategos.core.procesos.http.rutas.ProcesosRutas
-import com.amapola.strategos.core.procesos.persistencia.daos.{
-  CaracterizacionDaoImpl,
-  DocumentosCaracterizacionDaoImpl,
-  ProcesosDaoImpl,
-  ProductosServiciosDaoImpl
-}
+import com.amapola.strategos.core.procesos.persistencia.daos.{CaracterizacionDaoImpl, DocumentosCaracterizacionDaoImpl, ProcesosDaoImpl, ProductosServiciosDaoImpl}
 import com.amapola.strategos.core.procesos.servicios.ProcesosServiciosImpl
-import com.amapola.strategos.core.tablas_sistema.http.rutas.{
-  CausasRiesgosRoute,
-  ImpactoRiesgosRoute,
-  ProbabilidadRiesgosRoute,
-  TiposRiesgosRoute
-}
-import com.amapola.strategos.core.tablas_sistema.persistencia.daos.{
-  CausasRiesgosDaoImpl,
-  ImpactoRiesgosDaoImpl,
-  ProbabilidadRiesgosDaoImpl,
-  TipoRiesgosDaoImpl
-}
+import com.amapola.strategos.core.tablas_sistema.http.rutas._
+import com.amapola.strategos.core.tablas_sistema.persistencia.daos._
 import com.amapola.strategos.core.tablas_sistema.servicios._
 import com.amapola.strategos.utils.db.DatabaseConnector
 import me.archdev.restapi.utils.Config
@@ -55,6 +40,7 @@ object Boot extends App {
       config.database.password
     )
 
+    //Daos
     val caracterizacionDao = new CaracterizacionDaoImpl(databaseConnector)
     val procesosDao = new ProcesosDaoImpl(databaseConnector)
     val productosServiciosDao = new ProductosServiciosDaoImpl(databaseConnector)
@@ -68,25 +54,37 @@ object Boot extends App {
 
     val responsablesDao = new ResponsablesDaoImpl(databaseConnector)
 
-    val procesosService = new ProcesosServiciosImpl(
-      caracterizacionDao,
-      procesosDao,
-      productosServiciosDao,
-      documentosCaracterizacionDao)
+    val calificacionRiesgosDao = new CalificacionesRiesgosDaoImpl(
+      databaseConnector)
 
     val causasRiesgosServiceImpl = new CausasRiesgosServiceImpl(
       causasRiesgosDao)
 
+    //Servicios
     val impactoRiesgoService = new ImpactoRiesgosServiceImpl(impactoRiesgoDao)
     val probabildadRiesgoService = new ProbabilidadRiesgoServiceImpl(
       probabilidadRiesgosDao)
 
     val tipoRiesgosService = new TipoRiesgoServiceImpl(tipoRiesgosDao)
 
+    val responsablesService = new ResponsablesServiceImpl(responsablesDao)
+
+    val calificacionRiesgoService = new CalificacionRiesgosServiceImpl(
+      calificacionRiesgosDao)
+
+    val procesosService = new ProcesosServiciosImpl(
+      caracterizacionDao,
+      procesosDao,
+      productosServiciosDao,
+      documentosCaracterizacionDao)
+
+    //Rutas
     val procesosRutes =
       new ProcesosRutas(procesosService, config.archivos.directorio)
 
-    val responsablesService = new ResponsablesServiceImpl(responsablesDao)
+    val responsablesRoute = new ResponsablesRutas(responsablesService)
+
+    val tiposRiesgosRoute = new TiposRiesgosRoute(tipoRiesgosService)
 
     val causasRiesgosRoute = new CausasRiesgosRoute(causasRiesgosServiceImpl)
 
@@ -95,16 +93,15 @@ object Boot extends App {
     val probabilidadRiesgoRoute = new ProbabilidadRiesgosRoute(
       probabildadRiesgoService)
 
-    val responsablesRoute = new ResponsablesRutas(responsablesService)
-
-    val tiposRiesgosRoute = new TiposRiesgosRoute(tipoRiesgosService)
+    val calificacionRiesgoRoute = new CalificacionRiesgosRoute(calificacionRiesgoService)
 
     val routes = causasRiesgosRoute.getPaths ~
       impactoRiesgosRoute.getPaths ~
       probabilidadRiesgoRoute.getPaths ~
       tiposRiesgosRoute.getPaths ~
       procesosRutes.getPaths ~
-      responsablesRoute.getPaths
+      responsablesRoute.getPaths ~
+      calificacionRiesgoRoute.getPaths
 
     Http().bindAndHandle(routes, config.http.host, config.http.port)
   }
