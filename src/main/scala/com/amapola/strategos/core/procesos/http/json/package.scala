@@ -43,8 +43,9 @@ package object json {
 
   case class ProductoServicio(
       producto_Servicio_Id: Option[Long] = None,
-      proceso_Id: Long,
+      proceso_Id: Option[Long] = None,
       producto_Servicio_nombre: String,
+      producto_Servicio_Codigo: String,
       producto_Caracteristicas: String
   )
 
@@ -53,6 +54,7 @@ package object json {
       ProductoServicio(
         producto_Servicio_Id = entity.producto_Servicio_Id,
         proceso_Id = entity.proceso_Id,
+        producto_Servicio_Codigo = entity.product_Servicio_Codigo,
         producto_Servicio_nombre = entity.producto_Servicio_nombre,
         producto_Caracteristicas = entity.producto_Caracteristicas
       )
@@ -62,6 +64,7 @@ package object json {
       ProductosServiciosEntidad(
         producto_Servicio_Id = json.producto_Servicio_Id,
         proceso_Id = json.proceso_Id,
+        product_Servicio_Codigo = json.producto_Servicio_Codigo,
         producto_Servicio_nombre = json.producto_Servicio_nombre,
         producto_Caracteristicas = json.producto_Caracteristicas
       )
@@ -70,7 +73,7 @@ package object json {
 
   case class Caracterizacion(
       caraceterizacion_id: Option[Long] = None,
-      proceso_Id: Long,
+      proceso_Id: Option[Long] = None,
       procedimiento_Nombre: String,
       procedimiento_Codigo: String,
       procedimiento_Objetivo: String,
@@ -104,7 +107,7 @@ package object json {
 
   case class DocumentoCaracterizacion(
       procedimiento_Documento_Id: Option[Long] = None,
-      caraceterizacion_id: Long,
+      caraceterizacion_id: Option[Long] = None,
       procedimiento_Documento_Nombre: String,
       procedimiento_Documento_Descripcion: String,
       procedimiento_Documento_Codigo: String,

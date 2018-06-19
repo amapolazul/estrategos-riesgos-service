@@ -28,7 +28,7 @@ private[procesos] trait CaracterizacionesTable extends ProcesosTable{
 
     def * =
       (caracterizacionId.?,
-        procesoId,
+        procesoId.?,
         procedimientoNombre,
         procedimientoCodigo,
         procedimientoObjetivo) <> ((ProcesoCaracterizacionesEntidad.apply _).tupled, ProcesoCaracterizacionesEntidad.unapply)

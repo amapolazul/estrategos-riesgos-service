@@ -63,7 +63,7 @@ class ProcesosServiciosImpl(
                                                   procesoId: Long) = {
 
     val caraceristicasArchivos = list.map(x => {
-      val caractEntidad = Caracterizacion.toEntity(x)
+      val caractEntidad = Caracterizacion.toEntity(x).copy(proceso_Id = Some(procesoId))
 
       caracterizacionDao
         .crearCaracterizacion(caractEntidad)
@@ -71,7 +71,7 @@ class ProcesosServiciosImpl(
           val archivos = x.documentosCaracterizacion
           val archivosEntidad = archivos.map(arch => {
             val archivo = DocumentoCaracterizacion.toEntity(
-              arch.copy(caraceterizacion_id = caracterizacionId))
+              arch.copy(caraceterizacion_id = Some(caracterizacionId)))
             documentosCaracterizacionDao.crearDocumentoCaracterizacion(archivo)
           })
 
@@ -108,7 +108,7 @@ class ProcesosServiciosImpl(
     val futureList = list.map(x => {
 
       val prodServicio =
-        ProductoServicio.toEntity(x.copy(proceso_Id = procesoId))
+        ProductoServicio.toEntity(x.copy(proceso_Id = Some(procesoId)))
       productosServiciosDao.guardarProductoServicio(prodServicio)
     })
 

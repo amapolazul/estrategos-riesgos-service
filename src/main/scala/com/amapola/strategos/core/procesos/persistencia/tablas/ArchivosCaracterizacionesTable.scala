@@ -29,7 +29,7 @@ private[procesos] trait ArchivosCaracterizacionesTable extends Caracterizaciones
 
     def * =
       (procedimientoDocumentoId.?,
-        caracterizacionId,
+        caracterizacionId.?,
         procDocumentoNombre,
         procDocumentoDesc,
         procDocumentoCodigo,

@@ -16,9 +16,11 @@ CREATE TABLE IF NOT EXISTS procesos (
     "proceso_documento" VARCHAR NOT NULL
 );
 
+
 CREATE TABLE IF NOT EXISTS productos_servicios (
     "producto_servicio_id" BIGSERIAL PRIMARY KEY,
     "proceso_id" BIGSERIAL NOT NULL REFERENCES procesos(proceso_id) ON UPDATE RESTRICT ON DELETE CASCADE,
+    "producto_servicio_codigo" VARCHAR NOT NULL,
     "producto_servicio_nombre" VARCHAR NOT NULL,
     "producto_caracteristicas" VARCHAR NOT NULL
 );

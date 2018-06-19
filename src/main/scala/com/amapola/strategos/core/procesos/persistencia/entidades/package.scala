@@ -31,7 +31,8 @@ package object entidades {
 
   case class ProductosServiciosEntidad(
       producto_Servicio_Id: Option[Long] = None,
-      proceso_Id: Long,
+      proceso_Id: Option[Long] = None,
+      product_Servicio_Codigo: String,
       producto_Servicio_nombre: String,
       producto_Caracteristicas: String
   ) {
@@ -43,6 +44,7 @@ package object entidades {
     def merge(porActualizar: ProductosServiciosEntidad) = {
       porActualizar.copy(
         producto_Servicio_nombre = this.producto_Servicio_nombre,
+        product_Servicio_Codigo = this.product_Servicio_Codigo,
         producto_Caracteristicas = this.producto_Caracteristicas
       )
     }
@@ -50,7 +52,7 @@ package object entidades {
 
   case class ProcesoCaracterizacionesEntidad(
       caraceterizacion_id: Option[Long] = None,
-      proceso_Id: Long,
+      proceso_Id: Option[Long] = None,
       procedimiento_Nombre: String,
       procedimiento_Codigo: String,
       procedimiento_Objetivo: String
@@ -64,16 +66,16 @@ package object entidades {
     def merge(porActualizar: ProcesoCaracterizacionesEntidad)
       : ProcesoCaracterizacionesEntidad = {
       porActualizar.copy(
-        proceso_Id = this.proceso_Id,
         procedimiento_Nombre = this.procedimiento_Nombre,
-        procedimiento_Codigo = this.procedimiento_Codigo
+        procedimiento_Codigo = this.procedimiento_Codigo,
+        procedimiento_Objetivo = this.procedimiento_Objetivo
       )
     }
   }
 
   case class ProcesoDocumentosEntidad(
       procedimiento_Documento_Id: Option[Long] = None,
-      caraceterizacion_id: Long,
+      caraceterizacion_id: Option[Long] = None,
       procedimiento_Documento_Nombre: String,
       procedimiento_Documento_Descripcion: String,
       procedimiento_Documento_Codigo: String,
