@@ -6,7 +6,10 @@ import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.directives.MarshallingDirectives.{as, entity}
 import com.amapola.strategos.core.tablas_sistema.http.json._
 import com.amapola.strategos.core.tablas_sistema.servicios.ImpactoRiesgosService
-import com.amapola.strategos.utils.http.FileUploadDirectives
+import com.amapola.strategos.utils.http.{
+  FileUploadDirectives,
+  StrategosCorsSettings
+}
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import io.circe.generic.auto._
@@ -18,10 +21,11 @@ import scala.util.{Failure, Success}
 class ImpactoRiesgosRoute(impactoRiesgosService: ImpactoRiesgosService)(
     implicit executionContext: ExecutionContext)
     extends FailFastCirceSupport
-    with FileUploadDirectives {
+    with FileUploadDirectives
+    with StrategosCorsSettings {
 
   def getPaths: Route = {
-    cors() {
+    cors(settings) {
       pathPrefix("impacto-riesgos") {
         traerImpactoRiesgosPorId ~ traerImpactosRiesgo ~ crearImpactoRiesgo ~ actualizarImpactoRiesgo ~ borrarImpactoRiesgo
       }

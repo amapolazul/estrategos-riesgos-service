@@ -6,7 +6,10 @@ import akka.http.scaladsl.server.Directives._
 import com.amapola.strategos.core.tablas_sistema.http.json._
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import com.amapola.strategos.core.tablas_sistema.servicios.ProbabilidadRiesgoService
-import com.amapola.strategos.utils.http.FileUploadDirectives
+import com.amapola.strategos.utils.http.{
+  FileUploadDirectives,
+  StrategosCorsSettings
+}
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -18,9 +21,10 @@ class ProbabilidadRiesgosRoute(
     probabilidadRiesgoService: ProbabilidadRiesgoService)(
     implicit executionContext: ExecutionContext)
     extends FailFastCirceSupport
-    with FileUploadDirectives {
+    with FileUploadDirectives
+    with StrategosCorsSettings {
 
-  def getPaths: Route = cors() {
+  def getPaths: Route = cors(settings) {
     pathPrefix("probabilidad-riesgo") {
       traerProbabilidadRiesgoPorId ~
         traerProbabilidadesRiesgo ~

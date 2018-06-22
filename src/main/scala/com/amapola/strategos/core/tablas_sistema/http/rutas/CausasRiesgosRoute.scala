@@ -4,11 +4,11 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.directives.MarshallingDirectives.{as, entity}
+import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import com.amapola.strategos.core.tablas_sistema.http.json._
 import com.amapola.strategos.core.tablas_sistema.servicios.CausasRiesgosService
-import com.amapola.strategos.utils.http.FileUploadDirectives
+import com.amapola.strategos.utils.http.{FileUploadDirectives, StrategosCorsSettings}
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
-import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import io.circe.generic.auto._
 import io.circe.syntax._
 
@@ -18,11 +18,14 @@ import scala.util.{Failure, Success}
 class CausasRiesgosRoute(causasRiesgosService: CausasRiesgosService)(
     implicit executionContext: ExecutionContext)
     extends FailFastCirceSupport
-    with FileUploadDirectives {
+    with FileUploadDirectives
+    with StrategosCorsSettings {
 
-  def getPaths: Route = cors() {
-    pathPrefix("causas-riesgos") {
-      crearCausasRiesgos ~ traerCausasRiesgoPorId ~ traerCausasRiesgos ~ actualizarCausasRiesgo ~ borrarCausasRiesgo
+  def getPaths: Route = handleRejections(corsRejectionHandler) {
+    cors(settings) {
+      pathPrefix("causas-riesgos") {
+        crearCausasRiesgos ~ traerCausasRiesgoPorId ~ traerCausasRiesgos ~ actualizarCausasRiesgo ~ borrarCausasRiesgo
+      }
     }
   }
 
@@ -77,14 +80,16 @@ class CausasRiesgosRoute(causasRiesgosService: CausasRiesgosService)(
 
   private def borrarCausasRiesgo: Route = {
     pathPrefix(IntNumber) { id =>
-      delete {
-        onComplete(causasRiesgosService.borrarCausasRiesgo(id.toLong)) {
-          case Success(resultado) =>
-            if (resultado)
-              complete(StatusCodes.OK, "Registro borrado correctamente")
-            else complete(StatusCodes.NotFound, "Registro no encontrado")
-          case Failure(ex) =>
-            complete(StatusCodes.InternalServerError, ex.getMessage)
+      pathEndOrSingleSlash {
+        delete {
+          onComplete(causasRiesgosService.borrarCausasRiesgo(id.toLong)) {
+            case Success(resultado) =>
+              if (resultado)
+                complete(StatusCodes.OK, "Registro borrado correctamente")
+              else complete(StatusCodes.NotFound, "Registro no encontrado")
+            case Failure(ex) =>
+              complete(StatusCodes.InternalServerError, ex.getMessage)
+          }
         }
       }
     }

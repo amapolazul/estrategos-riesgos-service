@@ -8,7 +8,10 @@ import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import com.amapola.strategos.core.procesos.http.json.ProcesoProcedimientoJson
 import com.amapola.strategos.core.procesos.servicios.ProcesosServiciosService
 import com.amapola.strategos.infraestructura.AdministradorArchivosServiceImpl
-import com.amapola.strategos.utils.http.FileUploadDirectives
+import com.amapola.strategos.utils.http.{
+  FileUploadDirectives,
+  StrategosCorsSettings
+}
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -20,9 +23,10 @@ class ProcesosRutas(
     procesosService: ProcesosServiciosService,
     directorioDestino: String)(implicit executionContext: ExecutionContext)
     extends FailFastCirceSupport
-    with FileUploadDirectives {
+    with FileUploadDirectives
+    with StrategosCorsSettings {
 
-  def getPaths = cors() {
+  def getPaths = cors(settings) {
     pathPrefix("procesos") {
       crearProcesos ~ crearProcesosSubProcesos ~ getProcesosPorPadreId ~ getProcesoById
     }

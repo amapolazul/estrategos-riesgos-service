@@ -1,13 +1,28 @@
 package com.amapola.strategos.core.tablas_sistema.http.rutas
 
 import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.server.Directives.{as, complete, delete, entity, get, onComplete, pathEndOrSingleSlash, pathPrefix, post, put, _}
+import akka.http.scaladsl.server.Directives.{
+  as,
+  complete,
+  delete,
+  entity,
+  get,
+  onComplete,
+  pathEndOrSingleSlash,
+  pathPrefix,
+  post,
+  put,
+  _
+}
 import akka.http.scaladsl.server.PathMatchers.LongNumber
 import akka.http.scaladsl.server.Route
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import com.amapola.strategos.core.tablas_sistema.http.json.CalificacionRiesgosJson
 import com.amapola.strategos.core.tablas_sistema.servicios.CalificacionRiesgosService
-import com.amapola.strategos.utils.http.FileUploadDirectives
+import com.amapola.strategos.utils.http.{
+  FileUploadDirectives,
+  StrategosCorsSettings
+}
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -19,9 +34,10 @@ class CalificacionRiesgosRoute(
     calificacionRiesgosService: CalificacionRiesgosService)(
     implicit executionContext: ExecutionContext)
     extends FailFastCirceSupport
-    with FileUploadDirectives {
+    with FileUploadDirectives
+    with StrategosCorsSettings {
 
-  def getPaths: Route = cors() {
+  def getPaths: Route = cors(settings) {
     pathPrefix("calificacion-riesgo") {
       traerCalificacionRiesgoPorId ~
         traerCalificacionRiesgo ~
