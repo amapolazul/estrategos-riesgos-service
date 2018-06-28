@@ -29,7 +29,7 @@ class EjerciciosEvaluacionesEstatusRutas(
     * @return
     */
   def getPaths() = cors(settings) {
-    path("ejercicio-estados") {
+    pathPrefix("ejercicio-estados") {
       traerEvaluacionEstados
     }
   }
