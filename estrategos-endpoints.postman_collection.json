@@ -1,305 +1,320 @@
 {
-	"id": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
-	"name": "estrategos-endpoints",
-	"description": "",
-	"order": [],
-	"folders": [
+	"variables": [],
+	"info": {
+		"name": "estrategos-endpoints",
+		"_postman_id": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
 		{
 			"name": "Tablas de sistema",
 			"description": "",
-			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
-			"order": [],
-			"owner": "4440155",
-			"folders_order": [
-				"56d0118f-6eeb-4a13-b500-e068e448debd",
-				"d603744a-66c6-14b2-9c99-1ffbf35a3fc9"
-			],
-			"id": "4dab48d0-d4ff-3372-dc08-3512deb5150a"
-		},
-		{
-			"name": "probabilidad-riesgo",
-			"description": "",
-			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
-			"order": [],
-			"owner": "4440155",
-			"folder": "4dab48d0-d4ff-3372-dc08-3512deb5150a",
-			"folders_order": [],
-			"id": "d603744a-66c6-14b2-9c99-1ffbf35a3fc9"
+			"item": [
+				{
+					"name": "tipo-riesgo",
+					"description": "",
+					"item": [
+						{
+							"name": "Get tipo riesgo",
+							"request": {
+								"url": "localhost:9000/tipo-riesgo/1",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\"tipo_riesgo\" : \"ewwrdfdsfsdfds\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Traer todos tipo riesgos",
+							"request": {
+								"url": "localhost:9000/tipo-riesgo/",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\"probabilidad\":\"test2\",\n\"puntaje\":\"1\",\n\"descripcion\":\"test\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Borrar tipo riesgo",
+							"request": {
+								"url": "localhost:9000/tipo-riesgo/1",
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\"tipo_riesgo\" : \"ewwrdfdsfsdfds\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Modificar tipo riesgo",
+							"request": {
+								"url": "localhost:9000/tipo-riesgo/1",
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\"tipo_riesgo\" : \"ewwrdfdsfsdfds\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Crear tipo riesgo",
+							"request": {
+								"url": "localhost:9000/tipo-riesgo/",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\"tipo_riesgo\" : \"ewwr\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "probabilidad-riesgo",
+					"description": "",
+					"item": [],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "calificacion-riesgo",
+					"description": "",
+					"item": [
+						{
+							"name": "localhost:9000/calificacion-riesgos",
+							"request": {
+								"url": "localhost:9000/calificacion-riesgo/3",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
 		},
 		{
 			"name": "procesos",
 			"description": "",
-			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
-			"order": [
-				"9d579f92-f217-6247-649e-623f890c46b3",
-				"10a7b4e3-cc43-42b0-2289-44ee93aa704c",
-				"2c33df87-756a-ad63-8c9f-3c5c06a52acb"
-			],
-			"owner": "4440155",
-			"folders_order": [],
-			"id": "ec7b474f-5198-8d86-7b3f-b2d8f603a09b"
-		},
-		{
-			"name": "tipo-riesgo",
-			"description": "",
-			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
-			"order": [
-				"bc128a3f-fc9e-36b2-3f7f-951d7519535a",
-				"e2dc28d2-7904-45fc-bbee-ea6448bf7040",
-				"9db86788-f512-fa42-249d-b46c6efac157",
-				"b9bb8ae2-c357-350d-6c0d-789120d72976",
-				"a416545e-3e77-3df6-8d15-44c53f140e5b"
-			],
-			"owner": "4440155",
-			"folder": "4dab48d0-d4ff-3372-dc08-3512deb5150a",
-			"folders_order": [],
-			"id": "56d0118f-6eeb-4a13-b500-e068e448debd"
-		}
-	],
-	"folders_order": [
-		"4dab48d0-d4ff-3372-dc08-3512deb5150a",
-		"ec7b474f-5198-8d86-7b3f-b2d8f603a09b"
-	],
-	"timestamp": 1527571088075,
-	"owner": "4440155",
-	"public": false,
-	"requests": [
-		{
-			"id": "10a7b4e3-cc43-42b0-2289-44ee93aa704c",
-			"headers": "",
-			"headerData": [],
-			"url": "localhost:9000/procesos/1/sub-procesos",
-			"queryParams": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"preRequestScript": null,
-			"method": "GET",
-			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
-			"data": null,
-			"dataMode": "params",
-			"name": "localhost:9000/procesos/1/sub-procesos",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1528261861442,
-			"version": 2,
-			"responses": [],
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"folder": "ec7b474f-5198-8d86-7b3f-b2d8f603a09b"
-		},
-		{
-			"id": "2c33df87-756a-ad63-8c9f-3c5c06a52acb",
-			"headers": "",
-			"headerData": [],
-			"url": "localhost:9000/procesos/1",
-			"queryParams": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"preRequestScript": null,
-			"method": "GET",
-			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
-			"data": null,
-			"dataMode": "params",
-			"name": "localhost:9000/procesos/1",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1528265958314,
-			"version": 2,
-			"responses": [],
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"folder": "ec7b474f-5198-8d86-7b3f-b2d8f603a09b"
-		},
-		{
-			"id": "9d579f92-f217-6247-649e-623f890c46b3",
-			"headers": "Content-Type: application/json\n",
-			"headerData": [
+			"item": [
 				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
+					"name": "localhost:9000/procesos",
+					"request": {
+						"url": "localhost:9000/procesos",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"proceso\": {\n\t\t\"proceso_Nombre\": \"asdf\",\n\t\t\"proceso_Codigo\": \"asdf\",\n\t\t\"proceso_Tipo\": 2,\n\t\t\"proceso_Descripcion\": \"asfd\",\n\t\t\"proceso_Responsable_Id\": 1,\n\t\t\"proceso_Documento\": \"asdf\"\n\t},\n\t\"productoServicios\": [{\n\t\t\"proceso_Nombre\": \"asdfds\",\n\t\t\"producto_Servicio_nombre\": \"sdf\",\n\t\t\"producto_Servicio_Codigo\": \"asdf\",\n\t\t\"producto_Caracteristicas\": \"asdf\"\n\t}],\n\t\"caracterizaciones\": [{\n\t\t\"procedimiento_Nombre\": \"asdf\",\n\t\t\"procedimiento_Codigo\": \"asdf\",\n\t\t\"procedimiento_Objetivo\": \"asdf\",\n\t\t\"documentosCaracterizacion\": [{\n\t\t\t\"procedimiento_Documento_Nombre\": \"asdf\",\n\t\t\t\"procedimiento_Documento_Descripcion\": \"asdf\",\n\t\t\t\"procedimiento_Documento_Codigo\": \"asdf\",\n\t\t\t\"procedimiento_Documento_Arch\": \"asdf\"\n\t\t}]\n\t}]\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:9000/procesos/1/sub-procesos",
+					"request": {
+						"url": "localhost:9000/procesos/1/sub-procesos",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:9000/procesos/1",
+					"request": {
+						"url": "localhost:9000/procesos/1",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
 				}
-			],
-			"url": "localhost:9000/procesos",
-			"queryParams": [],
-			"preRequestScript": null,
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "POST",
-			"data": [],
-			"dataMode": "raw",
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1528261640960,
-			"name": "localhost:9000/procesos",
-			"description": "",
-			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
-			"responses": [],
-			"rawModeData": "{\n\t\"proceso\": {\n\t\t\"proceso_Nombre\": \"asdfdsf\",\n\t\t\"proceso_Codigo\": \"asdf\",\n\t\t\"proceso_Tipo\": 1,\n\t\t\"proceso_Responsable_Id\": 1,\n\t\t\"proceso_Documento\": \"asdf\"\n\t},\n\t\"productoServicios\": [{\n\t\t\"proceso\": \"asdf\",\n\t\t\"productoServicio\": \"adsf\",\n\t\t\"caracteristicas\": \"asdf\"\n\t}],\n\t\"caracterizaciones\": [{\n\t\t\"proceso\": \"asdf\",\n\t\t\"procedimiento\": \"sdf\",\n\t\t\"codigoProcedimiento\": \"sadf\",\n\t\t\"documentoSoporte\": \"asdf\",\n\t\t\"documentosCaracterizacion\": [{\n\t\t\t\"nombreDocumento\": \"asdf\",\n\t\t\t\"codigoDocumento\": \"asdf\",\n\t\t\t\"descripcion\": \"asdf\",\n\t\t\t\"anexo\": \"sadf\"\n\t\t}]\n\t}]\n}"
+			]
 		},
 		{
-			"id": "9db86788-f512-fa42-249d-b46c6efac157",
-			"headers": "Content-Type: application/json\n",
-			"headerData": [
-				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "localhost:9000/tipo-riesgo/1",
-			"queryParams": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"preRequestScript": null,
-			"method": "DELETE",
-			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
-			"data": [],
-			"dataMode": "raw",
-			"name": "Borrar tipo riesgo",
+			"name": "responsables",
 			"description": "",
-			"descriptionFormat": "html",
-			"time": 1527571261750,
-			"version": 2,
-			"responses": [],
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"folder": "56d0118f-6eeb-4a13-b500-e068e448debd",
-			"rawModeData": "{\n\"tipo_riesgo\" : \"ewwrdfdsfsdfds\"\n}"
+			"item": [
+				{
+					"name": "localhost:9000/responsables",
+					"request": {
+						"url": "",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"id": "a416545e-3e77-3df6-8d15-44c53f140e5b",
-			"headers": "Content-Type: application/json\n",
-			"headerData": [
-				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "localhost:9000/tipo-riesgo/",
-			"queryParams": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"preRequestScript": null,
-			"method": "POST",
-			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
-			"data": [],
-			"dataMode": "raw",
-			"name": "Crear tipo riesgo",
+			"name": "ejercicios evaluacion",
 			"description": "",
-			"descriptionFormat": "html",
-			"time": 1527571300476,
-			"version": 2,
-			"responses": [],
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"folder": "56d0118f-6eeb-4a13-b500-e068e448debd",
-			"rawModeData": "{\n\"tipo_riesgo\" : \"ewwr\"\n}"
-		},
-		{
-			"id": "b9bb8ae2-c357-350d-6c0d-789120d72976",
-			"headers": "Content-Type: application/json\n",
-			"headerData": [
+			"item": [
 				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "localhost:9000/tipo-riesgo/1",
-			"queryParams": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"preRequestScript": null,
-			"method": "PUT",
-			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
-			"data": [],
-			"dataMode": "raw",
-			"name": "Modificar tipo riesgo",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1527571284791,
-			"version": 2,
-			"responses": [],
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"folder": "56d0118f-6eeb-4a13-b500-e068e448debd",
-			"rawModeData": "{\n\"tipo_riesgo\" : \"ewwrdfdsfsdfds\"\n}"
-		},
-		{
-			"id": "bc128a3f-fc9e-36b2-3f7f-951d7519535a",
-			"headers": "Content-Type: application/json\n",
-			"headerData": [
+					"name": "Traer ejercicio riesgo",
+					"request": {
+						"url": "localhost:9000/ejercicio-riesgos/1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 1,\n\t\"proceso_id\": 1,\n\t\"estatus_id\": 1,\n\t\"descripcion\": \"fdsfsdfd\",\n\t\"fecha_creacion_ejercicio\": 123213213\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
 				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "localhost:9000/tipo-riesgo/1",
-			"queryParams": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"preRequestScript": "",
-			"method": "GET",
-			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
-			"data": [],
-			"dataMode": "raw",
-			"name": "Get tipo riesgo",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1527571187303,
-			"version": 2,
-			"responses": [],
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"folder": "56d0118f-6eeb-4a13-b500-e068e448debd",
-			"rawModeData": "{\n\"tipo_riesgo\" : \"ewwrdfdsfsdfds\"\n}"
-		},
-		{
-			"id": "e2dc28d2-7904-45fc-bbee-ea6448bf7040",
-			"headers": "Content-Type: application/json\n",
-			"headerData": [
+					"name": "Ejercicios por procesoId",
+					"request": {
+						"url": "localhost:9000/ejercicio-riesgos/procesos/1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 1,\n\t\"proceso_id\": 1,\n\t\"estatus_id\": 1,\n\t\"descripcion\": \"fdsfsdfd\",\n\t\"fecha_creacion_ejercicio\": 123213213\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
 				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
+					"name": "Delete ejercicio riesgo copy",
+					"request": {
+						"url": "localhost:9000/ejercicio-riesgos/1",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Ejercicio",
+					"request": {
+						"url": "localhost:9000/ejercicio-riesgos",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 1,\n\t\"proceso_id\": 1,\n\t\"estatus_id\": 1,\n\t\"descripcion\": \"fdsfsdfd\",\n\t\"fecha_creacion_ejercicio\": 123213213\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizasr ejercicio",
+					"request": {
+						"url": "localhost:9000/ejercicio-riesgos/1",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 1,\n\t\"proceso_id\": 1,\n\t\"estatus_id\": 1,\n\t\"descripcion\": \"changeit\",\n\t\"fecha_creacion_ejercicio\": 123213213\n}"
+						},
+						"description": ""
+					},
+					"response": []
 				}
-			],
-			"url": "localhost:9000/tipo-riesgo/",
-			"queryParams": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"preRequestScript": "",
-			"method": "GET",
-			"collectionId": "20e6a3c7-cff8-8f77-ea6a-17d2004b6aff",
-			"data": [],
-			"dataMode": "raw",
-			"name": "Traer todos tipo riesgos",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1527571466685,
-			"version": 2,
-			"responses": [],
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"folder": "56d0118f-6eeb-4a13-b500-e068e448debd",
-			"rawModeData": "{\n\"probabilidad\":\"test2\",\n\"puntaje\":\"1\",\n\"descripcion\":\"test\"\n}"
+			]
 		}
 	]
 }

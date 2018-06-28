@@ -2,20 +2,23 @@ package me.archdev.restapi
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
+import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
+import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.http.rutas.{EjerciciosEvaluacionesEstatusRutas, EjerciciosEvaluacionesRiesgosRutas}
+import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.persistencia.daos.{EjerciciosEvaluacionEstatusDaoImpl, EjerciciosEvaluacionRiesgosDaoImpl}
+import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.servicios.{EjerciciosEvaluacionesEstatusServiceImpl, EjerciciosEvaluacionesRiesgosServiceImpl}
 import com.amapola.strategos.core.procesos.http.rutas.ProcesosRutas
 import com.amapola.strategos.core.procesos.persistencia.daos.{CaracterizacionDaoImpl, DocumentosCaracterizacionDaoImpl, ProcesosDaoImpl, ProductosServiciosDaoImpl}
 import com.amapola.strategos.core.procesos.servicios.ProcesosServiciosImpl
+import com.amapola.strategos.core.responsables.http.rutas.ResponsablesRutas
+import com.amapola.strategos.core.responsables.persistencia.daos.ResponsablesDaoImpl
+import com.amapola.strategos.core.responsables.servicios.ResponsablesServiceImpl
 import com.amapola.strategos.core.tablas_sistema.http.rutas._
 import com.amapola.strategos.core.tablas_sistema.persistencia.daos._
 import com.amapola.strategos.core.tablas_sistema.servicios._
 import com.amapola.strategos.utils.db.DatabaseConnector
 import me.archdev.restapi.utils.Config
 import me.archdev.restapi.utils.db.DatabaseMigrationManager
-import akka.http.scaladsl.server.Directives._
-import com.amapola.strategos.core.responsables.http.rutas.ResponsablesRutas
-import com.amapola.strategos.core.responsables.persistencia.daos.ResponsablesDaoImpl
-import com.amapola.strategos.core.responsables.servicios.ResponsablesServiceImpl
 
 import scala.concurrent.ExecutionContext
 
@@ -60,6 +63,11 @@ object Boot extends App {
     val causasRiesgosServiceImpl = new CausasRiesgosServiceImpl(
       causasRiesgosDao)
 
+    val ejercicioEvaluacionEstadosDao = new EjerciciosEvaluacionEstatusDaoImpl(
+      databaseConnector)
+    val ejercicioEvaluacionRiesgosDao = new EjerciciosEvaluacionRiesgosDaoImpl(
+      databaseConnector)
+
     //Servicios
     val impactoRiesgoService = new ImpactoRiesgosServiceImpl(impactoRiesgoDao)
     val probabildadRiesgoService = new ProbabilidadRiesgoServiceImpl(
@@ -78,6 +86,12 @@ object Boot extends App {
       productosServiciosDao,
       documentosCaracterizacionDao)
 
+    val ejerciciosEstadosService = new EjerciciosEvaluacionesEstatusServiceImpl(
+      ejercicioEvaluacionEstadosDao)
+
+    val ejerciciosRiesgosService = new EjerciciosEvaluacionesRiesgosServiceImpl(
+      ejercicioEvaluacionRiesgosDao)
+
     //Rutas
     val procesosRutes =
       new ProcesosRutas(procesosService, config.archivos.directorio)
@@ -93,7 +107,11 @@ object Boot extends App {
     val probabilidadRiesgoRoute = new ProbabilidadRiesgosRoute(
       probabildadRiesgoService)
 
-    val calificacionRiesgoRoute = new CalificacionRiesgosRoute(calificacionRiesgoService)
+    val calificacionRiesgoRoute = new CalificacionRiesgosRoute(
+      calificacionRiesgoService)
+
+    val ejerciciosEstadosRoute = new EjerciciosEvaluacionesEstatusRutas(ejerciciosEstadosService)
+    val ejerciciosRutasRoute = new EjerciciosEvaluacionesRiesgosRutas(ejerciciosRiesgosService)
 
     val routes = causasRiesgosRoute.getPaths ~
       impactoRiesgosRoute.getPaths ~
@@ -101,7 +119,9 @@ object Boot extends App {
       tiposRiesgosRoute.getPaths ~
       procesosRutes.getPaths ~
       responsablesRoute.getPaths ~
-      calificacionRiesgoRoute.getPaths
+      calificacionRiesgoRoute.getPaths ~
+      ejerciciosEstadosRoute.getPaths() ~
+      ejerciciosRutasRoute.getPaths
 
     Http().bindAndHandle(routes, config.http.host, config.http.port)
   }

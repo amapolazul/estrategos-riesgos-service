@@ -7,7 +7,7 @@ import com.amapola.strategos.utils.db.DatabaseConnector
   * Definicion de la tabla Procesos. Este trait se encarga de mapear la entidad de base de datos
   * a una clase para su uso
   */
-private[procesos] trait ProcesosTable {
+trait ProcesosTable {
   protected val databaseConnector: DatabaseConnector
   import databaseConnector.profile.api._
 
