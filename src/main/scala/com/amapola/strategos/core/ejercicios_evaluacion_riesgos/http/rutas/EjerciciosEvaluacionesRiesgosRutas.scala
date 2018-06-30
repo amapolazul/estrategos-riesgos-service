@@ -134,7 +134,7 @@ class EjerciciosEvaluacionesRiesgosRutas(
             ejerciciosRiesgosService.traerEjerciciosEvaluacionPorProceso(
               procesoId)) {
             case Success(result) =>
-              complete(StatusCodes.NotFound, result.asJson)
+              complete(StatusCodes.OK, result.asJson)
             case Failure(ex) =>
               complete(StatusCodes.InternalServerError, ex.getMessage)
           }
