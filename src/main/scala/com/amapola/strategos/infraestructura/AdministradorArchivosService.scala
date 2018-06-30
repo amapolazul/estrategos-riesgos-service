@@ -8,9 +8,10 @@ trait AdministradorArchivosService {
   /**
     * Escribe el archivo dentro del destio especificado
     * @param archivo
+    * @param nombreArchivo
     * @param destino
     */
-  def crearArchivo(archivo: File, destino: String): Unit
+  def crearArchivo(archivo: File,  nombreArchivo: String, destino: String): Unit
 
 }
 
@@ -19,18 +20,19 @@ object AdministradorArchivosServiceImpl extends AdministradorArchivosService {
   /**
     * Escribe el archivo dentro del destio especificado
     *
-    * @param archivo
+    * @param archivoTmp
+    * @param nombreArchivo
     * @param destino
     */
-  override def crearArchivo(archivo: File, destino: String): Unit = {
+  override def crearArchivo(archivoTmp: File, nombreArchivo: String, destino: String): Unit = {
 
     val directorio = new File(destino)
 
-    val archivoFinalD = new File(directorio, archivo.getName)
+    val archivoFinalD = new File(directorio, nombreArchivo)
 
     val archivoFinal = Files.newOutputStream(archivoFinalD.toPath)
 
-    Files.copy(archivo.toPath, archivoFinal)
+    Files.copy(archivoTmp.toPath, archivoFinal)
 
   }
 }

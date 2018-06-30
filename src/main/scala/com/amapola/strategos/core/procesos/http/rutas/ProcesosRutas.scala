@@ -64,6 +64,8 @@ class ProcesosRutas(
                 .map(x => { complete(StatusCodes.OK, x.asJson) })
                 .getOrElse(
                   complete(StatusCodes.NotFound, "Proceso no encontrado"))
+            case Failure(ex) =>
+              complete(StatusCodes.InternalServerError, ex.getMessage())
           }
         }
       }
@@ -95,15 +97,15 @@ class ProcesosRutas(
             val finalStatus = files.foldLeft(StatusCodes.OK) {
               case (status, (metadata, file)) =>
                 AdministradorArchivosServiceImpl.crearArchivo(file,
+                                                              metadata.fileName,
                                                               directorioDestino)
                 file.delete()
                 status
             }
 
-            complete(finalStatus)
+            complete(finalStatus, "Archivos cargados correctamente")
         }
       }
     }
-
   }
 }
