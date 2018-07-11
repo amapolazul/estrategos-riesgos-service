@@ -3,7 +3,7 @@ package com.amapola.strategos.core.tablas_sistema.persistencia.tablas
 import com.amapola.strategos.core.tablas_sistema.persistencia.entidades.{ImpactoRiesgosEntidad, ProbabilidadRiesgosEntidad}
 import com.amapola.strategos.utils.db.DatabaseConnector
 
-private[tablas_sistema] trait ProbabilidadRiesgosTable {
+private[core] trait ProbabilidadRiesgosTable {
 
   protected val databaseConnector: DatabaseConnector
   import databaseConnector.profile.api._

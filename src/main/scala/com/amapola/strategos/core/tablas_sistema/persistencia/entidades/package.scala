@@ -74,4 +74,32 @@ package object entidades {
       )
     }
   }
+
+  case class RespuestasRiesgosEntidad(
+      id: Option[Long] = None,
+      respuestaRiesgoNombre: String,
+      descripcion: String
+  ) {
+    def merge(porActualizar: RespuestasRiesgosEntidad) = {
+      porActualizar.copy(
+        respuestaRiesgoNombre = this.respuestaRiesgoNombre,
+        descripcion = this.descripcion
+      )
+    }
+  }
+
+  case class EfectividadRiesgosEntidad(
+      id: Option[Long] = None,
+      efectividad_nombre: String,
+      puntaje: Int,
+      descripcion: String
+  ) {
+    def merge(porActualizar: EfectividadRiesgosEntidad) = {
+      porActualizar.copy(
+        efectividad_nombre = this.efectividad_nombre,
+        puntaje = this.puntaje,
+        descripcion = this.descripcion
+      )
+    }
+  }
 }

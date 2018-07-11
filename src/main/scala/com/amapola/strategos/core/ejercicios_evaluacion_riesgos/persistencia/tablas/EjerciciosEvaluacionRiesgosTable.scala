@@ -12,7 +12,7 @@ import slick.lifted.ForeignKeyQuery
 /**
   * Modela la tabla de ejercicios de evaluacion por proceso
   */
-private[ejercicios_evaluacion_riesgos] trait EjerciciosEvaluacionRiesgosTable
+private[core] trait EjerciciosEvaluacionRiesgosTable
     extends ProcesosTable
     with EjerciciosEvaluacionesEstatusTable {
 
