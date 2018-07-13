@@ -160,4 +160,66 @@ package object json {
       )
     }
   }
+
+  case class RespuestasRiesgoJson(
+      id: Option[Long] = None,
+      respuestaRiesgoNombre: String,
+      descripcion: String
+  ) {
+    require(!respuestaRiesgoNombre.isEmpty,
+            "El campo respuesta riesgo no puede ser vacio")
+    require(!descripcion.isEmpty,
+            "La descripcion del la respuesta riesgo no puede ser vacia")
+  }
+
+  object RespuestasRiesgoJson {
+    def toEntity(json: RespuestasRiesgoJson): RespuestasRiesgosEntidad = {
+      RespuestasRiesgosEntidad(
+        id = json.id,
+        respuestaRiesgoNombre = json.respuestaRiesgoNombre,
+        descripcion = json.descripcion
+      )
+    }
+
+    def fromEntity(entidad: RespuestasRiesgosEntidad): RespuestasRiesgoJson = {
+      RespuestasRiesgoJson(
+        id = entidad.id,
+        respuestaRiesgoNombre = entidad.respuestaRiesgoNombre,
+        descripcion = entidad.descripcion
+      )
+    }
+  }
+
+  case class EfectividadRiesgosJson(
+      id: Option[Long] = None,
+      efectividad_nombre: String,
+      puntaje: Int = 0,
+      descripcion: String
+  ) {
+    require(!efectividad_nombre.isEmpty,
+            "El campo nombre efectivad no puede ser vacio")
+    require(puntaje >= 0, "El campo puntaje debe ser mayor o igual a cero")
+    require(!descripcion.isEmpty, "El campo descripción no puede ser vacio")
+  }
+
+  object EfectividadRiesgosJson {
+    def toEntity(json: EfectividadRiesgosJson): EfectividadRiesgosEntidad = {
+      EfectividadRiesgosEntidad(
+        id = json.id,
+        efectividad_nombre = json.efectividad_nombre,
+        puntaje = json.puntaje,
+        descripcion = json.descripcion
+      )
+    }
+
+    def fromEntity(
+        entidad: EfectividadRiesgosEntidad): EfectividadRiesgosJson = {
+      EfectividadRiesgosJson(
+        id = entidad.id,
+        efectividad_nombre = entidad.efectividad_nombre,
+        puntaje = entidad.puntaje,
+        descripcion = entidad.descripcion
+      )
+    }
+  }
 }

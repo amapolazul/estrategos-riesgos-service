@@ -6,7 +6,10 @@ import akka.http.scaladsl.server.Directives.{entity, _}
 import com.amapola.strategos.core.tablas_sistema.http.json._
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import com.amapola.strategos.core.tablas_sistema.servicios.TipoRiesgosService
-import com.amapola.strategos.utils.http.{FileUploadDirectives, StrategosCorsSettings}
+import com.amapola.strategos.utils.http.{
+  FileUploadDirectives,
+  StrategosCorsSettings
+}
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -14,11 +17,16 @@ import io.circe.syntax._
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
+/**
+  * Expone los servicios http para el dominio tipo-riesgo
+  * @param tipoRiesgosServie
+  * @param executionContext
+  */
 class TiposRiesgosRoute(tipoRiesgosServie: TipoRiesgosService)(
     implicit executionContext: ExecutionContext)
     extends FailFastCirceSupport
     with FileUploadDirectives
-      with StrategosCorsSettings{
+    with StrategosCorsSettings {
 
   def getPaths: Route = cors(settings) {
     pathPrefix("tipo-riesgo") {

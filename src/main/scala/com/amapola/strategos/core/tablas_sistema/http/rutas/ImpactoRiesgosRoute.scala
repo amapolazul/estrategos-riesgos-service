@@ -18,6 +18,11 @@ import io.circe.syntax._
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
+/**
+  * Expone los servicios http para el dominio impacto riesgos
+  * @param impactoRiesgosService
+  * @param executionContext
+  */
 class ImpactoRiesgosRoute(impactoRiesgosService: ImpactoRiesgosService)(
     implicit executionContext: ExecutionContext)
     extends FailFastCirceSupport

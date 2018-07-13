@@ -28,7 +28,7 @@ class EjerciciosEvaluacionesEstatusRutas(
     * Devuelve las rutas asociadas al dominio ejercicio estados
     * @return
     */
-  def getPaths() = cors(settings) {
+  def getPaths = cors(settings) {
     pathPrefix("ejercicio-estados") {
       traerEvaluacionEstados
     }

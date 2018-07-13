@@ -30,6 +30,11 @@ import io.circe.syntax._
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
+/**
+  * Expone las rutas http para el dominio calificacion-riesgo
+  * @param calificacionRiesgosService
+  * @param executionContext
+  */
 class CalificacionRiesgosRoute(
     calificacionRiesgosService: CalificacionRiesgosService)(
     implicit executionContext: ExecutionContext)

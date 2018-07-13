@@ -15,6 +15,11 @@ import io.circe.syntax._
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
+/**
+  * Expone las rutas http para el dominio de causas riesgos
+  * @param causasRiesgosService
+  * @param executionContext
+  */
 class CausasRiesgosRoute(causasRiesgosService: CausasRiesgosService)(
     implicit executionContext: ExecutionContext)
     extends FailFastCirceSupport

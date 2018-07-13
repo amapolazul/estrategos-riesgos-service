@@ -68,6 +68,10 @@ object Boot extends App {
     val ejercicioEvaluacionRiesgosDao = new EjerciciosEvaluacionRiesgosDaoImpl(
       databaseConnector)
 
+    val efectividadRiesgosDao = new EfectividadRiesgosDaoImpl(databaseConnector)
+
+    val respuestaRiesgosDao = new RespuestaRiesgosDaoImpl(databaseConnector)
+
     //Servicios
     val impactoRiesgoService = new ImpactoRiesgosServiceImpl(impactoRiesgoDao)
     val probabildadRiesgoService = new ProbabilidadRiesgoServiceImpl(
@@ -92,6 +96,10 @@ object Boot extends App {
     val ejerciciosRiesgosService = new EjerciciosEvaluacionesRiesgosServiceImpl(
       ejercicioEvaluacionRiesgosDao)
 
+    val efectividadRiesgosService = new EfectividadRiesgosServiceImpl(efectividadRiesgosDao)
+
+    val respuestasRiesgosService = new RespuestasRiesgosServiceImpl(respuestaRiesgosDao)
+
     //Rutas
     val procesosRutes =
       new ProcesosRutas(procesosService, config.archivos.directorio)
@@ -113,6 +121,10 @@ object Boot extends App {
     val ejerciciosEstadosRoute = new EjerciciosEvaluacionesEstatusRutas(ejerciciosEstadosService)
     val ejerciciosRutasRoute = new EjerciciosEvaluacionesRiesgosRutas(ejerciciosRiesgosService)
 
+    val efectividadRiesgoRoute = new EfectividadRiesgoRoute(efectividadRiesgosService)
+
+    val respuestasRiesgoRoute = new RespuestasRiesgoRoute(respuestasRiesgosService)
+
     val routes = causasRiesgosRoute.getPaths ~
       impactoRiesgosRoute.getPaths ~
       probabilidadRiesgoRoute.getPaths ~
@@ -120,8 +132,10 @@ object Boot extends App {
       procesosRutes.getPaths ~
       responsablesRoute.getPaths ~
       calificacionRiesgoRoute.getPaths ~
-      ejerciciosEstadosRoute.getPaths() ~
-      ejerciciosRutasRoute.getPaths
+      ejerciciosEstadosRoute.getPaths ~
+      ejerciciosRutasRoute.getPaths ~
+      efectividadRiesgoRoute.getPaths ~
+      respuestasRiesgoRoute.getPaths
 
     Http().bindAndHandle(routes, config.http.host, config.http.port)
   }
