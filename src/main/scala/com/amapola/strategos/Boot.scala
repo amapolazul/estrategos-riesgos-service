@@ -121,7 +121,7 @@ object Boot extends App {
     val ejerciciosEstadosRoute = new EjerciciosEvaluacionesEstatusRutas(ejerciciosEstadosService)
     val ejerciciosRutasRoute = new EjerciciosEvaluacionesRiesgosRutas(ejerciciosRiesgosService)
 
-    val efectividadRiesgoRoute = new EfectividadRiesgoRoute(efectividadRiesgosService)
+    val efectividadRiesgoRoute = new EfectividadRiesgosRoute(efectividadRiesgosService)
 
     val respuestasRiesgoRoute = new RespuestasRiesgoRoute(respuestasRiesgosService)
 

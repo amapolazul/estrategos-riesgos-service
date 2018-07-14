@@ -141,6 +141,166 @@
 						}
 					],
 					"_postman_isSubFolder": true
+				},
+				{
+					"name": "respuestas-riesgos",
+					"description": "",
+					"item": [
+						{
+							"name": "Traer respuestas riesgos",
+							"request": {
+								"url": "localhost:9000/respuestas-riesgos",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Traer respuestas riesgos por id",
+							"request": {
+								"url": "localhost:9000/respuestas-riesgos/1",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Borrar respuesta riesgos",
+							"request": {
+								"url": "localhost:9000/respuestas-riesgos/1",
+								"method": "DELETE",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "crear respuesta riesgos",
+							"request": {
+								"url": "localhost:9000/respuestas-riesgos",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n \"respuestaRiesgoNombre\": \"String\",\n \"descripcion\": \"String\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Actualizar respuesta riesgos copy",
+							"request": {
+								"url": "localhost:9000/respuestas-riesgos/1",
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n \"id\": 1,\n \"respuestaRiesgoNombre\": \"String445\",\n \"descripcion\": \"String\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "efectividad-riesgos",
+					"description": "",
+					"item": [
+						{
+							"name": "Traer efectividad riesgos",
+							"request": {
+								"url": "localhost:9000/efectividad-riesgos",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Traer efectividad por id",
+							"request": {
+								"url": "localhost:9000/efectividad-riesgos/1",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Crear efectividad riesgo",
+							"request": {
+								"url": "http://localhost:9000/efectividad-riesgos",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 1,\n\t\"efectividad_nombre\": \"toma\",\n\t\"puntaje\": 1,\n\t\"descripcion\": \"sdfdsf\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Actualizar efectividad riesgo",
+							"request": {
+								"url": "http://localhost:9000/efectividad-riesgos/1",
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 1,\n\t\"efectividad_nombre\": \"toma 2\",\n\t\"puntaje\": 1,\n\t\"descripcion\": \"sdfdsf\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Borrar efectividad riesgo",
+							"request": {
+								"url": "http://localhost:9000/efectividad-riesgos/1",
+								"method": "DELETE",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -216,7 +376,27 @@
 				{
 					"name": "Traer ejercicio riesgo",
 					"request": {
-						"url": "localhost:9000/ejercicio-riesgos/1",
+						"url": "localhost:9000/ejercicio-riesgos/3",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 1,\n\t\"proceso_id\": 1,\n\t\"estatus_id\": 1,\n\t\"descripcion\": \"fdsfsdfd\",\n\t\"fecha_creacion_ejercicio\": 123213213\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Traer ejercicios estados",
+					"request": {
+						"url": "localhost:9000/ejercicio-estados/",
 						"method": "GET",
 						"header": [
 							{

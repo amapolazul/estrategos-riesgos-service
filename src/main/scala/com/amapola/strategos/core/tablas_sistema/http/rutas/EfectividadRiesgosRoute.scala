@@ -15,7 +15,12 @@ import io.circe.syntax._
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
-class EfectividadRiesgoRoute(efectividadRiesgosService: EfectividadRiesgosService)(
+/**
+  * Expone servicios http para la entidad efectividad_riesgos
+  * @param efectividadRiesgosService
+  * @param executionContext
+  */
+class EfectividadRiesgosRoute(efectividadRiesgosService: EfectividadRiesgosService)(
   implicit executionContext: ExecutionContext)
   extends FailFastCirceSupport
     with FileUploadDirectives

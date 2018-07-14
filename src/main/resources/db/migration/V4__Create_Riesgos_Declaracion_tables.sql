@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS efectividad_riesgos (
     "id" BIGSERIAL PRIMARY KEY,
     "efectividad_nombre" VARCHAR NOT NULL,
     "puntaje" INTEGER NOT NULL,
-    "descripcion" INTEGER NOT NULL
+    "descripcion" VARCHAR NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS declaracion_riesgos (
