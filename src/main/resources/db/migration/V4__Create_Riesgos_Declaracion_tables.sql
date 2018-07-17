@@ -57,3 +57,6 @@ CREATE TABLE IF NOT EXISTS controles_declaracion_riesgos (
     "control" VARCHAR NOT NULL,
     "descripcion" VARCHAR NOT NULL
 );
+
+INSERT INTO estuatus_riesgos(id, estatus_riesgo_nombre) VALUES (1, 'Pendiente');
+INSERT INTO estuatus_riesgos(id, estatus_riesgo_nombre) VALUES (2, 'Mitigado');
