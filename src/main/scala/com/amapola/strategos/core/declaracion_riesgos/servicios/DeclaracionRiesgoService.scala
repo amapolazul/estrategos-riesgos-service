@@ -54,7 +54,8 @@ trait DeclaracionRiesgoService {
     * @param declaracionRiesgoId
     * @return
     */
-  def traerDeclaracionRiesgoPorId(declaracionRiesgoId: Long): Future[Option[DeclaracionRiesgosRequestJson]]
+  def traerDeclaracionRiesgoPorId(
+      declaracionRiesgoId: Long): Future[Option[DeclaracionRiesgosRequestJson]]
 }
 
 class DeclaracionRiesgoServiceImpl(
@@ -204,13 +205,17 @@ class DeclaracionRiesgoServiceImpl(
     * @param declaracionRiesgoId
     * @return
     */
-  override def traerDeclaracionRiesgoPorId(declaracionRiesgoId: Long): Future[Option[DeclaracionRiesgosRequestJson]] = {
-    val fullDeclaracionRequest = for {
+  override def traerDeclaracionRiesgoPorId(declaracionRiesgoId: Long)
+    : Future[Option[DeclaracionRiesgosRequestJson]] = {
+    for {
       declaracionRiesgo <- declaracionRiesgosDao.traerDeclaracionRiesgoPorId(
         declaracionRiesgoId)
-      causasRiesgo <- causasDeclaracionService.listarCausasDeclaracionPorRiesgoId(declaracionRiesgoId)
-      efectosRiesgo <- efectosDeclaracionService.listarEfectosDeclaracionPorRiesgoId(declaracionRiesgoId)
-      controlesRiesgo <- controlesDeclaracionService.listarControlesDeclaracionPorRiesgoId(declaracionRiesgoId)
+      causasRiesgo <- causasDeclaracionService
+        .listarCausasDeclaracionPorRiesgoId(declaracionRiesgoId)
+      efectosRiesgo <- efectosDeclaracionService
+        .listarEfectosDeclaracionPorRiesgoId(declaracionRiesgoId)
+      controlesRiesgo <- controlesDeclaracionService
+        .listarControlesDeclaracionPorRiesgoId(declaracionRiesgoId)
     } yield {
       declaracionRiesgo.map(declaracion => {
         DeclaracionRiesgosRequestJson(
@@ -221,6 +226,5 @@ class DeclaracionRiesgoServiceImpl(
         )
       })
     }
-    fullDeclaracionRequest
   }
 }
