@@ -4,7 +4,7 @@ import com.amapola.strategos.core.declaracion_riesgos.persistencia.entidades.Cau
 import com.amapola.strategos.core.declaracion_riesgos.persistencia.tablas.CausasDeclaracionRiesgosTable
 import com.amapola.strategos.utils.db.DatabaseConnector
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 trait CausasDeclaracionDao {
 
@@ -13,7 +13,7 @@ trait CausasDeclaracionDao {
     * @param entidad
     * @return
     */
-  def crearCausasDeclaracionDao(
+  def crearCausasDeclaracion(
       entidad: CausasDeclaracionRiesgosEntidad): Future[Long]
 
   /**
@@ -51,7 +51,8 @@ trait CausasDeclaracionDao {
 
 }
 
-class CausasDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)
+class CausasDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
+    implicit executionContext: ExecutionContext)
     extends CausasDeclaracionDao
     with CausasDeclaracionRiesgosTable {
 
@@ -64,7 +65,7 @@ class CausasDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)
     * @param entidad
     * @return
     */
-  override def crearDeclaracionDao(
+  override def crearCausasDeclaracion(
       entidad: CausasDeclaracionRiesgosEntidad): Future[Long] = {
     db.run(
       causasDeclaracionRiesgos returning causasDeclaracionRiesgos

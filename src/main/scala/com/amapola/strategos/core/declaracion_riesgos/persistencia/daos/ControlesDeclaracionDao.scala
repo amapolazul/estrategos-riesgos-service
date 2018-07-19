@@ -4,7 +4,7 @@ import com.amapola.strategos.core.declaracion_riesgos.persistencia.entidades.Con
 import com.amapola.strategos.core.declaracion_riesgos.persistencia.tablas.ControlesDeclaracionRiesgosTable
 import com.amapola.strategos.utils.db.DatabaseConnector
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 trait ControlesDeclaracionDao {
 
@@ -13,7 +13,7 @@ trait ControlesDeclaracionDao {
     * @param entidad
     * @return
     */
-  def crearControlesDeclaracionDao(
+  def crearControlesDeclaracion(
       entidad: ControlesDeclaracionRiesgosEntidad): Future[Long]
 
   /**
@@ -39,8 +39,8 @@ trait ControlesDeclaracionDao {
     * @param declaracionRiesgoId
     * @return
     */
-  def traerControlesDeclaracionPorRiesgoId(
-      declaracionRiesgoId: Long): Future[Seq[ControlesDeclaracionRiesgosEntidad]]
+  def traerControlesDeclaracionPorRiesgoId(declaracionRiesgoId: Long)
+    : Future[Seq[ControlesDeclaracionRiesgosEntidad]]
 
   /**
     * Borra un registro de la tabla causas_declaracion_riesgo dado un id
@@ -51,7 +51,8 @@ trait ControlesDeclaracionDao {
 
 }
 
-class ControlesDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)
+class ControlesDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
+    implicit executionContext: ExecutionContext)
     extends ControlesDeclaracionDao
     with ControlesDeclaracionRiesgosTable {
 
@@ -64,7 +65,7 @@ class ControlesDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)
     * @param entidad
     * @return
     */
-  override def crearControlesDeclaracionDao(
+  override def crearControlesDeclaracion(
       entidad: ControlesDeclaracionRiesgosEntidad): Future[Long] = {
     db.run(
       controlDeclaracionRiesgos returning controlDeclaracionRiesgos

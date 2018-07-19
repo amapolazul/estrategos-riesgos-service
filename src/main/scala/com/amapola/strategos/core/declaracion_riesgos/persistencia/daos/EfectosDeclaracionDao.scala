@@ -4,7 +4,7 @@ import com.amapola.strategos.core.declaracion_riesgos.persistencia.entidades.Efe
 import com.amapola.strategos.core.declaracion_riesgos.persistencia.tablas.EfectosDeclaracionRiesgosTable
 import com.amapola.strategos.utils.db.DatabaseConnector
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 trait EfectosDeclaracionDao {
 
@@ -13,7 +13,7 @@ trait EfectosDeclaracionDao {
     * @param entidad
     * @return
     */
-  def crearEfectosDeclaracionDao(
+  def crearEfectosDeclaracion(
       entidad: EfectosDeclaracionRiesgosEntidad): Future[Long]
 
   /**
@@ -51,7 +51,8 @@ trait EfectosDeclaracionDao {
 
 }
 
-class EfectosDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)
+class EfectosDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
+    implicit executionContext: ExecutionContext)
     extends EfectosDeclaracionDao
     with EfectosDeclaracionRiesgosTable {
 
@@ -64,7 +65,7 @@ class EfectosDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)
     * @param entidad
     * @return
     */
-  override def crearEfectosDeclaracionDao(
+  override def crearEfectosDeclaracion(
       entidad: EfectosDeclaracionRiesgosEntidad): Future[Long] = {
     db.run(
       efectosDeclaracionRiesgos returning efectosDeclaracionRiesgos

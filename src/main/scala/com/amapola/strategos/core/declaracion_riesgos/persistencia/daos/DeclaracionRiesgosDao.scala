@@ -4,7 +4,7 @@ import com.amapola.strategos.core.declaracion_riesgos.persistencia.entidades.Dec
 import com.amapola.strategos.core.declaracion_riesgos.persistencia.tablas.DeclaracionRiesgosTable
 import com.amapola.strategos.utils.db.DatabaseConnector
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 trait DeclaracionRiesgosDao {
 
@@ -58,10 +58,10 @@ trait DeclaracionRiesgosDao {
 
 }
 
-class DeclaracionRiesgosDaoImpl(val databaseConnector: DatabaseConnector)
+class DeclaracionRiesgosDaoImpl(val databaseConnector: DatabaseConnector)(
+    implicit executionContext: ExecutionContext)
     extends DeclaracionRiesgosDao
     with DeclaracionRiesgosTable {
-
 
   import databaseConnector._
   import databaseConnector.profile.api._
