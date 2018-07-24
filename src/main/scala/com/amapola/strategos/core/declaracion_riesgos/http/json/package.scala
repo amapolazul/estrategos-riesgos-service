@@ -110,14 +110,12 @@ package object json {
   case class CausasDeclaracionRiesgosJson(
       id: Option[Long] = None,
       probabilidad_riesgo_id: Long,
-      declaracion_riesgo_id: Long,
+      declaracion_riesgo_id: Option[Long],
       causa: String,
       descripcion: String
   ) {
     require(probabilidad_riesgo_id > 0,
             "El campo probabilidad_riesgo_id debe ser mayor a 0")
-    require(declaracion_riesgo_id > 0,
-            "El campo declaracion_riesgo_id debe ser mayor a 0")
     require(!causa.isEmpty, "El campo causa no puede ser vacio")
     require(!descripcion.isEmpty, "El descripcion causa no puede ser vacio")
   }
@@ -147,13 +145,11 @@ package object json {
   case class EfectosDeclaracionRiesgosJson(
       id: Option[Long] = None,
       impacto_riesgos_id: Long,
-      declaracion_riesgo_id: Long,
+      declaracion_riesgo_id: Option[Long],
       impacto: String,
       descripcion: String
   ) {
     require(impacto_riesgos_id > 0,
-            "El campo impacto_riesgos_id debe ser mayor a 0")
-    require(declaracion_riesgo_id > 0,
             "El campo declaracion_riesgo_id debe ser mayor a 0")
     require(!impacto.isEmpty, "El campo impacto no puede ser vacio")
     require(!descripcion.isEmpty, "El campo descripcion no puede ser vacio")
@@ -184,14 +180,12 @@ package object json {
   case class ControlesDeclaracionRiesgosJson(
       id: Option[Long] = None,
       efectividad_riesgos_id: Long,
-      declaracion_riesgo_id: Long,
+      declaracion_riesgo_id: Option[Long],
       control: String,
       descripcion: String
   ) {
     require(efectividad_riesgos_id > 0,
             "El campo efectividad_riesgos_id no puede ser vacio")
-    require(declaracion_riesgo_id > 0,
-            "El campo declaracion_riesgo_id no puede ser vacio")
     require(!control.isEmpty, "El campo control no puede ser vacio")
     require(!descripcion.isEmpty, "El campo descripcion no puede ser vacio")
   }
@@ -223,8 +217,8 @@ package object json {
       efectosDeclaracionRiesgo: List[EfectosDeclaracionRiesgosJson],
       controlesDeclaracionRiesgo: List[ControlesDeclaracionRiesgosJson],
   ) {
-    require(causasDeclaracionRiesgo.size > 1, "Debe existir por lo menos una causa")
-    require(controlesDeclaracionRiesgo.size > 1, "Debe existir por lo menos un control")
-    require(efectosDeclaracionRiesgo.size > 1, "Debe existir por lo menos un efecto")
+    require(causasDeclaracionRiesgo.size >= 1, "Debe existir por lo menos una causa")
+    require(controlesDeclaracionRiesgo.size >= 1, "Debe existir por lo menos un control")
+    require(efectosDeclaracionRiesgo.size >= 1, "Debe existir por lo menos un efecto")
   }
 }

@@ -14,7 +14,7 @@ private[declaracion_riesgos] trait DeclaracionRiesgosEstatusTable {
       extends Table[EstatusRiesgosEntidad](tag, "estuatus_riesgos") {
 
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-    def estatus_riesgo_nombre = column[String]("estatus")
+    def estatus_riesgo_nombre = column[String]("estatus_riesgo_nombre")
 
     def * =
       (

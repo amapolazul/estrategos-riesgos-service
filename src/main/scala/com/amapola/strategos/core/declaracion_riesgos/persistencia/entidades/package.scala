@@ -48,7 +48,7 @@ package object entidades {
   case class CausasDeclaracionRiesgosEntidad(
       id: Option[Long] = None,
       probabilidad_riesgo_id: Long,
-      declaracion_riesgo_id: Long,
+      declaracion_riesgo_id: Option[Long],
       causa: String,
       descripcion: String
   ) {
@@ -66,7 +66,7 @@ package object entidades {
   case class EfectosDeclaracionRiesgosEntidad(
       id: Option[Long] = None,
       impacto_riesgos_id: Long,
-      declaracion_riesgo_id: Long,
+      declaracion_riesgo_id: Option[Long],
       impacto: String,
       descripcion: String
   ) {
@@ -84,7 +84,7 @@ package object entidades {
   case class ControlesDeclaracionRiesgosEntidad(
       id: Option[Long] = None,
       efectividad_riesgos_id: Long,
-      declaracion_riesgo_id: Long,
+      declaracion_riesgo_id: Option[Long],
       control: String,
       descripcion: String
   ) {

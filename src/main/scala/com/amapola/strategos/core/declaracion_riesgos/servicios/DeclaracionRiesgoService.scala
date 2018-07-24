@@ -100,7 +100,7 @@ class DeclaracionRiesgoServiceImpl(
       causasList: List[CausasDeclaracionRiesgosJson]): Future[List[Long]] = {
     val causasFuture = causasList.map(causa => {
       val causaConRiesgoId =
-        causa.copy(declaracion_riesgo_id = declaracionRiesgoId)
+        causa.copy(declaracion_riesgo_id = Some(declaracionRiesgoId))
       causasDeclaracionService.crearCausaDeclaracionService(causaConRiesgoId)
     })
 
@@ -118,7 +118,7 @@ class DeclaracionRiesgoServiceImpl(
       efectosList: List[EfectosDeclaracionRiesgosJson]): Future[List[Long]] = {
     val efectosFuture = efectosList.map(efecto => {
       val efectosConRiesgoId =
-        efecto.copy(declaracion_riesgo_id = declaracionRiesgoId)
+        efecto.copy(declaracion_riesgo_id = Some(declaracionRiesgoId))
       efectosDeclaracionService.crearEfectoDeclaracionService(
         efectosConRiesgoId)
     })
@@ -138,7 +138,7 @@ class DeclaracionRiesgoServiceImpl(
     : Future[List[Long]] = {
     val controlesFuture = controlesList.map(control => {
       val controlConRiesgoId =
-        control.copy(declaracion_riesgo_id = declaracionRiesgoId)
+        control.copy(declaracion_riesgo_id = Some(declaracionRiesgoId))
       controlesDeclaracionService.crearControlDeclaracionService(
         controlConRiesgoId)
     })

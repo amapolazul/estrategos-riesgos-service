@@ -4,11 +4,28 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
-import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.http.rutas.{EjerciciosEvaluacionesEstatusRutas, EjerciciosEvaluacionesRiesgosRutas}
-import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.persistencia.daos.{EjerciciosEvaluacionEstatusDaoImpl, EjerciciosEvaluacionRiesgosDaoImpl}
-import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.servicios.{EjerciciosEvaluacionesEstatusServiceImpl, EjerciciosEvaluacionesRiesgosServiceImpl}
+import com.amapola.strategos.core.declaracion_riesgos.http.rutas._
+import com.amapola.strategos.core.declaracion_riesgos.persistencia.daos._
+import com.amapola.strategos.core.declaracion_riesgos.servicios._
+import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.http.rutas.{
+  EjerciciosEvaluacionesEstatusRutas,
+  EjerciciosEvaluacionesRiesgosRutas
+}
+import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.persistencia.daos.{
+  EjerciciosEvaluacionEstatusDaoImpl,
+  EjerciciosEvaluacionRiesgosDaoImpl
+}
+import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.servicios.{
+  EjerciciosEvaluacionesEstatusServiceImpl,
+  EjerciciosEvaluacionesRiesgosServiceImpl
+}
 import com.amapola.strategos.core.procesos.http.rutas.ProcesosRutas
-import com.amapola.strategos.core.procesos.persistencia.daos.{CaracterizacionDaoImpl, DocumentosCaracterizacionDaoImpl, ProcesosDaoImpl, ProductosServiciosDaoImpl}
+import com.amapola.strategos.core.procesos.persistencia.daos.{
+  CaracterizacionDaoImpl,
+  DocumentosCaracterizacionDaoImpl,
+  ProcesosDaoImpl,
+  ProductosServiciosDaoImpl
+}
 import com.amapola.strategos.core.procesos.servicios.ProcesosServiciosImpl
 import com.amapola.strategos.core.responsables.http.rutas.ResponsablesRutas
 import com.amapola.strategos.core.responsables.persistencia.daos.ResponsablesDaoImpl
@@ -72,6 +89,14 @@ object Boot extends App {
 
     val respuestaRiesgosDao = new RespuestaRiesgosDaoImpl(databaseConnector)
 
+    val causasDeclaracionDao = new CausasDeclaracionDaoImpl(databaseConnector)
+    val controlesDeclaracionDao = new ControlesDeclaracionDaoImpl(
+      databaseConnector)
+    val efectosDeclaracionDao = new EfectosDeclaracionDaoImpl(databaseConnector)
+    val declaracionRiesgosEstatusDao = new DeclaracionRiesgosEstatusDaoImpl(
+      databaseConnector)
+    val declaracionRiesgosDao = new DeclaracionRiesgosDaoImpl(databaseConnector)
+
     //Servicios
     val impactoRiesgoService = new ImpactoRiesgosServiceImpl(impactoRiesgoDao)
     val probabildadRiesgoService = new ProbabilidadRiesgoServiceImpl(
@@ -96,9 +121,25 @@ object Boot extends App {
     val ejerciciosRiesgosService = new EjerciciosEvaluacionesRiesgosServiceImpl(
       ejercicioEvaluacionRiesgosDao)
 
-    val efectividadRiesgosService = new EfectividadRiesgosServiceImpl(efectividadRiesgosDao)
+    val efectividadRiesgosService = new EfectividadRiesgosServiceImpl(
+      efectividadRiesgosDao)
 
-    val respuestasRiesgosService = new RespuestasRiesgosServiceImpl(respuestaRiesgosDao)
+    val respuestasRiesgosService = new RespuestasRiesgosServiceImpl(
+      respuestaRiesgosDao)
+
+    val causasDeclaracionService = new CausasDeclaracionServiceImpl(
+      causasDeclaracionDao)
+    val controlesDeclaracionService = new ControlesDeclaracionServiceImpl(
+      controlesDeclaracionDao)
+    val efectosDeclaracionService = new EfectosDeclaracionServiceImpl(
+      efectosDeclaracionDao)
+    val declaracionRiesgosEstatusService =
+      new DeclaracionRiesgosEstatusServiceImpl(declaracionRiesgosEstatusDao)
+    val declaracionRiesgosService = new DeclaracionRiesgoServiceImpl(
+      declaracionRiesgosDao,
+      causasDeclaracionService,
+      efectosDeclaracionService,
+      controlesDeclaracionService)
 
     //Rutas
     val procesosRutes =
@@ -118,12 +159,27 @@ object Boot extends App {
     val calificacionRiesgoRoute = new CalificacionRiesgosRoute(
       calificacionRiesgoService)
 
-    val ejerciciosEstadosRoute = new EjerciciosEvaluacionesEstatusRutas(ejerciciosEstadosService)
-    val ejerciciosRutasRoute = new EjerciciosEvaluacionesRiesgosRutas(ejerciciosRiesgosService)
+    val ejerciciosEstadosRoute = new EjerciciosEvaluacionesEstatusRutas(
+      ejerciciosEstadosService)
+    val ejerciciosRutasRoute = new EjerciciosEvaluacionesRiesgosRutas(
+      ejerciciosRiesgosService)
 
-    val efectividadRiesgoRoute = new EfectividadRiesgosRoute(efectividadRiesgosService)
+    val efectividadRiesgoRoute = new EfectividadRiesgosRoute(
+      efectividadRiesgosService)
 
-    val respuestasRiesgoRoute = new RespuestasRiesgoRoute(respuestasRiesgosService)
+    val respuestasRiesgoRoute = new RespuestasRiesgoRoute(
+      respuestasRiesgosService)
+
+    val causasDeclaracionRoute = new CausasDeclaracionRoute(
+      causasDeclaracionService)
+    val controlesDeclaracionRoute = new ControlesDeclaracionRoute(
+      controlesDeclaracionService)
+    val efectosDeclaracionRoute = new EfectosDeclaracionRoute(
+      efectosDeclaracionService)
+    val declaracionRiesgosEstatusRoute = new DeclaracionRiesgoEstatusRoute(
+      declaracionRiesgosEstatusService)
+    val declaracionRiesgosRoute = new DeclaracionRiesgosRoute(
+      declaracionRiesgosService)
 
     val routes = causasRiesgosRoute.getPaths ~
       impactoRiesgosRoute.getPaths ~
@@ -135,7 +191,12 @@ object Boot extends App {
       ejerciciosEstadosRoute.getPaths ~
       ejerciciosRutasRoute.getPaths ~
       efectividadRiesgoRoute.getPaths ~
-      respuestasRiesgoRoute.getPaths
+      respuestasRiesgoRoute.getPaths ~
+      causasDeclaracionRoute.getPaths ~
+      controlesDeclaracionRoute.getPaths ~
+      efectosDeclaracionRoute.getPaths ~
+      declaracionRiesgosEstatusRoute.getPaths ~
+      declaracionRiesgosRoute.getPaths
 
     Http().bindAndHandle(routes, config.http.host, config.http.port)
   }

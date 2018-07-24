@@ -48,7 +48,7 @@ private[declaracion_riesgos] trait CausasDeclaracionRiesgosTable
       (
         id.?,
         probabilidad_riesgo_id,
-        declaracion_riesgo_id,
+        declaracion_riesgo_id.?,
         causa,
         descripcion
       ) <> ((CausasDeclaracionRiesgosEntidad.apply _).tupled, CausasDeclaracionRiesgosEntidad.unapply)

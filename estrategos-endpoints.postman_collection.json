@@ -109,7 +109,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\"tipo_riesgo\" : \"ewwr\"\n}"
+									"raw": "{\n\"tipo_riesgo\" : \"tipo riesgo 1\"\n}"
 								},
 								"description": ""
 							},
@@ -121,7 +121,81 @@
 				{
 					"name": "probabilidad-riesgo",
 					"description": "",
-					"item": [],
+					"item": [
+						{
+							"name": "Traer todas probabilidades riesgos",
+							"request": {
+								"url": "http://localhost:9000/probabilidad-riesgo",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Traer probabilidad riesgo por Id",
+							"request": {
+								"url": "http://localhost:9000/probabilidad-riesgo/1",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Crear probabilidad riesgo",
+							"request": {
+								"url": "http://localhost:9000/probabilidad-riesgo",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"probabilidad\": \"probablidad 1\",\n\t\"puntaje\": \"4\",\n\t\"descripcion\": \"probabilidad 1\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Actualizar probabilidad riesgo",
+							"request": {
+								"url": "http://localhost:9000/probabilidad-riesgo/1",
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"probabilidad\": \"probablidad 1\",\n\t\"puntaje\": \"6\",\n\t\"descripcion\": \"probabilidad 1\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Borrar probabilidad riesgo",
+							"request": {
+								"url": "http://localhost:9000/probabilidad-riesgo/1",
+								"method": "DELETE",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						}
+					],
 					"_postman_isSubFolder": true
 				},
 				{
@@ -193,7 +267,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n \"respuestaRiesgoNombre\": \"String\",\n \"descripcion\": \"String\"\n}"
+									"raw": "{\n \"respuestaRiesgoNombre\": \"prueba 1\",\n \"descripcion\": \"respuesta prueba 1\"\n}"
 								},
 								"description": ""
 							},
@@ -262,7 +336,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"id\": 1,\n\t\"efectividad_nombre\": \"toma\",\n\t\"puntaje\": 1,\n\t\"descripcion\": \"sdfdsf\"\n}"
+									"raw": "{\n\t\"id\": 1,\n\t\"efectividad_nombre\": \"Efectivdad 1\",\n\t\"puntaje\": 1,\n\t\"descripcion\": \"efectividad\"\n}"
 								},
 								"description": ""
 							},
@@ -301,6 +375,33 @@
 						}
 					],
 					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Impacto riesgos",
+					"description": "",
+					"item": [
+						{
+							"name": "Crea impacto riesgos",
+							"request": {
+								"url": "localhost:9000/impacto-riesgos",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"impacto\": \"Impacto 1\",\n\t\"puntaje\": \"1\",\n\t\"descripcion\": \"Desc Impacto\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		},
@@ -322,7 +423,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"proceso\": {\n\t\t\"proceso_Nombre\": \"asdf\",\n\t\t\"proceso_Codigo\": \"asdf\",\n\t\t\"proceso_Tipo\": 2,\n\t\t\"proceso_Descripcion\": \"asfd\",\n\t\t\"proceso_Responsable_Id\": 1,\n\t\t\"proceso_Documento\": \"asdf\"\n\t},\n\t\"productoServicios\": [{\n\t\t\"proceso_Nombre\": \"asdfds\",\n\t\t\"producto_Servicio_nombre\": \"sdf\",\n\t\t\"producto_Servicio_Codigo\": \"asdf\",\n\t\t\"producto_Caracteristicas\": \"asdf\"\n\t}],\n\t\"caracterizaciones\": [{\n\t\t\"procedimiento_Nombre\": \"asdf\",\n\t\t\"procedimiento_Codigo\": \"asdf\",\n\t\t\"procedimiento_Objetivo\": \"asdf\",\n\t\t\"documentosCaracterizacion\": [{\n\t\t\t\"procedimiento_Documento_Nombre\": \"asdf\",\n\t\t\t\"procedimiento_Documento_Descripcion\": \"asdf\",\n\t\t\t\"procedimiento_Documento_Codigo\": \"asdf\",\n\t\t\t\"procedimiento_Documento_Arch\": \"asdf\"\n\t\t}]\n\t}]\n}"
+							"raw": "{\n\t\"proceso\": {\n\t\t\"proceso_Nombre\": \"Proceso 1\",\n\t\t\"proceso_Codigo\": \"Proceso 1\",\n\t\t\"proceso_Tipo\": 2,\n\t\t\"proceso_Descripcion\": \"Proceso 1\",\n\t\t\"proceso_Responsable_Id\": 1,\n\t\t\"proceso_Documento\": \"Proceso 1\"\n\t},\n\t\"productoServicios\": [{\n\t\t\"proceso_Nombre\": \"Producto 1\",\n\t\t\"producto_Servicio_nombre\": \"Producto 1\",\n\t\t\"producto_Servicio_Codigo\": \"Producto 1\",\n\t\t\"producto_Caracteristicas\": \"Producto 1\"\n\t}],\n\t\"caracterizaciones\": [{\n\t\t\"procedimiento_Nombre\": \"Procedimiento 1\",\n\t\t\"procedimiento_Codigo\": \"Procedimiento 1\",\n\t\t\"procedimiento_Objetivo\": \"Procedimiento 1\",\n\t\t\"documentosCaracterizacion\": [{\n\t\t\t\"procedimiento_Documento_Nombre\": \"Documento 1\",\n\t\t\t\"procedimiento_Documento_Descripcion\": \"Documento 1\",\n\t\t\t\"procedimiento_Documento_Codigo\": \"Documento 1\",\n\t\t\t\"procedimiento_Documento_Arch\": \"Documento 1\"\n\t\t}]\n\t}]\n}"
 						},
 						"description": ""
 					},
@@ -468,7 +569,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 1,\n\t\"proceso_id\": 1,\n\t\"estatus_id\": 1,\n\t\"descripcion\": \"fdsfsdfd\",\n\t\"fecha_creacion_ejercicio\": 123213213\n}"
+							"raw": "{\n\t\"id\": 1,\n\t\"proceso_id\": 1,\n\t\"estatus_id\": 1,\n\t\"descripcion\": \"ejercicio 1\",\n\t\"fecha_creacion_ejercicio\": 123213213\n}"
 						},
 						"description": ""
 					},
@@ -490,6 +591,119 @@
 							"mode": "raw",
 							"raw": "{\n\t\"id\": 1,\n\t\"proceso_id\": 1,\n\t\"estatus_id\": 1,\n\t\"descripcion\": \"changeit\",\n\t\"fecha_creacion_ejercicio\": 123213213\n}"
 						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "declaracion-riesgos",
+			"description": "",
+			"item": [
+				{
+					"name": "declaracion-estatus",
+					"description": "",
+					"item": [
+						{
+							"name": "Estados declaracion riesgo",
+							"request": {
+								"url": "localhost:9000/declaracion-estados",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Traer ejercicio declaracion completo",
+					"request": {
+						"url": "localhost:9000/declaracion-riesgos/2",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Crear declaracion de riesgos",
+					"request": {
+						"url": "localhost:9000/declaracion-riesgos",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"declaracionRiesgo\": {\n      \"proceso_id\": 1,\n\t  \"ejercicio_riesgo_id\": 1,\n\t  \"tipo_riesgo_id\": 1,\n\t  \"respuesta_riesgo_id\": 1,\n\t  \"estatus_riesgo_id\": 1,\n\t  \"factor_riesgo\": \"12\",\n\t  \"descripcion\": \"12\",\n\t  \"probabilidad\": \"12\",\n\t  \"historico\": \"12\",\n\t  \"impacto\": \"12\",\n\t  \"severidad\": \"12\",\n\t  \"riesgo_residual\": \"12\",\n\t  \"fecha_creacion\": 121221,\n\t  \"fecha_actualizacion\": 121212\n\t},\n\t\"causasDeclaracionRiesgo\": [{\n\t  \"probabilidad_riesgo_id\": 2,\n      \"causa\": \"Causa\",\n      \"descripcion\": \"desc causa\"\n\t}],\n\t\"efectosDeclaracionRiesgo\": [{\n\t  \"impacto_riesgos_id\": 1,\n      \"impacto\": \"Impacto 1\",\n      \"descripcion\": \"desc impacto\"\n\t}],\n\t\"controlesDeclaracionRiesgo\": [{\n\t  \"efectividad_riesgos_id\": 1,\n      \"control\": \"Control 1\",\n      \"descripcion\": \"Desc control\"\n\t}]\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Traer declaracion riesgos pendientes por procesoId",
+					"request": {
+						"url": {
+							"raw": "localhost:9000/declaracion-riesgos?procesoId=1",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"declaracion-riesgos"
+							],
+							"query": [
+								{
+									"key": "procesoId",
+									"value": "1",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Traer declaracion riesgos pendientes por ejercicio",
+					"request": {
+						"url": {
+							"raw": "localhost:9000/declaracion-riesgos?ejercicioId=1",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"declaracion-riesgos"
+							],
+							"query": [
+								{
+									"key": "ejercicioId",
+									"value": "1",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
 						"description": ""
 					},
 					"response": []

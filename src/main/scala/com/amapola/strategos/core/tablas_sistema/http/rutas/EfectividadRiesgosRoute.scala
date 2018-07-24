@@ -72,7 +72,7 @@ class EfectividadRiesgosRoute(efectividadRiesgosService: EfectividadRiesgosServi
         entity(as[EfectividadRiesgosJson]) { entity =>
           onComplete(efectividadRiesgosService.crearEfectividadRiesgo(entity)) {
             case Success(_) =>
-              complete(StatusCodes.OK, "Impacto creado correctamente")
+              complete(StatusCodes.OK, "Registro creado correctamente")
             case Failure(ex) =>
               complete(StatusCodes.InternalServerError, ex.getMessage)
           }
@@ -90,7 +90,7 @@ class EfectividadRiesgosRoute(efectividadRiesgosService: EfectividadRiesgosServi
               efectividadRiesgosService.actualizarEfectividadRiesgo(id, entity)) {
               case Success(result) =>
                 if (result)
-                  complete(StatusCodes.OK, "Impacto actualizado correctamente")
+                  complete(StatusCodes.OK, "Registro actualizado correctamente")
                 else
                   complete(StatusCodes.NotFound,
                     "No se encuentra el registro a actualizar")

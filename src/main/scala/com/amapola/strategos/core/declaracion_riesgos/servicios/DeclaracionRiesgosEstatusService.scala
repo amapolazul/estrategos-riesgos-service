@@ -14,7 +14,7 @@ trait DeclaracionRiesgosEstatusService {
   def traerDeclaracionRiesgosEstatus(): Future[List[EstatusRiesgosJson]]
 }
 
-case class DeclaracionRiesgosEstatusServiceImpl(
+class DeclaracionRiesgosEstatusServiceImpl(
     declaracionResgosEstatusDao: DeclaracionRiesgosEstatusDao)(
     implicit executionContext: ExecutionContext)
     extends DeclaracionRiesgosEstatusService {
