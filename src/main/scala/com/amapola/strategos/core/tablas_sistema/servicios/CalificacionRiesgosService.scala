@@ -45,6 +45,14 @@ trait CalificacionRiesgosService {
     */
   def traerCalificacionRiesgo(): Future[List[CalificacionRiesgosJson]]
 
+  /**
+    * Consulta la calificacion de un riesgo dada la severidad
+    * @param severidad
+    * @return
+    */
+  def consultarCalifiacionRiesgoPorSeveridad(
+      severidad: Long): Future[Option[CalificacionRiesgosJson]]
+
 }
 
 class CalificacionRiesgosServiceImpl(
@@ -113,5 +121,18 @@ class CalificacionRiesgosServiceImpl(
     calificacionRiesgosDao
       .traerTodasCalificacionRiesgo()
       .map(_.map(CalificacionRiesgosJson.fromEntity(_)).toList)
+  }
+
+  /**
+    * Consulta la calificacion de un riesgo dada la severidad
+    *
+    * @param severidad
+    * @return
+    */
+  override def consultarCalifiacionRiesgoPorSeveridad(
+      severidad: Long): Future[Option[CalificacionRiesgosJson]] = {
+    calificacionRiesgosDao
+      .consultarCalifiacionRiesgoPorSeveridad(severidad)
+      .map(_.map(CalificacionRiesgosJson.fromEntity(_)))
   }
 }

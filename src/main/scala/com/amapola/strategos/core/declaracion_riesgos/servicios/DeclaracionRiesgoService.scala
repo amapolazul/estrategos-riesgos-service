@@ -2,6 +2,8 @@ package com.amapola.strategos.core.declaracion_riesgos.servicios
 
 import com.amapola.strategos.core.declaracion_riesgos.http.json._
 import com.amapola.strategos.core.declaracion_riesgos.persistencia.daos.DeclaracionRiesgosDao
+import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.servicios.EjerciciosEvaluacionesRiesgosService
+import com.amapola.strategos.core.tablas_sistema.servicios.CalificacionRiesgosService
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -62,7 +64,9 @@ class DeclaracionRiesgoServiceImpl(
     declaracionRiesgosDao: DeclaracionRiesgosDao,
     causasDeclaracionService: CausasDeclaracionService,
     efectosDeclaracionService: EfectosDeclaracionService,
-    controlesDeclaracionService: ControlesDeclaracionService)(
+    controlesDeclaracionService: ControlesDeclaracionService,
+    ejerciciosEvaluacionesRiesgosService: EjerciciosEvaluacionesRiesgosService,
+    calificacionRiesgosService: CalificacionRiesgosService)(
     implicit executionContext: ExecutionContext)
     extends DeclaracionRiesgoService {
 
@@ -193,11 +197,29 @@ class DeclaracionRiesgoServiceImpl(
     */
   override def listarDeclaracionesRiesgoPendientesPorProcesoId(
       procesoId: Long): Future[List[DeclaracionRiesgosJson]] = {
+
     declaracionRiesgosDao
       .traerDeclaracionesRiesgoPendientesPorProcesoId(procesoId)
-      .map(list => {
-        list.map(DeclaracionRiesgosJson.fromEntity(_)).toList
+      .flatMap(list => {
+        val futureList = list
+          .map(x => {
+            for {
+              calificacion <- calificacionRiesgosService
+                .consultarCalifiacionRiesgoPorSeveridad(x.severidad.toLong)
+              ejercicio <- ejerciciosEvaluacionesRiesgosService
+                .traerEjercicioEvaluacionPorId(x.ejercicio_riesgo_id)
+            } yield {
+              val declaracion = DeclaracionRiesgosJson.fromEntity(x)
+              val fechaEjercicio = ejercicio.map(_.fecha_creacion_ejercicio)
+              declaracion.copy(fecha_ejercicio = fechaEjercicio,
+                               calificacion_riesgo =
+                                 calificacion.map(_.nombre_calificacion_riesgo))
+            }
+          })
+          .toList
+        Future.sequence(futureList)
       })
+
   }
 
   /**

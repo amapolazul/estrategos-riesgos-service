@@ -19,7 +19,10 @@ package object json {
       severidad: String,
       riesgo_residual: String,
       fecha_creacion: Long,
-      fecha_actualizacion: Long
+      fecha_actualizacion: Long,
+      fecha_ejercicio: Option[Long] = None,
+      calificacion_riesgo: Option[String] = None
+
   ) {
     require(proceso_id > 0, "El campo proceso_id debe ser mayor a 0")
     require(ejercicio_riesgo_id > 0,

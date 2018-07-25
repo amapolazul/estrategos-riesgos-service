@@ -45,6 +45,15 @@ trait CalificacionesRiesgosDao {
     * @return
     */
   def borrarCalificacionRiesgo(id: Long): Future[Boolean]
+
+  /**
+    * Consulta la calificacion de un riesgo dada la severidad
+    * @param severidad
+    * @return
+    */
+  def consultarCalifiacionRiesgoPorSeveridad(
+      severidad: Long): Future[Option[CalificacionRiesgosEntidad]]
+
 }
 
 class CalificacionesRiesgosDaoImpl(val databaseConnector: DatabaseConnector)(
@@ -113,4 +122,20 @@ class CalificacionesRiesgosDaoImpl(val databaseConnector: DatabaseConnector)(
     */
   override def borrarCalificacionRiesgo(id: Long): Future[Boolean] =
     db.run(calificacionRiesgos.filter(_.id === id).delete).map(_ == 1)
+
+  /**
+    * Consulta la calificacion de un riesgo dada la severidad
+    * @param severidad
+    * @return
+    */
+  override def consultarCalifiacionRiesgoPorSeveridad(
+      severidad: Long): Future[Option[CalificacionRiesgosEntidad]] = {
+
+    db.run(
+      calificacionRiesgos
+        .filter(_.rango_maximo >= severidad)
+        .filter(_.rango_minimo <= severidad)
+        .result
+        .headOption)
+  }
 }

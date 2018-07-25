@@ -139,7 +139,9 @@ object Boot extends App {
       declaracionRiesgosDao,
       causasDeclaracionService,
       efectosDeclaracionService,
-      controlesDeclaracionService)
+      controlesDeclaracionService,
+      ejerciciosRiesgosService,
+      calificacionRiesgoService)
 
     //Rutas
     val procesosRutes =
