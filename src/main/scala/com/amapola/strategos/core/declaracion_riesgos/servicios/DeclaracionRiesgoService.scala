@@ -184,8 +184,24 @@ class DeclaracionRiesgoServiceImpl(
       ejercicioId: Long): Future[List[DeclaracionRiesgosJson]] = {
     declaracionRiesgosDao
       .traerDeclaracionesRiesgoPorEjercicioEvaluacionId(ejercicioId)
-      .map(list => {
-        list.map(DeclaracionRiesgosJson.fromEntity(_)).toList
+      .flatMap(list => {
+        val futureList = list
+          .map(x => {
+            for {
+              calificacion <- calificacionRiesgosService
+                .consultarCalifiacionRiesgoPorSeveridad(x.severidad.toLong)
+              ejercicio <- ejerciciosEvaluacionesRiesgosService
+                .traerEjercicioEvaluacionPorId(x.ejercicio_riesgo_id)
+            } yield {
+              val declaracion = DeclaracionRiesgosJson.fromEntity(x)
+              val fechaEjercicio = ejercicio.map(_.fecha_creacion_ejercicio)
+              declaracion.copy(fecha_ejercicio = fechaEjercicio,
+                calificacion_riesgo =
+                  calificacion.map(_.nombre_calificacion_riesgo))
+            }
+          })
+          .toList
+        Future.sequence(futureList)
       })
   }
 
