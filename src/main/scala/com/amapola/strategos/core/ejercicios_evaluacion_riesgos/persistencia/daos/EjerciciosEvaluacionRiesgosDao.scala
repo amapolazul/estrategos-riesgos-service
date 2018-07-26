@@ -92,7 +92,7 @@ class EjerciciosEvaluacionRiesgosDaoImpl(
 
     traerEjercicioEvaluacionPorId(id).flatMap {
       case Some(eval) =>
-        val updated = eval.merge(entidad)
+        val updated = entidad.merge(eval)
         db.run(ejerciciosEvaluacionRiesgos.filter(_.id === id).update(updated))
           .map(_ == 1)
       case None => Future.successful(false)
