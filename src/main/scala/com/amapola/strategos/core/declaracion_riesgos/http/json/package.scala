@@ -13,8 +13,9 @@ package object json {
       estatus_riesgo_id: Long,
       factor_riesgo: String,
       descripcion: String,
+      efectividad_controles: String,
       probabilidad: String,
-      historico: String,
+      historico: Boolean,
       impacto: String,
       severidad: String,
       riesgo_residual: String,
@@ -34,8 +35,8 @@ package object json {
             "El campo estatus_riesgo_id debe ser mayor a 0")
     require(!factor_riesgo.isEmpty, "El campo factor_riesgo no puede ser vacio")
     require(!descripcion.isEmpty, "El campo descripcion no puede ser vacio")
+    require(!efectividad_controles.isEmpty, "El campo efectividad_controles no puede ser vacio")
     require(!probabilidad.isEmpty, "El campo probabilidad no puede ser vacio")
-    require(!historico.isEmpty, "El campo historico no puede ser vacio")
     require(!impacto.isEmpty, "El campo impacto no puede ser vacio")
     require(!severidad.isEmpty, "El campo severidad no puede ser vacio")
     require(fecha_creacion > 0, "El campo fecha_creacion debe ser mayor a 0")
@@ -55,6 +56,7 @@ package object json {
         estatus_riesgo_id = entity.estatus_riesgo_id,
         factor_riesgo = entity.factor_riesgo,
         descripcion = entity.descripcion,
+        efectividad_controles = entity.efectividad_controles,
         probabilidad = entity.probabilidad,
         historico = entity.historico,
         impacto = entity.impacto,
@@ -75,6 +77,7 @@ package object json {
         estatus_riesgo_id = json.estatus_riesgo_id,
         factor_riesgo = json.factor_riesgo,
         descripcion = json.descripcion,
+        efectividad_controles = json.efectividad_controles,
         probabilidad = json.probabilidad,
         historico = json.historico,
         impacto = json.impacto,

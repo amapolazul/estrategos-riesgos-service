@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS respuestas_riesgos (
     "descripcion" VARCHAR NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS estuatus_riesgos (
+CREATE TABLE IF NOT EXISTS estatus_riesgos (
     "id" BIGSERIAL PRIMARY KEY,
     "estatus_riesgo_nombre" VARCHAR NOT NULL
 );
@@ -22,11 +22,12 @@ CREATE TABLE IF NOT EXISTS declaracion_riesgos (
     "ejercicio_riesgo_id" BIGSERIAL NOT NULL REFERENCES ejercicios_evaluacion_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
     "tipo_riesgo_id" BIGSERIAL NOT NULL REFERENCES tipo_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
     "respuesta_riesgo_id" BIGSERIAL NOT NULL REFERENCES respuestas_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "estatus_riesgo_id" BIGSERIAL NOT NULL REFERENCES estuatus_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
+    "estatus_riesgo_id" BIGSERIAL NOT NULL REFERENCES estatus_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
     "factor_riesgo" VARCHAR NOT NULL,
     "descripcion" VARCHAR NOT NULL,
+    "efectividad_controles"  VARCHAR NOT NULL,
     "probabilidad" VARCHAR NOT NULL,
-    "historico" VARCHAR NOT NULL,
+    "historico" BOOLEAN NOT NULL,
     "impacto" VARCHAR NOT NULL,
     "severidad" VARCHAR NOT NULL,
     "riesgo_residual" VARCHAR NOT NULL,
@@ -58,5 +59,5 @@ CREATE TABLE IF NOT EXISTS controles_declaracion_riesgos (
     "descripcion" VARCHAR NOT NULL
 );
 
-INSERT INTO estuatus_riesgos(id, estatus_riesgo_nombre) VALUES (1, 'Pendiente');
-INSERT INTO estuatus_riesgos(id, estatus_riesgo_nombre) VALUES (2, 'Mitigado');
+INSERT INTO estatus_riesgos(id, estatus_riesgo_nombre) VALUES (1, 'Pendiente');
+INSERT INTO estatus_riesgos(id, estatus_riesgo_nombre) VALUES (2, 'Mitigado');

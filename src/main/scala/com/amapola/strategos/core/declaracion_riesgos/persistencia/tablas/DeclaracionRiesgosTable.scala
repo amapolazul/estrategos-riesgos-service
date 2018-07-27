@@ -32,8 +32,9 @@ private[declaracion_riesgos] trait DeclaracionRiesgosTable extends ProcesosTable
     def estatus_riesgo_id = column[Long]("estatus_riesgo_id")
     def factor_riesgo = column[String]("factor_riesgo")
     def descripcion = column[String]("descripcion")
+    def efectividad_controles = column[String]("efectividad_controles")
     def probabilidad = column[String]("probabilidad")
-    def historico = column[String]("historico")
+    def historico = column[Boolean]("historico")
     def impacto = column[String]("impacto")
     def severidad = column[String]("severidad")
     def riesgo_residual = column[String]("riesgo_residual")
@@ -79,6 +80,7 @@ private[declaracion_riesgos] trait DeclaracionRiesgosTable extends ProcesosTable
       estatus_riesgo_id,
       factor_riesgo,
       descripcion,
+      efectividad_controles,
       probabilidad,
       historico,
       impacto,

@@ -11,7 +11,7 @@ private[declaracion_riesgos] trait DeclaracionRiesgosEstatusTable {
   import databaseConnector.profile.api._
 
   class DeclaracionRiesgosEstatus(tag: Tag)
-      extends Table[EstatusRiesgosEntidad](tag, "estuatus_riesgos") {
+      extends Table[EstatusRiesgosEntidad](tag, "estatus_riesgos") {
 
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def estatus_riesgo_nombre = column[String]("estatus_riesgo_nombre")
