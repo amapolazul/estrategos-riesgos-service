@@ -197,7 +197,7 @@ class DeclaracionRiesgoServiceImpl(
               val fechaEjercicio = ejercicio.map(_.fecha_creacion_ejercicio)
               declaracion.copy(fecha_ejercicio = fechaEjercicio,
                 calificacion_riesgo =
-                  calificacion.map(_.nombre_calificacion_riesgo))
+                  calificacion.map(_.color))
             }
           })
           .toList
@@ -229,7 +229,7 @@ class DeclaracionRiesgoServiceImpl(
               val fechaEjercicio = ejercicio.map(_.fecha_creacion_ejercicio)
               declaracion.copy(fecha_ejercicio = fechaEjercicio,
                                calificacion_riesgo =
-                                 calificacion.map(_.nombre_calificacion_riesgo))
+                                 calificacion.map(_.color))
             }
           })
           .toList
