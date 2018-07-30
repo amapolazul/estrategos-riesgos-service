@@ -60,6 +60,8 @@ libraryDependencies ++= {
   )
 }
 
+mainClass in Compile := Some("com.amapola.strategos.Boot")
+
 enablePlugins(UniversalPlugin)
 enablePlugins(DockerPlugin)
 

@@ -1,4 +1,4 @@
-package me.archdev.restapi
+package com.amapola.strategos
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
