@@ -10,6 +10,6 @@ CREATE TABLE IF NOT EXISTS ejercicios_evaluacion_riesgos (
     "id" BIGSERIAL PRIMARY KEY,
     "proceso_id" BIGSERIAL NOT NULL REFERENCES procesos(proceso_id) ON UPDATE RESTRICT ON DELETE CASCADE,
     "estatus_id" BIGSERIAL NOT NULL REFERENCES ejercicios_evaluacion_estatus(id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "descripcion" VARCHAR NOT NULL,
+    "descripcion" VARCHAR,
     "fecha_creacion_ejercicio" BIGINT NOT NULL
 );

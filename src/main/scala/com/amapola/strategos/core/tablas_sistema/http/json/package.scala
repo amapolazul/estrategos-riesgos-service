@@ -7,9 +7,8 @@ package object json {
   case class CausasRiesgosJson(
       id: Option[Long] = None,
       causa_riesgo: String,
-      descripcion: String
+      descripcion: Option[String]
   ) {
-    require(!descripcion.isEmpty, "El campo descripcion no puede ser vacio")
     require(!causa_riesgo.isEmpty, "El campo causa_riesgo no puede ser vacio")
   }
 
@@ -34,13 +33,12 @@ package object json {
   case class ImpactoRiesgosJson(
       id: Option[Long] = None,
       impacto: String,
-      puntaje: String,
-      descripcion: String,
+      puntaje: Long,
+      descripcion: Option[String],
   ) {
 
     require(!impacto.isEmpty, "El campo impacto no puede ser vacio")
-    require(!puntaje.isEmpty, "El campo puntaje no puede ser vacio")
-    require(!descripcion.isEmpty, "El campo descripcion no puede ser vacio")
+    require(puntaje > 0, "El puntaje deb")
   }
 
   object ImpactoRiesgosJson {
@@ -66,13 +64,12 @@ package object json {
   case class ProbabilidadRiesgosJson(
       id: Option[Long] = None,
       probabilidad: String,
-      puntaje: String,
-      descripcion: String,
+      puntaje: Long,
+      descripcion: Option[String],
   ) {
 
     require(!probabilidad.isEmpty, "El campo probabilidad es requerido")
-    require(!puntaje.isEmpty, "El campo puntaje es requerido")
-    require(!descripcion.isEmpty, "El campo descripcion es requerido")
+    require(puntaje > 0, "El puntaje debe ser mayor a 0")
   }
 
   object ProbabilidadRiesgosJson {
@@ -164,12 +161,11 @@ package object json {
   case class RespuestasRiesgoJson(
       id: Option[Long] = None,
       respuestaRiesgoNombre: String,
-      descripcion: String
+      descripcion: Option[String]
   ) {
     require(!respuestaRiesgoNombre.isEmpty,
             "El campo respuesta riesgo no puede ser vacio")
-    require(!descripcion.isEmpty,
-            "La descripcion del la respuesta riesgo no puede ser vacia")
+
   }
 
   object RespuestasRiesgoJson {
@@ -194,12 +190,11 @@ package object json {
       id: Option[Long] = None,
       efectividad_nombre: String,
       puntaje: Int = 0,
-      descripcion: String
+      descripcion: Option[String]
   ) {
     require(!efectividad_nombre.isEmpty,
             "El campo nombre efectivad no puede ser vacio")
     require(puntaje >= 0, "El campo puntaje debe ser mayor o igual a cero")
-    require(!descripcion.isEmpty, "El campo descripción no puede ser vacio")
   }
 
   object EfectividadRiesgosJson {

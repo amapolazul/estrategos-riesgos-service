@@ -5,7 +5,7 @@ package object entidades {
   case class CausasRiesgosEntidad(
       id: Option[Long] = None,
       causa_riesgo: String,
-      descripcion: String
+      descripcion: Option[String]
   ) {
     def merge(porActualizar: CausasRiesgosEntidad) = {
       porActualizar.copy(
@@ -18,8 +18,8 @@ package object entidades {
   case class ImpactoRiesgosEntidad(
       id: Option[Long] = None,
       impacto: String,
-      puntaje: String,
-      descripcion: String,
+      puntaje: Long,
+      descripcion: Option[String],
   ) {
     def merge(porActualizar: ImpactoRiesgosEntidad) = {
       porActualizar.copy(
@@ -33,8 +33,8 @@ package object entidades {
   case class ProbabilidadRiesgosEntidad(
       id: Option[Long] = None,
       probabilidad: String,
-      puntaje: String,
-      descripcion: String,
+      puntaje: Long,
+      descripcion: Option[String],
   ) {
     def merge(porActualizar: ProbabilidadRiesgosEntidad) = {
       porActualizar.copy(
@@ -78,7 +78,7 @@ package object entidades {
   case class RespuestasRiesgosEntidad(
       id: Option[Long] = None,
       respuestaRiesgoNombre: String,
-      descripcion: String
+      descripcion: Option[String]
   ) {
     def merge(porActualizar: RespuestasRiesgosEntidad) = {
       porActualizar.copy(
@@ -92,7 +92,7 @@ package object entidades {
       id: Option[Long] = None,
       efectividad_nombre: String,
       puntaje: Int,
-      descripcion: String
+      descripcion: Option[String]
   ) {
     def merge(porActualizar: EfectividadRiesgosEntidad) = {
       porActualizar.copy(

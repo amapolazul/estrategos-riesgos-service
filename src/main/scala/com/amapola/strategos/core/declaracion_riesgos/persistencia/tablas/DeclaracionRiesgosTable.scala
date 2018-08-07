@@ -79,7 +79,7 @@ private[declaracion_riesgos] trait DeclaracionRiesgosTable extends ProcesosTable
       respuesta_riesgo_id,
       estatus_riesgo_id,
       factor_riesgo,
-      descripcion,
+      descripcion.?,
       efectividad_controles,
       probabilidad,
       historico,

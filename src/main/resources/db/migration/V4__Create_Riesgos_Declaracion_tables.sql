@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS respuestas_riesgos (
     "id" BIGSERIAL PRIMARY KEY,
     "respuesta_riesgo_nombre" VARCHAR NOT NULL,
-    "descripcion" VARCHAR NOT NULL
+    "descripcion" VARCHAR
 );
 
 CREATE TABLE IF NOT EXISTS estatus_riesgos (
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS efectividad_riesgos (
     "id" BIGSERIAL PRIMARY KEY,
     "efectividad_nombre" VARCHAR NOT NULL,
     "puntaje" INTEGER NOT NULL,
-    "descripcion" VARCHAR NOT NULL
+    "descripcion" VARCHAR
 );
 
 CREATE TABLE IF NOT EXISTS declaracion_riesgos (
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS declaracion_riesgos (
     "respuesta_riesgo_id" BIGSERIAL NOT NULL REFERENCES respuestas_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
     "estatus_riesgo_id" BIGSERIAL NOT NULL REFERENCES estatus_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
     "factor_riesgo" VARCHAR NOT NULL,
-    "descripcion" VARCHAR NOT NULL,
+    "descripcion" VARCHAR,
     "efectividad_controles"  VARCHAR NOT NULL,
     "probabilidad" VARCHAR NOT NULL,
     "historico" BOOLEAN NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS causas_declaracion_riesgos (
     "probabilidad_riesgo_id" BIGSERIAL NOT NULL REFERENCES probabilidad_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
     "declaracion_riesgo_id" BIGSERIAL NOT NULL REFERENCES declaracion_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
     "causa" VARCHAR NOT NULL,
-    "descripcion" VARCHAR NOT NULL
+    "descripcion" VARCHAR
 );
 
 CREATE TABLE IF NOT EXISTS efectos_declaracion_riesgos (
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS efectos_declaracion_riesgos (
     "impacto_riesgos_id" BIGSERIAL NOT NULL REFERENCES impacto_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
     "declaracion_riesgo_id" BIGSERIAL NOT NULL REFERENCES declaracion_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
     "impacto" VARCHAR NOT NULL,
-    "descripcion" VARCHAR NOT NULL
+    "descripcion" VARCHAR
 );
 
 CREATE TABLE IF NOT EXISTS controles_declaracion_riesgos (
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS controles_declaracion_riesgos (
     "efectividad_riesgos_id" BIGSERIAL NOT NULL REFERENCES efectividad_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
     "declaracion_riesgo_id" BIGSERIAL NOT NULL REFERENCES declaracion_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
     "control" VARCHAR NOT NULL,
-    "descripcion" VARCHAR NOT NULL
+    "descripcion" VARCHAR
 );
 
 INSERT INTO estatus_riesgos(id, estatus_riesgo_nombre) VALUES (1, 'Pendiente');

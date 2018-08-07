@@ -12,7 +12,7 @@ package object json {
       respuesta_riesgo_id: Long,
       estatus_riesgo_id: Long,
       factor_riesgo: String,
-      descripcion: String,
+      descripcion: Option[String],
       efectividad_controles: String,
       probabilidad: String,
       historico: Boolean,
@@ -34,7 +34,6 @@ package object json {
     require(estatus_riesgo_id > 0,
             "El campo estatus_riesgo_id debe ser mayor a 0")
     require(!factor_riesgo.isEmpty, "El campo factor_riesgo no puede ser vacio")
-    require(!descripcion.isEmpty, "El campo descripcion no puede ser vacio")
     require(!efectividad_controles.isEmpty, "El campo efectividad_controles no puede ser vacio")
     require(!probabilidad.isEmpty, "El campo probabilidad no puede ser vacio")
     require(!impacto.isEmpty, "El campo impacto no puede ser vacio")

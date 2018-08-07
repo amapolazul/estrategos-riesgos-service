@@ -15,11 +15,11 @@ private[core] trait ImpactoRiesgosTable {
       extends Table[ImpactoRiesgosEntidad](tag, "impacto_riesgos") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def impacto = column[String]("impacto")
-    def puntaje = column[String]("puntaje")
+    def puntaje = column[Long]("puntaje")
     def descripcion = column[String]("descripcion")
 
     def * =
-      (id.?, impacto, puntaje, descripcion) <> ((ImpactoRiesgosEntidad.apply _).tupled, ImpactoRiesgosEntidad.unapply)
+      (id.?, impacto, puntaje, descripcion.?) <> ((ImpactoRiesgosEntidad.apply _).tupled, ImpactoRiesgosEntidad.unapply)
   }
 
   val impactoRiesgos = TableQuery[ImpactoRiesgos]

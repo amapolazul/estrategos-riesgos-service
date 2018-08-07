@@ -10,7 +10,7 @@ package object entidades {
       respuesta_riesgo_id: Long,
       estatus_riesgo_id: Long,
       factor_riesgo: String,
-      descripcion: String,
+      descripcion: Option[String],
       efectividad_controles: String,
       probabilidad: String,
       historico: Boolean,

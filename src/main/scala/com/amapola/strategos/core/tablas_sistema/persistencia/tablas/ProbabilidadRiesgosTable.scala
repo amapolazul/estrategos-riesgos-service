@@ -12,11 +12,11 @@ private[core] trait ProbabilidadRiesgosTable {
     extends Table[ProbabilidadRiesgosEntidad](tag, "probabilidad_riesgos") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def probabilidad = column[String]("probabilidad")
-    def puntaje = column[String]("puntaje")
+    def puntaje = column[Long]("puntaje")
     def descripcion = column[String]("descripcion")
 
     def * =
-      (id.?, probabilidad, puntaje, descripcion) <> ((ProbabilidadRiesgosEntidad.apply _).tupled, ProbabilidadRiesgosEntidad.unapply)
+      (id.?, probabilidad, puntaje, descripcion.?) <> ((ProbabilidadRiesgosEntidad.apply _).tupled, ProbabilidadRiesgosEntidad.unapply)
   }
 
   val probabilidadRiesgos = TableQuery[ProbabilidadRiesgos]

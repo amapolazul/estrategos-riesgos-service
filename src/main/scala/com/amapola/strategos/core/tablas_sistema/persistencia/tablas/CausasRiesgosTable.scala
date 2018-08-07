@@ -18,7 +18,7 @@ private[tablas_sistema] trait CausasRiesgosTable {
     def descripcion = column[String]("descripcion")
 
     def * =
-      (id.?, causa_riesgo, descripcion) <> ((CausasRiesgosEntidad.apply _).tupled, CausasRiesgosEntidad.unapply)
+      (id.?, causa_riesgo, descripcion.?) <> ((CausasRiesgosEntidad.apply _).tupled, CausasRiesgosEntidad.unapply)
   }
 
   val causasRiesgos = TableQuery[CausasRiesgos]

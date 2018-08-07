@@ -20,7 +20,7 @@ private[core] trait EfectividadRiesgosTable {
     def descripcion = column[String]("descripcion")
 
     override def * =
-      (id.?, efectividad_nombre, puntaje, descripcion) <> ((EfectividadRiesgosEntidad.apply _).tupled, EfectividadRiesgosEntidad.unapply)
+      (id.?, efectividad_nombre, puntaje, descripcion.?) <> ((EfectividadRiesgosEntidad.apply _).tupled, EfectividadRiesgosEntidad.unapply)
   }
 
   val efectividadRiesgos = TableQuery[EfectividadRiesgos]
