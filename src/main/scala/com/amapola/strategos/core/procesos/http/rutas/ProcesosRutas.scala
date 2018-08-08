@@ -28,7 +28,7 @@ class ProcesosRutas(
 
   def getPaths = cors(settings) {
     pathPrefix("procesos") {
-      crearProcesos ~ crearProcesosSubProcesos ~ getProcesosPorPadreId ~ getProcesoById
+      crearProcesos ~ crearProcesosSubProcesos ~ getProcesosPorPadreId ~ getProcesoById ~ getProcesos
     }
   }
 
@@ -84,6 +84,19 @@ class ProcesosRutas(
                 complete(StatusCodes.InternalServerError, ex.getMessage())
             }
           }
+        }
+      }
+    }
+  }
+
+  def getProcesos = {
+    pathEndOrSingleSlash {
+      get {
+        onComplete(procesosService.traerProcesos()) {
+          case Success(results) =>
+            complete(StatusCodes.OK, results.asJson)
+          case Failure(ex) =>
+            complete(StatusCodes.InternalServerError, ex.getMessage())
         }
       }
     }

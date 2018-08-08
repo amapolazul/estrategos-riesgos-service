@@ -31,6 +31,12 @@ trait ProcesosServiciosService {
     */
   def traerProcesoPorId(id: Long) : Future[Option[ProcesoProcedimientoJson]]
 
+  /**
+    * Consulta todos los procesos y sub procesos
+    * @return
+    */
+  def traerProcesos() : Future[Seq[Proceso]]
+
 }
 
 

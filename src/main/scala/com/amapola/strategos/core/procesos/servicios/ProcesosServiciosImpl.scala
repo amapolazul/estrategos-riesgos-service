@@ -63,7 +63,8 @@ class ProcesosServiciosImpl(
                                                   procesoId: Long) = {
 
     val caraceristicasArchivos = list.map(x => {
-      val caractEntidad = Caracterizacion.toEntity(x).copy(proceso_Id = Some(procesoId))
+      val caractEntidad =
+        Caracterizacion.toEntity(x).copy(proceso_Id = Some(procesoId))
 
       caracterizacionDao
         .crearCaracterizacion(caractEntidad)
@@ -143,8 +144,8 @@ class ProcesosServiciosImpl(
         proceso match {
           case Some(pr) =>
             for {
-              productoServicios <- productosServiciosDao.getProductoServiciosPorProcesoId(
-                pr.proceso_Id.getOrElse(0l))
+              productoServicios <- productosServiciosDao
+                .getProductoServiciosPorProcesoId(pr.proceso_Id.getOrElse(0l))
               caract <- caracterizacionDao.darCaracterizacionesPorProcesoId(
                 pr.proceso_Id.getOrElse(0l))
               caractArchivos <- crearListaCaracterizacionesArchivosJson(caract)
@@ -152,8 +153,9 @@ class ProcesosServiciosImpl(
               Some(
                 ProcesoProcedimientoJson(
                   proceso = Proceso.fromEntity(pr),
-                  productoServicios =
-                    productoServicios.map(ProductoServicio.fromEntity(_)).toList,
+                  productoServicios = productoServicios
+                    .map(ProductoServicio.fromEntity(_))
+                    .toList,
                   caracterizaciones = caractArchivos
                 ))
             }
@@ -161,5 +163,15 @@ class ProcesosServiciosImpl(
             Future.successful(None)
         }
       })
+  }
+
+  /**
+    * Consulta todos los procesos y subprocesos
+    * @return
+    */
+  override def traerProcesos(): Future[Seq[Proceso]] = {
+    procesosDao.getProcesos().map( list => {
+      list.map( Proceso.fromEntity(_))
+    })
   }
 }
