@@ -1,63 +1,63 @@
-CREATE TABLE IF NOT EXISTS respuestas_riesgos (
-    "id" BIGSERIAL PRIMARY KEY,
-    "respuesta_riesgo_nombre" VARCHAR NOT NULL,
-    "descripcion" VARCHAR
+CREATE TABLE respuestas_riesgos (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    respuesta_riesgo_nombre VARCHAR(255) NOT NULL,
+    descripcion VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS estatus_riesgos (
-    "id" BIGSERIAL PRIMARY KEY,
-    "estatus_riesgo_nombre" VARCHAR NOT NULL
+CREATE TABLE estatus_riesgos (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    estatus_riesgo_nombre VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS efectividad_riesgos (
-    "id" BIGSERIAL PRIMARY KEY,
-    "efectividad_nombre" VARCHAR NOT NULL,
-    "puntaje" INTEGER NOT NULL,
-    "descripcion" VARCHAR
+CREATE TABLE efectividad_riesgos (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    efectividad_nombre VARCHAR(255) NOT NULL,
+    puntaje INTEGER NOT NULL,
+    descripcion VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS declaracion_riesgos (
-    "id" BIGSERIAL PRIMARY KEY,
-    "proceso_id" BIGSERIAL NOT NULL REFERENCES procesos(proceso_id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "ejercicio_riesgo_id" BIGSERIAL NOT NULL REFERENCES ejercicios_evaluacion_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "tipo_riesgo_id" BIGSERIAL NOT NULL REFERENCES tipo_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "respuesta_riesgo_id" BIGSERIAL NOT NULL REFERENCES respuestas_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "estatus_riesgo_id" BIGSERIAL NOT NULL REFERENCES estatus_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "factor_riesgo" VARCHAR NOT NULL,
-    "descripcion" VARCHAR,
-    "efectividad_controles"  VARCHAR NOT NULL,
-    "probabilidad" VARCHAR NOT NULL,
-    "historico" BOOLEAN NOT NULL,
-    "impacto" VARCHAR NOT NULL,
-    "severidad" VARCHAR NOT NULL,
-    "riesgo_residual" VARCHAR NOT NULL,
-    "fecha_creacion" BIGINT NOT NULL,
-    "fecha_actualizacion" BIGINT NOT NULL
+CREATE TABLE declaracion_riesgos (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    proceso_id BIGINT NOT NULL FOREIGN KEY REFERENCES procesos(proceso_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    ejercicio_riesgo_id BIGINT NOT NULL FOREIGN KEY REFERENCES ejercicios_evaluacion_riesgos(id),
+    tipo_riesgo_id BIGINT NOT NULL FOREIGN KEY REFERENCES tipo_riesgos(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    respuesta_riesgo_id BIGINT NOT NULL FOREIGN KEY REFERENCES respuestas_riesgos(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    estatus_riesgo_id BIGINT NOT NULL FOREIGN KEY REFERENCES estatus_riesgos(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    factor_riesgo VARCHAR(255) NOT NULL,
+    descripcion VARCHAR(255),
+    efectividad_controles  VARCHAR(255) NOT NULL,
+    probabilidad VARCHAR(255) NOT NULL,
+    historico BIT NOT NULL,
+    impacto VARCHAR(255) NOT NULL,
+    severidad VARCHAR(255) NOT NULL,
+    riesgo_residual VARCHAR(255) NOT NULL,
+    fecha_creacion BIGINT NOT NULL,
+    fecha_actualizacion BIGINT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS causas_declaracion_riesgos (
-    "id" BIGSERIAL PRIMARY KEY,
-    "probabilidad_riesgo_id" BIGSERIAL NOT NULL REFERENCES probabilidad_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "declaracion_riesgo_id" BIGSERIAL NOT NULL REFERENCES declaracion_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "causa" VARCHAR NOT NULL,
-    "descripcion" VARCHAR
+CREATE TABLE causas_declaracion_riesgos (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    probabilidad_riesgo_id BIGINT FOREIGN KEY REFERENCES probabilidad_riesgos(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    declaracion_riesgo_id BIGINT FOREIGN KEY REFERENCES declaracion_riesgos(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    causa VARCHAR(255) NOT NULL,
+    descripcion VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS efectos_declaracion_riesgos (
-    "id" BIGSERIAL PRIMARY KEY,
-    "impacto_riesgos_id" BIGSERIAL NOT NULL REFERENCES impacto_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "declaracion_riesgo_id" BIGSERIAL NOT NULL REFERENCES declaracion_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "impacto" VARCHAR NOT NULL,
-    "descripcion" VARCHAR
+CREATE TABLE efectos_declaracion_riesgos (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    impacto_riesgos_id BIGINT FOREIGN KEY REFERENCES impacto_riesgos(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    declaracion_riesgo_id BIGINT FOREIGN KEY REFERENCES declaracion_riesgos(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    impacto VARCHAR(255) NOT NULL,
+    descripcion VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS controles_declaracion_riesgos (
-    "id" BIGSERIAL PRIMARY KEY,
-    "efectividad_riesgos_id" BIGSERIAL NOT NULL REFERENCES efectividad_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "declaracion_riesgo_id" BIGSERIAL NOT NULL REFERENCES declaracion_riesgos(id) ON UPDATE RESTRICT ON DELETE CASCADE,
-    "control" VARCHAR NOT NULL,
-    "descripcion" VARCHAR
+CREATE TABLE controles_declaracion_riesgos (
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    efectividad_riesgos_id BIGINT FOREIGN KEY REFERENCES efectividad_riesgos(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    declaracion_riesgo_id BIGINT FOREIGN KEY REFERENCES declaracion_riesgos(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    control VARCHAR(255) NOT NULL,
+    descripcion VARCHAR(255)
 );
 
-INSERT INTO estatus_riesgos(id, estatus_riesgo_nombre) VALUES (1, 'Pendiente');
-INSERT INTO estatus_riesgos(id, estatus_riesgo_nombre) VALUES (2, 'Mitigado');
+INSERT INTO estatus_riesgos(estatus_riesgo_nombre) VALUES ('Pendiente');
+INSERT INTO estatus_riesgos(estatus_riesgo_nombre) VALUES ('Mitigado');

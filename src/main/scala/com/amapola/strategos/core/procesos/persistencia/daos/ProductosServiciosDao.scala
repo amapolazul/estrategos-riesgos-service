@@ -96,7 +96,7 @@ class ProductosServiciosDaoImpl(val databaseConnector: DatabaseConnector)(
       entidad: ProductosServiciosEntidad): Future[Long] =
     db.run(
       productosServicios returning productosServicios
-        .map(_.procesoId) += entidad)
+        .map(_.productoServicioId) += entidad)
 
   /**
     * Retorna los ProductoServicios de un proceso dado un ProcesoId

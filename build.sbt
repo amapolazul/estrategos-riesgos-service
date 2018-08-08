@@ -21,7 +21,8 @@ libraryDependencies ++= {
     "com.typesafe.slick" %% "slick" % slickVersion,
 
     // Postgres driver
-    "org.postgresql" % "postgresql" % "42.1.4",
+    //"org.postgresql" % "postgresql" % "42.1.4",
+    "com.microsoft.sqlserver" % "mssql-jdbc" % "6.2.1.jre8",
 
     // Migration for SQL databases
     "org.flywaydb" % "flyway-core" % "4.2.0",
