@@ -95,7 +95,19 @@ class EfectividadRiesgosDaoImpl (val databaseConnector: DatabaseConnector)(
     traerEfectividadRiesgoPorId(id).flatMap {
       case Some(efectividad) =>
         val actualizado = entidad.merge(efectividad)
-        db.run(efectividadRiesgos.filter(_.id === id).update(actualizado))
+        db.run(efectividadRiesgos.filter(_.id === id).
+          map(x => {
+            (
+              x.efectividad_nombre,
+              x.puntaje,
+              x.descripcion
+            )
+          })
+          update((
+            actualizado.efectividad_nombre,
+            actualizado.puntaje,
+            actualizado.descripcion.getOrElse("")
+          )))
           .map(_ == 1)
       case None => Future.successful(false)
     }

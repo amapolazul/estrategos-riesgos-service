@@ -94,7 +94,14 @@ class TipoRiesgosDaoImpl(val databaseConnector: DatabaseConnector)(
     traerTipoRiesgoPorId(id) flatMap {
       case Some(old) =>
         val actualizado = entidad.merge(old)
-        db.run(tiposRiesgos.filter(_.id === id).update(actualizado)).map(_ == 1)
+        db.run(
+            tiposRiesgos
+              .filter(_.id === id)
+              .map(x => {
+                x.tipo_riesgo
+              })
+              .update(actualizado.tipo_riesgo))
+          .map(_ == 1)
       case None =>
         Future.successful(false)
     }

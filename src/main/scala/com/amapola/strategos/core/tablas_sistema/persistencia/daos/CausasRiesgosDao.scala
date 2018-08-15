@@ -97,8 +97,15 @@ class CausasRiesgosDaoImpl(val databaseConnector: DatabaseConnector)(
     traerCausasRiesgoPorId(id).flatMap {
       case Some(causasOld) =>
         val actualizado = entidad.merge(causasOld)
-        db.run(causasRiesgos.filter(_.id === id).update(actualizado))
-          .map(_ == 1)
+        db.run(causasRiesgos.filter(_.id === id).map(x => {
+          (
+            x.causa_riesgo,
+            x.descripcion
+          )
+        }).update((
+            actualizado.causa_riesgo,
+            actualizado.descripcion.getOrElse("")
+          ))).map(_ == 1)
       case None => Future.successful(false)
     }
   }

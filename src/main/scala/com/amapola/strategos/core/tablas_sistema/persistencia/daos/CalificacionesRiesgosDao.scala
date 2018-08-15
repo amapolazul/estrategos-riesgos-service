@@ -108,7 +108,20 @@ class CalificacionesRiesgosDaoImpl(val databaseConnector: DatabaseConnector)(
     traerCalificacionRiesgoPorId(id).flatMap {
       case Some(calificacionOld) =>
         val actualizado = entidad.merge(calificacionOld)
-        db.run(calificacionRiesgos.filter(_.id === id).update(actualizado))
+        db.run(calificacionRiesgos.filter(_.id === id).map(x => {
+          (
+            x.nombre_calificacion_riesgo,
+            x.color,
+            x.rango_minimo,
+            x.rango_maximo,
+            x.accion_tomar
+          )
+        }).update((actualizado.nombre_calificacion_riesgo,
+          actualizado.color,
+          actualizado.rango_minimo,
+          actualizado.rango_maximo,
+          actualizado.accion_tomar))
+        )
           .map(_ == 1)
       case None => Future.successful(false)
     }

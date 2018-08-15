@@ -97,7 +97,19 @@ class ImpactoRiesgosDaoImpl(val databaseConnector: DatabaseConnector)(
     traerImpactoRiesgoPorId(id) flatMap {
       case Some(old) =>
         val actualizado = entidad.merge(old)
-        db.run(impactoRiesgos.filter(_.id === id).update(actualizado))
+        db.run(impactoRiesgos.filter(_.id === id)
+            .map(x => {
+              (
+                x.impacto,
+                x.puntaje,
+                x.descripcion
+              )
+            })
+          .update((
+            actualizado.impacto,
+            actualizado.puntaje,
+            actualizado.descripcion.getOrElse("")
+          )))
           .map(_ == 1)
       case None => Future.successful(false)
     }

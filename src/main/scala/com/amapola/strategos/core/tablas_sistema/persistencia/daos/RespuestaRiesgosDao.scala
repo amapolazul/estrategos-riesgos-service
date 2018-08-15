@@ -100,7 +100,17 @@ class RespuestaRiesgosDaoImpl(val databaseConnector: DatabaseConnector)(
     traerRespuestaRiesgoPorId(id).flatMap {
       case Some(respuestasOld) =>
         val actualizado = entidad.merge(respuestasOld)
-        db.run(respuestasRiesgos.filter(_.id === id).update(actualizado))
+        db.run(respuestasRiesgos.filter(_.id === id)
+          .map(x => {
+            (
+              x.respuestaRiesgoNombre,
+              x.descripcion
+            )
+          })
+          .update((
+            actualizado.respuestaRiesgoNombre,
+            actualizado.descripcion.getOrElse("")
+          )))
           .map(_ == 1)
       case None => Future.successful(false)
     }

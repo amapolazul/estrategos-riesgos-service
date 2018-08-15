@@ -100,7 +100,18 @@ class ProbabilidadRiesgosDaoImpl(val databaseConnector: DatabaseConnector)(
     traerProabilidadRiesgoPorId(id) flatMap {
       case Some(old) =>
         val actualizado = entidad.merge(old)
-        db.run(probabilidadRiesgos.filter(_.id === id).update(actualizado))
+        db.run(probabilidadRiesgos.filter(_.id === id)
+          .map(x => {
+            (
+              x.probabilidad,
+              x.puntaje,
+              x.descripcion
+            )
+          })
+          .update((
+            actualizado.probabilidad,
+            actualizado.puntaje,
+            actualizado.descripcion.getOrElse(""))))
           .map(_ == 1)
       case None =>
         Future.successful(false)

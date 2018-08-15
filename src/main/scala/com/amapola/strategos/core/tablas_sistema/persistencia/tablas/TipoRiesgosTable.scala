@@ -14,10 +14,10 @@ private[core] trait TipoRiesgosTable {
   class TiposRiesgos(tag: Tag)
       extends Table[TipoRiesgosEntidad](tag, "tipo_riesgos") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-    def probabilidad = column[String]("tipo_riesgo")
+    def tipo_riesgo = column[String]("tipo_riesgo")
 
     def * =
-      (id.?, probabilidad) <> ((TipoRiesgosEntidad.apply _).tupled, TipoRiesgosEntidad.unapply)
+      (id.?, tipo_riesgo) <> ((TipoRiesgosEntidad.apply _).tupled, TipoRiesgosEntidad.unapply)
   }
 
   val tiposRiesgos = TableQuery[TiposRiesgos]
