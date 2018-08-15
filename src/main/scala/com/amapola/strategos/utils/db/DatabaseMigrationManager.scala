@@ -8,6 +8,7 @@ class DatabaseMigrationManager(jdbcUrl: String, dbUser: String, dbPassword: Stri
   flyway.setDataSource(jdbcUrl, dbUser, dbPassword)
 
   def migrateDatabaseSchema() : Unit =
+    flyway.setBaselineOnMigrate(true)
     flyway.baseline()
     flyway.migrate()
 
