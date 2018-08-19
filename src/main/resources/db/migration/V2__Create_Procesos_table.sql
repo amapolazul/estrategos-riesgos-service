@@ -1,19 +1,3 @@
---CREATE TABLE responsable (
---    responsable_id BIGINT IDENTITY(1,1) PRIMARY KEY,
---    usuario_id BIGINT,
---    nombre VARCHAR(255) NOT NULL,
---    cargo VARCHAR(255) NOT NULL,
---    ubicacion VARCHAR(255),
---    email VARCHAR(255),
---    notas VARCHAR(255),
---    children_count BIGINT,
---    tipo BIGINT NOT NULL,
---    grupo BIGINT NOT NULL,
---    organizacion_id BIGINT
---);
-
-INSERT INTO responsable (nombre,cargo,email,tipo,grupo) values ('Sebastian','c','test@test.com.co',1,1);
-
 CREATE TABLE procesos (
     proceso_id BIGINT IDENTITY(1,1) PRIMARY KEY,
     proceso_padre_id BIGINT,
@@ -21,7 +5,7 @@ CREATE TABLE procesos (
     proceso_descripcion VARCHAR(255) NOT NULL,
     proceso_codigo VARCHAR(255) NOT NULL,
     proceso_tipo VARCHAR(255) NOT NULL,
-    proceso_responsable_id BIGINT FOREIGN KEY REFERENCES responsable(responsable_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    proceso_responsable_id BIGINT,
     proceso_documento VARCHAR(255) NOT NULL
 );
 

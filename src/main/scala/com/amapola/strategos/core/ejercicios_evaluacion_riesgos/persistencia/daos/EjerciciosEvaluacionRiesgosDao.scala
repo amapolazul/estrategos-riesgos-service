@@ -93,7 +93,19 @@ class EjerciciosEvaluacionRiesgosDaoImpl(
     traerEjercicioEvaluacionPorId(id).flatMap {
       case Some(eval) =>
         val updated = entidad.merge(eval)
-        db.run(ejerciciosEvaluacionRiesgos.filter(_.id === id).update(updated))
+        db.run(
+            ejerciciosEvaluacionRiesgos
+              .filter(_.id === id)
+              .map(x => {
+                (x.proceso_id,
+                 x.estatus_id,
+                 x.descripcion,
+                 x.fecha_creacion_ejercicio)
+              })
+              .update((updated.proceso_id,
+                      updated.estatus_id,
+                      updated.descripcion,
+                      updated.fecha_creacion_ejercicio)))
           .map(_ == 1)
       case None => Future.successful(false)
     }
