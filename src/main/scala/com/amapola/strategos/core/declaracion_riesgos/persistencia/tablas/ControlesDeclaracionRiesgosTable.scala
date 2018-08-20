@@ -45,7 +45,7 @@ private[declaracion_riesgos] trait ControlesDeclaracionRiesgosTable
         efectividad_riesgos_id,
         declaracion_riesgo_id.?,
         control,
-        descripcion
+        descripcion.?
       ) <> ((ControlesDeclaracionRiesgosEntidad.apply _).tupled, ControlesDeclaracionRiesgosEntidad.unapply)
   }
 

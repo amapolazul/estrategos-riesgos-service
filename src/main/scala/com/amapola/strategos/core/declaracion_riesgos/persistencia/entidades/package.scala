@@ -52,7 +52,7 @@ package object entidades {
       probabilidad_riesgo_id: Long,
       declaracion_riesgo_id: Option[Long],
       causa: String,
-      descripcion: String
+      descripcion: Option[String]
   ) {
 
     def merge(porActualizar: CausasDeclaracionRiesgosEntidad) = {
@@ -70,7 +70,7 @@ package object entidades {
       impacto_riesgos_id: Long,
       declaracion_riesgo_id: Option[Long],
       impacto: String,
-      descripcion: String
+      descripcion: Option[String]
   ) {
 
     def merge(porActualizar: EfectosDeclaracionRiesgosEntidad) = {
@@ -88,7 +88,7 @@ package object entidades {
       efectividad_riesgos_id: Long,
       declaracion_riesgo_id: Option[Long],
       control: String,
-      descripcion: String
+      descripcion: Option[String]
   ) {
     def merge(porActualizar: ControlesDeclaracionRiesgosEntidad) = {
       porActualizar.copy(
