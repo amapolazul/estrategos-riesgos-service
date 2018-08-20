@@ -97,7 +97,17 @@ class CausasDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
       result match {
         case Some(causaDecl) =>
           val merge = entidad.merge(causaDecl)
-          db.run(causasDeclaracionRiesgos.update(merge)).map(_ == 1)
+          db.run(causasDeclaracionRiesgos.filter(_.id === id).map(x => {
+            (
+              x.probabilidad_riesgo_id,
+              x.causa,
+              x.descripcion
+            )
+          }).update((
+            merge.probabilidad_riesgo_id,
+            merge.causa,
+            merge.descripcion
+          ))).map(_ == 1)
         case None => Future.successful(false)
       }
     })

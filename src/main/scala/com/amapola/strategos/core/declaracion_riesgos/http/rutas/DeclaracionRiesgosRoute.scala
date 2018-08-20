@@ -134,7 +134,7 @@ class DeclaracionRiesgosRoute(
     pathPrefix(LongNumber) { riesgoId =>
       pathEndOrSingleSlash {
         put {
-          entity(as[DeclaracionRiesgosJson]) { entity =>
+          entity(as[DeclaracionRiesgosRequestJson]) { entity =>
             onComplete(
               declaracionRiesgoService.editarDeclaracionRiesgo(riesgoId,
                                                                entity)) {

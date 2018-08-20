@@ -97,7 +97,24 @@ class ControlesDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
       result match {
         case Some(causaDecl) =>
           val merge = entidad.merge(causaDecl)
-          db.run(controlDeclaracionRiesgos.update(merge)).map(_ == 1)
+          db.run(
+              controlDeclaracionRiesgos
+                .filter(_.id === id)
+                .map(x => {
+                  (
+                    x.efectividad_riesgos_id,
+                    x.control,
+                    x.descripcion
+                  )
+                })
+                .update(
+                  (
+                    merge.efectividad_riesgos_id,
+                    merge.control,
+                    merge.descripcion,
+                  )))
+            .map(_ == 1)
+
         case None => Future.successful(false)
       }
     })

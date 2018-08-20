@@ -102,7 +102,40 @@ class DeclaracionRiesgosDaoImpl(val databaseConnector: DatabaseConnector)(
       declRiesgo match {
         case Some(toUpdate) =>
           val merged = entidad.merge(toUpdate)
-          db.run(declaracionesRiesgos.update(merged)).map(_ == 1)
+          db.run(
+              declaracionesRiesgos
+                .filter(_.id === id)
+                .map(x => {
+                  (
+                    x.tipo_riesgo_id,
+                    x.respuesta_riesgo_id,
+                    x.estatus_riesgo_id,
+                    x.factor_riesgo,
+                    x.descripcion,
+                    x.efectividad_controles,
+                    x.probabilidad,
+                    x.historico,
+                    x.impacto,
+                    x.severidad,
+                    x.riesgo_residual,
+                    x.fecha_actualizacion
+                  )
+                })
+                .update(
+                  (merged.tipo_riesgo_id,
+                   merged.respuesta_riesgo_id,
+                   merged.estatus_riesgo_id,
+                   merged.factor_riesgo,
+                   merged.descripcion.getOrElse(""),
+                   merged.efectividad_controles,
+                   merged.probabilidad,
+                   merged.historico,
+                   merged.impacto,
+                   merged.severidad,
+                   merged.riesgo_residual,
+                   merged.fecha_actualizacion)))
+            .map(_ == 1)
+
         case None => Future.successful(false)
       }
     })

@@ -26,7 +26,7 @@ trait DeclaracionRiesgoService {
     */
   def editarDeclaracionRiesgo(
       id: Long,
-      declaracionRiesgo: DeclaracionRiesgosJson): Future[Boolean]
+      declaracionRiesgo: DeclaracionRiesgosRequestJson): Future[Boolean]
 
   /**
     * Borra la declaracion de riesgo por su id
@@ -84,12 +84,13 @@ class DeclaracionRiesgoServiceImpl(
     for {
       declaracionRiesgoId <- declaracionRiesgosDao.crearDeclaracionRiesgo(
         declaracionEntity)
-      _ <- crearCausasDeclaracion(declaracionRiesgoId,
-                                  request.causasDeclaracionRiesgo)
-      _ <- crearEfectosDeclaracion(declaracionRiesgoId,
-                                   request.efectosDeclaracionRiesgo)
-      _ <- crearControlesDeclaracion(declaracionRiesgoId,
-                                     request.controlesDeclaracionRiesgo)
+      _ <- crearActualizarCausasDeclaracion(declaracionRiesgoId,
+                                            request.causasDeclaracionRiesgo)
+      _ <- crearActualizarEfectosDeclaracion(declaracionRiesgoId,
+                                             request.efectosDeclaracionRiesgo)
+      _ <- crearActualizarControlesDeclaracion(
+        declaracionRiesgoId,
+        request.controlesDeclaracionRiesgo)
     } yield declaracionRiesgoId
   }
 
@@ -99,13 +100,21 @@ class DeclaracionRiesgoServiceImpl(
     * @param causasList
     * @return
     */
-  private def crearCausasDeclaracion(
+  private def crearActualizarCausasDeclaracion(
       declaracionRiesgoId: Long,
       causasList: List[CausasDeclaracionRiesgosJson]): Future[List[Long]] = {
     val causasFuture = causasList.map(causa => {
-      val causaConRiesgoId =
-        causa.copy(declaracion_riesgo_id = Some(declaracionRiesgoId))
-      causasDeclaracionService.crearCausaDeclaracionService(causaConRiesgoId)
+      causa.id match {
+        case Some(id) =>
+          causasDeclaracionService
+            .actualizarCausaDeclaracion(id, causa)
+            .map(x => if (x) 1l else 0l)
+        case None =>
+          val causaConRiesgoId =
+            causa.copy(declaracion_riesgo_id = Some(declaracionRiesgoId))
+          causasDeclaracionService.crearCausaDeclaracionService(
+            causaConRiesgoId)
+      }
     })
 
     Future.sequence(causasFuture)
@@ -117,14 +126,21 @@ class DeclaracionRiesgoServiceImpl(
     * @param efectosList
     * @return
     */
-  private def crearEfectosDeclaracion(
+  private def crearActualizarEfectosDeclaracion(
       declaracionRiesgoId: Long,
       efectosList: List[EfectosDeclaracionRiesgosJson]): Future[List[Long]] = {
     val efectosFuture = efectosList.map(efecto => {
-      val efectosConRiesgoId =
-        efecto.copy(declaracion_riesgo_id = Some(declaracionRiesgoId))
-      efectosDeclaracionService.crearEfectoDeclaracionService(
-        efectosConRiesgoId)
+      efecto.id match {
+        case Some(id) =>
+          efectosDeclaracionService
+            .actualizarEfectoDeclaracion(id, efecto)
+            .map(x => if (x) 1l else 0l)
+        case None =>
+          val efectosConRiesgoId =
+            efecto.copy(declaracion_riesgo_id = Some(declaracionRiesgoId))
+          efectosDeclaracionService.crearEfectoDeclaracionService(
+            efectosConRiesgoId)
+      }
     })
 
     Future.sequence(efectosFuture)
@@ -136,15 +152,22 @@ class DeclaracionRiesgoServiceImpl(
     * @param controlesList
     * @return
     */
-  private def crearControlesDeclaracion(
+  private def crearActualizarControlesDeclaracion(
       declaracionRiesgoId: Long,
       controlesList: List[ControlesDeclaracionRiesgosJson])
     : Future[List[Long]] = {
     val controlesFuture = controlesList.map(control => {
-      val controlConRiesgoId =
-        control.copy(declaracion_riesgo_id = Some(declaracionRiesgoId))
-      controlesDeclaracionService.crearControlDeclaracionService(
-        controlConRiesgoId)
+      control.id match {
+        case Some(id) =>
+          controlesDeclaracionService
+            .actualizarControlDeclaracion(id, control)
+            .map(x => if (x) 1l else 0l)
+        case None =>
+          val controlConRiesgoId =
+            control.copy(declaracion_riesgo_id = Some(declaracionRiesgoId))
+          controlesDeclaracionService.crearControlDeclaracionService(
+            controlConRiesgoId)
+      }
     })
 
     Future.sequence(controlesFuture)
@@ -159,9 +182,26 @@ class DeclaracionRiesgoServiceImpl(
     */
   override def editarDeclaracionRiesgo(
       id: Long,
-      declaracionRiesgo: DeclaracionRiesgosJson): Future[Boolean] = {
-    val entity = DeclaracionRiesgosJson.toEntity(declaracionRiesgo)
-    declaracionRiesgosDao.actualizarDeclaracionRiesgo(id, entity)
+      declaracionRiesgo: DeclaracionRiesgosRequestJson): Future[Boolean] = {
+    val declaracionEntity =
+      DeclaracionRiesgosJson.toEntity(declaracionRiesgo.declaracionRiesgo)
+
+    for {
+      riesgoActualizacion <- declaracionRiesgosDao.actualizarDeclaracionRiesgo(
+        id,
+        declaracionEntity)
+      causaAct <- crearActualizarCausasDeclaracion(
+        declaracionEntity.ejercicio_riesgo_id,
+        declaracionRiesgo.causasDeclaracionRiesgo)
+//      efectpAct <- crearActualizarEfectosDeclaracion(
+//        declaracionEntity.ejercicio_riesgo_id,
+//        declaracionRiesgo.efectosDeclaracionRiesgo)
+//      controlAct <- crearActualizarControlesDeclaracion(
+//        declaracionEntity.ejercicio_riesgo_id,
+//        declaracionRiesgo.controlesDeclaracionRiesgo)
+    } yield {
+      riesgoActualizacion //&& !causaAct.exists(_ == 0) && !efectpAct.exists(_ == 0l) && !controlAct.exists(_ == 0l)
+    }
   }
 
   /**
@@ -196,8 +236,7 @@ class DeclaracionRiesgoServiceImpl(
               val declaracion = DeclaracionRiesgosJson.fromEntity(x)
               val fechaEjercicio = ejercicio.map(_.fecha_creacion_ejercicio)
               declaracion.copy(fecha_ejercicio = fechaEjercicio,
-                calificacion_riesgo =
-                  calificacion.map(_.color))
+                               calificacion_riesgo = calificacion.map(_.color))
             }
           })
           .toList
@@ -228,8 +267,7 @@ class DeclaracionRiesgoServiceImpl(
               val declaracion = DeclaracionRiesgosJson.fromEntity(x)
               val fechaEjercicio = ejercicio.map(_.fecha_creacion_ejercicio)
               declaracion.copy(fecha_ejercicio = fechaEjercicio,
-                               calificacion_riesgo =
-                                 calificacion.map(_.color))
+                               calificacion_riesgo = calificacion.map(_.color))
             }
           })
           .toList
