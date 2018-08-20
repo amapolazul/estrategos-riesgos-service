@@ -8,10 +8,8 @@ import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import com.amapola.strategos.core.procesos.http.json.ProcesoProcedimientoJson
 import com.amapola.strategos.core.procesos.servicios.ProcesosServiciosService
 import com.amapola.strategos.infraestructura.AdministradorArchivosServiceImpl
-import com.amapola.strategos.utils.http.{
-  FileUploadDirectives,
-  StrategosCorsSettings
-}
+import com.amapola.strategos.utils.http.{FileUploadDirectives, StrategosCorsSettings}
+import com.amapola.strategos.utils.logs_auditoria.servicios.LogsAuditoriaService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -21,7 +19,7 @@ import scala.util.{Failure, Success}
 
 class ProcesosRutas(
     procesosService: ProcesosServiciosService,
-    directorioDestino: String)(implicit executionContext: ExecutionContext)
+    directorioDestino: String)(implicit executionContext: ExecutionContext, logsAuditoriaService: LogsAuditoriaService)
     extends FailFastCirceSupport
     with FileUploadDirectives
     with StrategosCorsSettings {
@@ -44,8 +42,10 @@ class ProcesosRutas(
         entity(as[ProcesoProcedimientoJson]) { entity =>
           onComplete(procesosService.crearProcesos(entity)) {
             case Success(_) =>
+              logsAuditoriaService.info(s"Proceso ${entity.proceso} correctamente", this.getClass.toString)
               complete(StatusCodes.Created, "Proceso creado correctamente")
             case Failure(ex) =>
+              logsAuditoriaService.error(s"Creacion de Proceso ${entity.proceso} ha fallado", this.getClass.toString, ex)
               complete(StatusCodes.InternalServerError,
                        s"Ocurrio un error: ${ex.getMessage}")
           }

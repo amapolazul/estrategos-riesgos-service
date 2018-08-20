@@ -22,6 +22,8 @@ import com.amapola.strategos.core.tablas_sistema.http.rutas._
 import com.amapola.strategos.core.tablas_sistema.persistencia.daos._
 import com.amapola.strategos.core.tablas_sistema.servicios._
 import com.amapola.strategos.utils.db.DatabaseConnector
+import com.amapola.strategos.utils.logs_auditoria.persistencia.daos.LogsAuditoriaDaoImpl
+import com.amapola.strategos.utils.logs_auditoria.servicios.LogsAuditoriaServiceImpl
 import me.archdev.restapi.utils.Config
 import me.archdev.restapi.utils.db.DatabaseMigrationManager
 
@@ -85,6 +87,8 @@ object Boot extends App {
       databaseConnector)
     val declaracionRiesgosDao = new DeclaracionRiesgosDaoImpl(databaseConnector)
 
+    val logsAuditoriaDao = new LogsAuditoriaDaoImpl(databaseConnector)
+
     //Servicios
     val impactoRiesgoService = new ImpactoRiesgosServiceImpl(impactoRiesgoDao)
     val probabildadRiesgoService = new ProbabilidadRiesgoServiceImpl(
@@ -130,6 +134,8 @@ object Boot extends App {
       controlesDeclaracionService,
       ejerciciosRiesgosService,
       calificacionRiesgoService)
+
+    implicit val logsAuditoriaService = new LogsAuditoriaServiceImpl(logsAuditoriaDao)
 
     //Rutas
     val procesosRutes =
