@@ -6,10 +6,10 @@ package object entidades {
       proceso_Id: Option[Long] = None,
       proceso_Padre_Id: Option[Long] = None,
       proceso_Nombre: String,
-      proceso_Codigo: String,
-      proceso_Descripcion: String,
-      proceso_Tipo: Long,
-      proceso_Responsable_Id: Long,
+      proceso_Codigo: Option[String] = None,
+      proceso_Descripcion: Option[String] = None,
+      proceso_Tipo: Option[Long] = None,
+      proceso_Responsable_Id: Option[Long] = None,
       proceso_Documento: String
   ) {
     require(!proceso_Nombre.isEmpty, "El campo proceso_Nombre es requerido")
@@ -34,12 +34,10 @@ package object entidades {
       proceso_Id: Option[Long] = None,
       product_Servicio_Codigo: String,
       producto_Servicio_nombre: String,
-      producto_Caracteristicas: String
+      producto_Caracteristicas: Option[String] = None
   ) {
     require(!producto_Servicio_nombre.isEmpty,
             "El campo producto_Servicio_Nombre es requerido")
-    require(!producto_Caracteristicas.isEmpty,
-            "El campo producto_Caracteristicas es requerido")
 
     def merge(porActualizar: ProductosServiciosEntidad) = {
       porActualizar.copy(
@@ -55,7 +53,7 @@ package object entidades {
       proceso_Id: Option[Long] = None,
       procedimiento_Nombre: String,
       procedimiento_Codigo: String,
-      procedimiento_Objetivo: String
+      procedimiento_Objetivo: Option[String] = None
   ) {
 
     require(!procedimiento_Nombre.isEmpty,

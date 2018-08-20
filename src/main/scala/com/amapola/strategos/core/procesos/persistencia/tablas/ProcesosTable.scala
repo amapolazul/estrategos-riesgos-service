@@ -25,10 +25,10 @@ trait ProcesosTable {
       (procesoId.?,
        procesoPadreId.?,
        procesoNombre,
-       procesoCodigo,
-       procesoDescripcion,
-       procesoTipo,
-       procesoResponsable,
+       procesoCodigo.?,
+       procesoDescripcion.?,
+       procesoTipo.?,
+       procesoResponsable.?,
        procesoDocumento) <> ((ProcesosEntidad.apply _).tupled, ProcesosEntidad.unapply)
   }
 

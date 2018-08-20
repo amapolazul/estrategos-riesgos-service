@@ -8,10 +8,10 @@ package object json {
       proceso_Id: Option[Long] = None,
       proceso_Padre_Id: Option[Long] = None,
       proceso_Nombre: String,
-      proceso_Descripcion: String,
-      proceso_Codigo: String,
-      proceso_Tipo: Long,
-      proceso_Responsable_Id: Long,
+      proceso_Descripcion: Option[String] = None,
+      proceso_Codigo: Option[String] = None,
+      proceso_Tipo: Option[Long] = None,
+      proceso_Responsable_Id: Option[Long] = None,
       proceso_Documento: String
   )
   object Proceso {
@@ -46,7 +46,7 @@ package object json {
       proceso_Id: Option[Long] = None,
       producto_Servicio_nombre: String,
       producto_Servicio_Codigo: String,
-      producto_Caracteristicas: String
+      producto_Caracteristicas: Option[String] = None
   )
 
   object ProductoServicio {
@@ -76,7 +76,7 @@ package object json {
       proceso_Id: Option[Long] = None,
       procedimiento_Nombre: String,
       procedimiento_Codigo: String,
-      procedimiento_Objetivo: String,
+      procedimiento_Objetivo: Option[String] = None,
       documentosCaracterizacion: List[DocumentoCaracterizacion]
   )
 

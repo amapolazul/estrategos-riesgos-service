@@ -31,7 +31,7 @@ private[procesos] trait CaracterizacionesTable extends ProcesosTable{
         procesoId.?,
         procedimientoNombre,
         procedimientoCodigo,
-        procedimientoObjetivo) <> ((ProcesoCaracterizacionesEntidad.apply _).tupled, ProcesoCaracterizacionesEntidad.unapply)
+        procedimientoObjetivo.?) <> ((ProcesoCaracterizacionesEntidad.apply _).tupled, ProcesoCaracterizacionesEntidad.unapply)
   }
 
   val caracterizaciones = TableQuery[Caracterizaciones]

@@ -37,7 +37,7 @@ private[procesos] trait ProductosServiciosTable extends ProcesosTable {
        procesoId.?,
        productoServicioNombre,
        productServicioCodigo,
-       productoCaracteristicas) <> ((ProductosServiciosEntidad.apply _).tupled, ProductosServiciosEntidad.unapply)
+       productoCaracteristicas.?) <> ((ProductosServiciosEntidad.apply _).tupled, ProductosServiciosEntidad.unapply)
   }
 
   protected val productosServicios = TableQuery[ProductosServicios]
