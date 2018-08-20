@@ -117,12 +117,11 @@ package object json {
       probabilidad_riesgo_id: Long,
       declaracion_riesgo_id: Option[Long],
       causa: String,
-      descripcion: String
+      descripcion: Option[String] = None
   ) {
     require(probabilidad_riesgo_id > 0,
             "El campo probabilidad_riesgo_id debe ser mayor a 0")
     require(!causa.isEmpty, "El campo causa no puede ser vacio")
-    require(!descripcion.isEmpty, "El descripcion causa no puede ser vacio")
   }
 
   object CausasDeclaracionRiesgosJson {
@@ -152,12 +151,11 @@ package object json {
       impacto_riesgos_id: Long,
       declaracion_riesgo_id: Option[Long],
       impacto: String,
-      descripcion: String
+      descripcion: Option[String] = None
   ) {
     require(impacto_riesgos_id > 0,
             "El campo declaracion_riesgo_id debe ser mayor a 0")
     require(!impacto.isEmpty, "El campo impacto no puede ser vacio")
-    require(!descripcion.isEmpty, "El campo descripcion no puede ser vacio")
   }
 
   object EfectosDeclaracionRiesgosJson {
@@ -187,12 +185,11 @@ package object json {
       efectividad_riesgos_id: Long,
       declaracion_riesgo_id: Option[Long],
       control: String,
-      descripcion: String
+      descripcion: Option[String] = None
   ) {
     require(efectividad_riesgos_id > 0,
             "El campo efectividad_riesgos_id no puede ser vacio")
     require(!control.isEmpty, "El campo control no puede ser vacio")
-    require(!descripcion.isEmpty, "El campo descripcion no puede ser vacio")
   }
 
   object ControlesDeclaracionRiesgosJson {
