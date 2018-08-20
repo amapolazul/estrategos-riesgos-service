@@ -111,7 +111,7 @@ class ControlesDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
                   (
                     merge.efectividad_riesgos_id,
                     merge.control,
-                    merge.descripcion,
+                    merge.descripcion.getOrElse(""),
                   )))
             .map(_ == 1)
 

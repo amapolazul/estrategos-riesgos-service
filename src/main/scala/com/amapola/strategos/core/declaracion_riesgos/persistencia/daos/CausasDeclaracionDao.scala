@@ -106,7 +106,7 @@ class CausasDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
           }).update((
             merge.probabilidad_riesgo_id,
             merge.causa,
-            merge.descripcion
+            merge.descripcion.getOrElse("")
           ))).map(_ == 1)
         case None => Future.successful(false)
       }

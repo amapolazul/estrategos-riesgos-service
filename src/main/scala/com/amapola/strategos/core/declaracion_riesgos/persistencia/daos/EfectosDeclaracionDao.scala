@@ -111,7 +111,7 @@ class EfectosDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
                 (
                   merge.impacto_riesgos_id,
                   merge.impacto,
-                  merge.descripcion,
+                  merge.descripcion.getOrElse(""),
                 ))).map(_ == 1)
         case None => Future.successful(false)
       }
