@@ -193,14 +193,14 @@ class DeclaracionRiesgoServiceImpl(
       causaAct <- crearActualizarCausasDeclaracion(
         declaracionEntity.ejercicio_riesgo_id,
         declaracionRiesgo.causasDeclaracionRiesgo)
-//      efectpAct <- crearActualizarEfectosDeclaracion(
-//        declaracionEntity.ejercicio_riesgo_id,
-//        declaracionRiesgo.efectosDeclaracionRiesgo)
-//      controlAct <- crearActualizarControlesDeclaracion(
-//        declaracionEntity.ejercicio_riesgo_id,
-//        declaracionRiesgo.controlesDeclaracionRiesgo)
+      efectpAct <- crearActualizarEfectosDeclaracion(
+        declaracionEntity.ejercicio_riesgo_id,
+        declaracionRiesgo.efectosDeclaracionRiesgo)
+      controlAct <- crearActualizarControlesDeclaracion(
+        declaracionEntity.ejercicio_riesgo_id,
+        declaracionRiesgo.controlesDeclaracionRiesgo)
     } yield {
-      riesgoActualizacion //&& !causaAct.exists(_ == 0) && !efectpAct.exists(_ == 0l) && !controlAct.exists(_ == 0l)
+      riesgoActualizacion && !causaAct.exists(_ == 0) && !efectpAct.exists(_ == 0l) && !controlAct.exists(_ == 0l)
     }
   }
 
