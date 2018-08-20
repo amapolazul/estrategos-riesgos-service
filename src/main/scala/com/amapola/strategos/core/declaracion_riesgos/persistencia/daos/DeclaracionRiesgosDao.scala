@@ -159,7 +159,11 @@ class DeclaracionRiesgosDaoImpl(val databaseConnector: DatabaseConnector)(
     */
   override def traerDeclaracionesRiesgoPendientesPorProcesoId(
       procesoId: Long): Future[Seq[DeclaracionRiesgosEntidad]] = {
-    db.run(declaracionesRiesgos.filter(_.proceso_id === procesoId).result)
+    db.run(
+      declaracionesRiesgos
+        .filter(_.proceso_id === procesoId)
+        .filter(_.tipo_riesgo_id === 1l)
+        .result)
   }
 
   /**
