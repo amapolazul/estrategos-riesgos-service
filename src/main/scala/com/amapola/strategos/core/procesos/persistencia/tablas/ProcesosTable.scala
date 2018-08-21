@@ -29,7 +29,7 @@ trait ProcesosTable {
        procesoDescripcion.?,
        procesoTipo.?,
        procesoResponsable.?,
-       procesoDocumento) <> ((ProcesosEntidad.apply _).tupled, ProcesosEntidad.unapply)
+       procesoDocumento.?) <> ((ProcesosEntidad.apply _).tupled, ProcesosEntidad.unapply)
   }
 
   protected val procesos = TableQuery[Procesos]

@@ -10,12 +10,10 @@ package object entidades {
       proceso_Descripcion: Option[String] = None,
       proceso_Tipo: Option[Long] = None,
       proceso_Responsable_Id: Option[Long] = None,
-      proceso_Documento: String
+      proceso_Documento: Option[String]
   ) {
     require(!proceso_Nombre.isEmpty, "El campo proceso_Nombre es requerido")
     require(!proceso_Codigo.isEmpty, "El campo proceso_Codigo es requerido")
-    require(!proceso_Documento.isEmpty,
-            "El campo proceso_Documento es requerido")
 
     def merge(porActualizar: ProcesosEntidad) = {
       porActualizar.copy(
@@ -75,14 +73,12 @@ package object entidades {
       procedimiento_Documento_Id: Option[Long] = None,
       caraceterizacion_id: Option[Long] = None,
       procedimiento_Documento_Nombre: String,
-      procedimiento_Documento_Descripcion: String,
+      procedimiento_Documento_Descripcion: Option[String],
       procedimiento_Documento_Codigo: String,
       procedimiento_Documento_Arch: String
   ) {
     require(!procedimiento_Documento_Nombre.isEmpty,
             "El campo procedimiento_Documento_Nombre es requerido")
-    require(!procedimiento_Documento_Descripcion.isEmpty,
-            "El campo procedimiento_Documento_Descripcion es requerido")
     require(!procedimiento_Documento_Codigo.isEmpty,
             "El campo procedimiento_Documento_Codigo es requerido")
     require(!procedimiento_Documento_Arch.isEmpty,
@@ -91,8 +87,7 @@ package object entidades {
     def merge(porActualizar: ProcesoDocumentosEntidad) = {
       porActualizar.copy(
         procedimiento_Documento_Nombre = this.procedimiento_Documento_Nombre,
-        procedimiento_Documento_Descripcion =
-          this.procedimiento_Documento_Descripcion,
+        procedimiento_Documento_Descripcion = this.procedimiento_Documento_Descripcion,
         procedimiento_Documento_Codigo = this.procedimiento_Documento_Codigo,
         procedimiento_Documento_Arch = this.procedimiento_Documento_Arch
       )

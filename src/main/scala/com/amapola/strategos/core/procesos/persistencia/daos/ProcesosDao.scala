@@ -111,8 +111,26 @@ class ProcesosDaoImpl(val databaseConnector: DatabaseConnector)(
                                  entidad: ProcesosEntidad): Future[Boolean] = {
     getProcesoPorId(idProceso) flatMap {
       case Some(procesoAnterior) =>
-        val actualizado = procesoAnterior.merge(entidad)
-        db.run(procesos.filter(_.procesoId === idProceso).update(actualizado))
+        val actualizado = entidad.merge(procesoAnterior)
+        db.run(procesos.filter(_.procesoId === idProceso)
+          .map(x => {
+            (
+              x.procesoNombre,
+              x.procesoCodigo,
+              x.procesoDescripcion,
+              x.procesoTipo,
+              x.procesoResponsable,
+              x.procesoDocumento
+            )
+          })
+          .update((
+            actualizado.proceso_Nombre,
+            actualizado.proceso_Codigo.getOrElse(""),
+            actualizado.proceso_Descripcion.getOrElse(""),
+            actualizado.proceso_Tipo.getOrElse(0l),
+            actualizado.proceso_Responsable_Id.getOrElse(0l),
+            actualizado.proceso_Documento
+          )))
           .map(_ == 1)
       case None => Future.successful(false)
     }

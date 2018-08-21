@@ -46,10 +46,28 @@ class ProcesosServiciosImpl(
 
     for {
       procesoId <- procesosDao.guardarProceso(procesoEntity)
-      _ <- crearListaProductosServicios(prodcutosServicios, procesoId)
-      _ <- crearListaCaracterizacionesArchivos(caracterizaciones, procesoId)
+      _ <- crearActualizarListaProductosServicios(prodcutosServicios, procesoId)
+      _ <- crearActualizarListaCaracterizacionesArchivos(caracterizaciones,
+                                                         procesoId)
     } yield procesoId
 
+  }
+
+  /**
+    * Actualiza un proceso completo dado la entidad con la nueva información y su Id
+    * @param id
+    * @param request
+    */
+  def actualizarProceso(id: Long, request: ProcesoProcedimientoJson) = {
+    val procesoEntity = Proceso.toEntity(request.proceso)
+    val prodcutosServicios = request.productoServicios
+    val caracterizaciones = request.caracterizaciones
+
+    for {
+      procesoActualizado <- procesosDao.actualizarProceso(id, procesoEntity)
+      productosActualizados <- crearActualizarListaProductosServicios(prodcutosServicios, id)
+      caracterizacionesActualizadas <- crearActualizarListaCaracterizacionesArchivos(caracterizaciones, id)
+    } yield procesoActualizado && !productosActualizados.exists(_ == 0) && !caracterizacionesActualizadas.flatten.exists(_ == 0)
   }
 
   /**
@@ -59,25 +77,54 @@ class ProcesosServiciosImpl(
     * @param procesoId
     * @return
     */
-  private def crearListaCaracterizacionesArchivos(list: List[Caracterizacion],
-                                                  procesoId: Long) = {
+  private def crearActualizarListaCaracterizacionesArchivos(
+      list: List[Caracterizacion],
+      procesoId: Long) = {
 
     val caraceristicasArchivos = list.map(x => {
-      val caractEntidad =
-        Caracterizacion.toEntity(x).copy(proceso_Id = Some(procesoId))
 
-      caracterizacionDao
-        .crearCaracterizacion(caractEntidad)
-        .flatMap(caracterizacionId => {
-          val archivos = x.documentosCaracterizacion
-          val archivosEntidad = archivos.map(arch => {
-            val archivo = DocumentoCaracterizacion.toEntity(
-              arch.copy(caraceterizacion_id = Some(caracterizacionId)))
-            documentosCaracterizacionDao.crearDocumentoCaracterizacion(archivo)
-          })
+      x.caraceterizacion_id match {
+        case Some(caractId) =>
+          val caractEntidad = Caracterizacion.toEntity(x)
+          caracterizacionDao
+            .actualizarCaracterizacion(caractId, caractEntidad)
+            .flatMap(upd => {
+              val archivos = x.documentosCaracterizacion
+              val archivosEntidad = archivos.map(arch => {
+                arch.procedimiento_Documento_Id match {
+                  case Some(docId) =>
+                    val archivo = DocumentoCaracterizacion.toEntity(arch)
+                    documentosCaracterizacionDao
+                      .actualizarDocumentoCaracetizacion(docId, archivo)
+                      .map(if (_) 1l else 0l)
+                  case None =>
+                    val archivo = DocumentoCaracterizacion.toEntity(
+                      arch.copy(caraceterizacion_id = Some(caractId)))
+                    documentosCaracterizacionDao.crearDocumentoCaracterizacion(
+                      archivo)
+                }
+              })
 
-          Future.sequence(archivosEntidad)
-        })
+              Future.sequence(archivosEntidad)
+            })
+        case None =>
+          val caractEntidad =
+            Caracterizacion.toEntity(x).copy(proceso_Id = Some(procesoId))
+
+          caracterizacionDao
+            .crearCaracterizacion(caractEntidad)
+            .flatMap(caracterizacionId => {
+              val archivos = x.documentosCaracterizacion
+              val archivosEntidad = archivos.map(arch => {
+                val archivo = DocumentoCaracterizacion.toEntity(
+                  arch.copy(caraceterizacion_id = Some(caracterizacionId)))
+                documentosCaracterizacionDao.crearDocumentoCaracterizacion(
+                  archivo)
+              })
+
+              Future.sequence(archivosEntidad)
+            })
+      }
     })
 
     Future.sequence(caraceristicasArchivos)
@@ -103,14 +150,20 @@ class ProcesosServiciosImpl(
     * @param procesoId
     * @return
     */
-  private def crearListaProductosServicios(
+  private def crearActualizarListaProductosServicios(
       list: List[ProductoServicio],
       procesoId: Long): Future[List[Long]] = {
     val futureList = list.map(x => {
 
       val prodServicio =
         ProductoServicio.toEntity(x.copy(proceso_Id = Some(procesoId)))
-      productosServiciosDao.guardarProductoServicio(prodServicio)
+      prodServicio.producto_Servicio_Id match {
+        case Some(id) =>
+          productosServiciosDao
+            .actualizarProductoServicios(id, prodServicio)
+            .map(if (_) 1l else 0l)
+        case None => productosServiciosDao.guardarProductoServicio(prodServicio)
+      }
     })
 
     Future.sequence(futureList)
@@ -170,8 +223,10 @@ class ProcesosServiciosImpl(
     * @return
     */
   override def traerProcesos(): Future[Seq[Proceso]] = {
-    procesosDao.getProcesos().map( list => {
-      list.map( Proceso.fromEntity(_))
-    })
+    procesosDao
+      .getProcesos()
+      .map(list => {
+        list.map(Proceso.fromEntity(_))
+      })
   }
 }

@@ -13,6 +13,7 @@ import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import com.amapola.strategos.core.declaracion_riesgos.http.json.ControlesDeclaracionRiesgosJson
 import com.amapola.strategos.core.declaracion_riesgos.servicios.ControlesDeclaracionService
 import com.amapola.strategos.utils.http.StrategosCorsSettings
+import com.amapola.strategos.utils.logs_auditoria.servicios.LogsAuditoriaService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -22,7 +23,8 @@ import scala.util.{Failure, Success}
 
 class ControlesDeclaracionRoute(
     controlesDeclaracionService: ControlesDeclaracionService)(
-    implicit executionContext: ExecutionContext)
+    implicit executionContext: ExecutionContext,
+    logsAuditoriaService: LogsAuditoriaService)
     extends FailFastCirceSupport
     with StrategosCorsSettings {
 
@@ -95,8 +97,15 @@ class ControlesDeclaracionRoute(
             controlesDeclaracionService.listarControlesDeclaracionPorRiesgoId(
               riesgoId.toLong)) {
             case Success(result) =>
+              logsAuditoriaService.info(
+                s"Registros de controles por el riesgoId: ${riesgoId} correctamente consultados",
+                this.getClass.toString)
               complete(StatusCodes.OK, result.asJson)
             case Failure(ex) =>
+              logsAuditoriaService.error(
+                s"Error consultando los controles por el riesgoId: $riesgoId",
+                this.getClass.toString,
+                ex)
               complete(StatusCodes.InternalServerError,
                        s"Ha ocurrido un error interno ${ex.getMessage}")
           }

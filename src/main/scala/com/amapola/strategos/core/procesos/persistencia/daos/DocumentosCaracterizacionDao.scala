@@ -115,11 +115,25 @@ class DocumentosCaracterizacionDaoImpl(val databaseConnector: DatabaseConnector)
       entidad: ProcesoDocumentosEntidad): Future[Boolean] = {
     getDocumentoCaracterizacionPorId(prodDocId) flatMap {
       case Some(antiguo) =>
-        val actualizado = antiguo.merge(entidad)
+        val actualizado = entidad.merge(antiguo)
         db.run(
             caracterizacionDocumentos
               .filter(_.procedimientoDocumentoId === prodDocId)
-              .update(actualizado))
+              .map(x => {
+                (
+                  x.procDocumentoNombre,
+                  x.procDocumentoDesc,
+                  x.procDocumentoCodigo,
+                  x.procDocumentoArchivo
+                )
+              })
+              .update(
+                (
+                  actualizado.procedimiento_Documento_Nombre,
+                  actualizado.procedimiento_Documento_Descripcion.getOrElse(""),
+                  actualizado.procedimiento_Documento_Codigo,
+                  actualizado.procedimiento_Documento_Arch
+                )))
           .map(_ == 1)
       case None => Future.successful(false)
     }

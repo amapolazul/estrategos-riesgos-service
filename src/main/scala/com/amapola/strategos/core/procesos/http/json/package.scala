@@ -12,11 +12,12 @@ package object json {
       proceso_Codigo: Option[String] = None,
       proceso_Tipo: Option[Long] = None,
       proceso_Responsable_Id: Option[Long] = None,
-      proceso_Documento: String
+      proceso_Documento: Option[String]
   )
   object Proceso {
     def toEntity(proceso: Proceso): ProcesosEntidad = {
       ProcesosEntidad(
+        proceso_Id = proceso.proceso_Id,
         proceso_Padre_Id = proceso.proceso_Padre_Id,
         proceso_Nombre = proceso.proceso_Nombre,
         proceso_Descripcion = proceso.proceso_Descripcion,
@@ -109,7 +110,7 @@ package object json {
       procedimiento_Documento_Id: Option[Long] = None,
       caraceterizacion_id: Option[Long] = None,
       procedimiento_Documento_Nombre: String,
-      procedimiento_Documento_Descripcion: String,
+      procedimiento_Documento_Descripcion: Option[String],
       procedimiento_Documento_Codigo: String,
       procedimiento_Documento_Arch: String
   )

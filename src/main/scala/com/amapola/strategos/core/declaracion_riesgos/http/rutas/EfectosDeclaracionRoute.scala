@@ -1,18 +1,13 @@
 package com.amapola.strategos.core.declaracion_riesgos.http.rutas
 
 import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.server.Directives.{
-  complete,
-  get,
-  onComplete,
-  pathEndOrSingleSlash,
-  _
-}
+import akka.http.scaladsl.server.Directives.{complete, get, onComplete, pathEndOrSingleSlash, _}
 import akka.http.scaladsl.server.PathMatchers.LongNumber
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import com.amapola.strategos.core.declaracion_riesgos.http.json.EfectosDeclaracionRiesgosJson
 import com.amapola.strategos.core.declaracion_riesgos.servicios.EfectosDeclaracionService
 import com.amapola.strategos.utils.http.StrategosCorsSettings
+import com.amapola.strategos.utils.logs_auditoria.servicios.LogsAuditoriaService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -22,7 +17,8 @@ import scala.util.{Failure, Success}
 
 class EfectosDeclaracionRoute(
     efectosDeclaracionService: EfectosDeclaracionService)(
-    implicit executionContext: ExecutionContext)
+    implicit executionContext: ExecutionContext,
+    logsAuditoriaService: LogsAuditoriaService)
     extends FailFastCirceSupport
     with StrategosCorsSettings {
 
@@ -55,6 +51,7 @@ class EfectosDeclaracionRoute(
                   complete(StatusCodes.OK, "Registro actualizado correctamente")
                 else complete(StatusCodes.NotFound, "Registro no encontrado")
               case Failure(ex) =>
+                logsAuditoriaService.error("Ha ocurrido un error en actualizarEfectoRiesgoPorId",this.getClass.toString, ex)
                 complete(StatusCodes.InternalServerError,
                          s"Ha ocurrido un error interno ${ex.getMessage}")
             }
@@ -76,6 +73,7 @@ class EfectosDeclaracionRoute(
               complete(StatusCodes.OK, "Registro borrado correctamente")
             else complete(StatusCodes.NotFound, "Registro no encontrado")
           case Failure(ex) =>
+            logsAuditoriaService.error("Ha ocurrido un error en actualizarEfectoRiesgoPorId",this.getClass.toString, ex)
             complete(StatusCodes.InternalServerError,
                      s"Ha ocurrido un error interno ${ex.getMessage}")
 
@@ -98,6 +96,7 @@ class EfectosDeclaracionRoute(
             case Success(result) =>
               complete(StatusCodes.OK, result.asJson)
             case Failure(ex) =>
+              logsAuditoriaService.error("Ha ocurrido un error en actualizarEfectoRiesgoPorId",this.getClass.toString, ex)
               complete(StatusCodes.InternalServerError,
                        s"Ha ocurrido un error interno ${ex.getMessage}")
           }

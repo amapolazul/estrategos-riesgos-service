@@ -8,12 +8,10 @@ import akka.http.scaladsl.server.Directives.{
 }
 import akka.http.scaladsl.server.PathMatchers.LongNumber
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
-import com.amapola.strategos.core.declaracion_riesgos.http.json.{
-  DeclaracionRiesgosJson,
-  DeclaracionRiesgosRequestJson
-}
+import com.amapola.strategos.core.declaracion_riesgos.http.json.DeclaracionRiesgosRequestJson
 import com.amapola.strategos.core.declaracion_riesgos.servicios.DeclaracionRiesgoService
 import com.amapola.strategos.utils.http.StrategosCorsSettings
+import com.amapola.strategos.utils.logs_auditoria.servicios.LogsAuditoriaService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -23,7 +21,8 @@ import scala.util.{Failure, Success}
 
 class DeclaracionRiesgosRoute(
     declaracionRiesgoService: DeclaracionRiesgoService)(
-    implicit executionContext: ExecutionContext)
+    implicit executionContext: ExecutionContext,
+    logsAuditoriaService: LogsAuditoriaService)
     extends FailFastCirceSupport
     with StrategosCorsSettings {
 
@@ -49,13 +48,17 @@ class DeclaracionRiesgosRoute(
     */
   private def traerRiesgosPorEjercicioId() = pathEndOrSingleSlash {
     get {
-    parameter('ejercicioId) { ejercicioId =>
+      parameter('ejercicioId) { ejercicioId =>
         onComplete(
           declaracionRiesgoService.listarDeclaracionesRiesgoPorEjercicioId(
             ejercicioId.toLong)) {
           case Success(result) =>
             complete(StatusCodes.OK, result.asJson)
           case Failure(ex) =>
+            logsAuditoriaService.error(
+              "Ha ocurrido un error en traerRiesgosPorEjercicioId",
+              this.getClass.toString,
+              ex)
             complete(StatusCodes.InternalServerError,
                      s"Ha ocurrido un error. ${ex.getMessage}")
         }
@@ -75,6 +78,10 @@ class DeclaracionRiesgosRoute(
           case Success(result) =>
             complete(StatusCodes.OK, result.asJson)
           case Failure(ex) =>
+            logsAuditoriaService.error(
+              "Ha ocurrido un error en traerRiesgosPendientesPorProcesoId",
+              this.getClass.toString,
+              ex)
             complete(StatusCodes.InternalServerError,
                      s"Ha ocurrido un error. ${ex.getMessage}")
         }
@@ -98,6 +105,10 @@ class DeclaracionRiesgosRoute(
                 complete(StatusCodes.NotFound, "Registro no encontrado"))
 
           case Failure(ex) =>
+            logsAuditoriaService.error(
+              "Ha ocurrido un error en traerRiesgoCompletoPorId",
+              this.getClass.toString,
+              ex)
             complete(StatusCodes.InternalServerError,
                      s"Ha ocurrido un error. ${ex.getMessage}")
         }
@@ -115,9 +126,16 @@ class DeclaracionRiesgosRoute(
         entity(as[DeclaracionRiesgosRequestJson]) { entity =>
           onComplete(declaracionRiesgoService.crearDeclaracionRiesgo(entity)) {
             case Success(result) =>
+              logsAuditoriaService.info(
+                s"Registro de declaracion riesgo con Id:${result} creado correctamente",
+                this.getClass.toString)
               complete(StatusCodes.OK,
                        s"Registro creado correctamente: ${result}")
             case Failure(ex) =>
+              logsAuditoriaService.error(
+                "Ha ocurrido un error guardando la declaracion de riesgo",
+                this.getClass.toString,
+                ex)
               complete(StatusCodes.InternalServerError,
                        s"Ha ocurrido un error: ${ex.getMessage}")
           }
@@ -139,12 +157,20 @@ class DeclaracionRiesgosRoute(
               declaracionRiesgoService.editarDeclaracionRiesgo(riesgoId,
                                                                entity)) {
               case Success(result) =>
-                if (result)
+                if (result) {
+                  logsAuditoriaService.info(
+                    s"Registro de declaracion riesgo con Id:${riesgoId} actualizado correctamente",
+                    this.getClass.toString)
                   complete(
                     StatusCodes.OK,
                     s"Registro actualizado correctamente correctamente: ${result}")
+                }
                 else complete(StatusCodes.NotFound, "Registro no encontrado")
               case Failure(ex) =>
+                logsAuditoriaService.error(
+                  "Ha ocurrido un error en actualizarDeclaracionRiesgo",
+                  this.getClass.toString,
+                  ex)
                 complete(StatusCodes.InternalServerError,
                          s"Ha ocurrido un error: ${ex.getMessage}")
             }

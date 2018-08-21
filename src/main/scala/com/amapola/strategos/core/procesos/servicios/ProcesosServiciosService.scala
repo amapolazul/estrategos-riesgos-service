@@ -37,6 +37,13 @@ trait ProcesosServiciosService {
     */
   def traerProcesos() : Future[Seq[Proceso]]
 
+  /**
+    * Actualiza un proceso completo dado la entidad con la nueva información y su Id
+    * @param id
+    * @param request
+    */
+  def actualizarProceso(id:Long, request: ProcesoProcedimientoJson) : Future[Boolean]
+
 }
 
 

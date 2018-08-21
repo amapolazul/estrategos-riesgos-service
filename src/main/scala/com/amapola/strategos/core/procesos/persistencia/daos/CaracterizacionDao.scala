@@ -126,7 +126,14 @@ class CaracterizacionDaoImpl(val databaseConnector: DatabaseConnector)(
         db.run(
             caracterizaciones
               .filter(_.caracterizacionId === caracterizacionId)
-              .update(actualizado))
+              .map(x => {
+                (x.procedimientoNombre,
+                 x.procedimientoCodigo,
+                 x.procedimientoObjetivo)
+              })
+              .update((actualizado.procedimiento_Nombre,
+                       actualizado.procedimiento_Codigo,
+                       actualizado.procedimiento_Objetivo.getOrElse(""))))
           .map(_ == 1)
       case None => Future.successful(false)
     }

@@ -31,7 +31,7 @@ private[procesos] trait ArchivosCaracterizacionesTable extends Caracterizaciones
       (procedimientoDocumentoId.?,
         caracterizacionId.?,
         procDocumentoNombre,
-        procDocumentoDesc,
+        procDocumentoDesc.?,
         procDocumentoCodigo,
         procDocumentoArchivo) <> ((ProcesoDocumentosEntidad.apply _).tupled, ProcesoDocumentosEntidad.unapply)
   }

@@ -8,7 +8,10 @@ import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import com.amapola.strategos.core.procesos.http.json.ProcesoProcedimientoJson
 import com.amapola.strategos.core.procesos.servicios.ProcesosServiciosService
 import com.amapola.strategos.infraestructura.AdministradorArchivosServiceImpl
-import com.amapola.strategos.utils.http.{FileUploadDirectives, StrategosCorsSettings}
+import com.amapola.strategos.utils.http.{
+  FileUploadDirectives,
+  StrategosCorsSettings
+}
 import com.amapola.strategos.utils.logs_auditoria.servicios.LogsAuditoriaService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
@@ -17,16 +20,17 @@ import io.circe.syntax._
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
-class ProcesosRutas(
-    procesosService: ProcesosServiciosService,
-    directorioDestino: String)(implicit executionContext: ExecutionContext, logsAuditoriaService: LogsAuditoriaService)
+class ProcesosRutas(procesosService: ProcesosServiciosService,
+                    directorioDestino: String)(
+    implicit executionContext: ExecutionContext,
+    logsAuditoriaService: LogsAuditoriaService)
     extends FailFastCirceSupport
     with FileUploadDirectives
     with StrategosCorsSettings {
 
   def getPaths = cors(settings) {
     pathPrefix("procesos") {
-      crearProcesos ~ crearProcesosSubProcesos ~ getProcesosPorPadreId ~ getProcesoById ~ getProcesos
+      crearProcesos ~ cargarArchivosProceso ~ getProcesosPorPadreId ~ getProcesoById ~ getProcesos ~ actualizarProceso
     }
   }
 
@@ -42,10 +46,15 @@ class ProcesosRutas(
         entity(as[ProcesoProcedimientoJson]) { entity =>
           onComplete(procesosService.crearProcesos(entity)) {
             case Success(_) =>
-              logsAuditoriaService.info(s"Proceso ${entity.proceso} correctamente", this.getClass.toString)
+              logsAuditoriaService.info(
+                s"Proceso ${entity.proceso} correctamente",
+                this.getClass.toString)
               complete(StatusCodes.Created, "Proceso creado correctamente")
             case Failure(ex) =>
-              logsAuditoriaService.error(s"Creacion de Proceso ${entity.proceso} ha fallado", this.getClass.toString, ex)
+              logsAuditoriaService.error(
+                s"Creacion de Proceso ${entity.proceso} ha fallado",
+                this.getClass.toString,
+                ex)
               complete(StatusCodes.InternalServerError,
                        s"Ocurrio un error: ${ex.getMessage}")
           }
@@ -102,8 +111,33 @@ class ProcesosRutas(
     }
   }
 
+  def actualizarProceso: Route = {
+    pathPrefix(LongNumber) { id =>
+      pathEndOrSingleSlash {
+        put {
+          entity(as[ProcesoProcedimientoJson]) { entity =>
+            onComplete(procesosService.actualizarProceso(id, entity)) {
+              case Success(_) =>
+                logsAuditoriaService.info(
+                  s"Proceso ${entity.proceso.proceso_Id} actualizado correctamente",
+                  this.getClass.toString)
+                complete(StatusCodes.OK,
+                         "Proceso actualizado correctamente")
+              case Failure(ex) =>
+                logsAuditoriaService.error(
+                  s"La actualizacion de Proceso ${entity.proceso.proceso_Id} ha fallado",
+                  this.getClass.toString,
+                  ex)
+                complete(StatusCodes.InternalServerError,
+                         s"Ocurrio un error: ${ex.getMessage}")
+            }
+          }
+        }
+      }
+    }
+  }
 
-  def crearProcesosSubProcesos: Route = {
+  def cargarArchivosProceso: Route = {
     pathPrefix("upload") {
       post {
         FileUploadDirectives.customStoreUploadedFiles(tempDestination) {

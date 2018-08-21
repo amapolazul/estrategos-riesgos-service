@@ -124,7 +124,19 @@ class ProductosServiciosDaoImpl(val databaseConnector: DatabaseConnector)(
         db.run(
             productosServicios
               .filter(_.productoServicioId === prodServicioId)
-              .update(actualizado))
+              .map(x => {
+                (
+                  x.productoServicioNombre,
+                  x.productServicioCodigo,
+                  x.productoCaracteristicas
+                )
+              })
+              .update(
+                (
+                  actualizado.producto_Servicio_nombre,
+                  actualizado.product_Servicio_Codigo,
+                  actualizado.producto_Caracteristicas.getOrElse("")
+                )))
           .map(_ == 1)
       case None => Future.successful(false)
     }
