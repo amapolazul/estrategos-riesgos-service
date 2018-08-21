@@ -87,7 +87,8 @@ package object entidades {
     def merge(porActualizar: ProcesoDocumentosEntidad) = {
       porActualizar.copy(
         procedimiento_Documento_Nombre = this.procedimiento_Documento_Nombre,
-        procedimiento_Documento_Descripcion = this.procedimiento_Documento_Descripcion,
+        procedimiento_Documento_Descripcion =
+          this.procedimiento_Documento_Descripcion,
         procedimiento_Documento_Codigo = this.procedimiento_Documento_Codigo,
         procedimiento_Documento_Arch = this.procedimiento_Documento_Arch
       )
