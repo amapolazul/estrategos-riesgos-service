@@ -129,7 +129,7 @@ class ProcesosDaoImpl(val databaseConnector: DatabaseConnector)(
             actualizado.proceso_Descripcion.getOrElse(""),
             actualizado.proceso_Tipo.getOrElse(0l),
             actualizado.proceso_Responsable_Id.getOrElse(0l),
-            actualizado.proceso_Documento
+            actualizado.proceso_Documento.getOrElse("")
           )))
           .map(_ == 1)
       case None => Future.successful(false)
