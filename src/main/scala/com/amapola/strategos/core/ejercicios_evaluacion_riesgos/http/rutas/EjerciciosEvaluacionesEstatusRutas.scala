@@ -1,16 +1,11 @@
 package com.amapola.strategos.core.ejercicios_evaluacion_riesgos.http.rutas
 
 import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.server.Directives.{
-  complete,
-  get,
-  onComplete,
-  pathEndOrSingleSlash,
-  _
-}
+import akka.http.scaladsl.server.Directives.{complete, get, onComplete, pathEndOrSingleSlash, _}
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.servicios.EjerciciosEvaluacionesEstatusService
 import com.amapola.strategos.utils.http.StrategosCorsSettings
+import com.amapola.strategos.utils.logs_auditoria.servicios.LogsAuditoriaService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -20,7 +15,8 @@ import scala.util.{Failure, Success}
 
 class EjerciciosEvaluacionesEstatusRutas(
     ejerciciosStatusService: EjerciciosEvaluacionesEstatusService)(
-    implicit executionContext: ExecutionContext)
+    implicit executionContext: ExecutionContext,
+    logsAuditoriaService: LogsAuditoriaService)
     extends FailFastCirceSupport
     with StrategosCorsSettings {
 
@@ -43,6 +39,7 @@ class EjerciciosEvaluacionesEstatusRutas(
       onComplete(ejerciciosStatusService.traerEjerciciosEstatus()) {
         case Success(result) => complete(StatusCodes.OK, result.asJson)
         case Failure(ex) =>
+          logsAuditoriaService.error("Ha ocurrido un error en traerEvaluacionEstados()", this.getClass.toString, ex)
           complete(StatusCodes.InternalServerError, ex.getMessage)
       }
     }

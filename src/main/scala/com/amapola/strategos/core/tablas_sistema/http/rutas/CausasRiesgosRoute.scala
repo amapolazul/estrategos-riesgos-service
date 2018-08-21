@@ -8,6 +8,7 @@ import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import com.amapola.strategos.core.tablas_sistema.http.json._
 import com.amapola.strategos.core.tablas_sistema.servicios.CausasRiesgosService
 import com.amapola.strategos.utils.http.{FileUploadDirectives, StrategosCorsSettings}
+import com.amapola.strategos.utils.logs_auditoria.servicios.LogsAuditoriaService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -21,7 +22,8 @@ import scala.util.{Failure, Success}
   * @param executionContext
   */
 class CausasRiesgosRoute(causasRiesgosService: CausasRiesgosService)(
-    implicit executionContext: ExecutionContext)
+    implicit executionContext: ExecutionContext,
+    logsAuditoriaService: LogsAuditoriaService)
     extends FailFastCirceSupport
     with FileUploadDirectives
     with StrategosCorsSettings {
@@ -42,6 +44,10 @@ class CausasRiesgosRoute(causasRiesgosService: CausasRiesgosService)(
             case Success(_) =>
               complete(StatusCodes.Created, "Registro creado correctamente")
             case Failure(ex) =>
+              logsAuditoriaService.error(
+                s"Ha ocurrido un error en crearCausasRiesgos",
+                this.getClass.toString,
+                ex)
               complete(StatusCodes.InternalServerError, ex.getMessage)
           }
         }
@@ -62,6 +68,10 @@ class CausasRiesgosRoute(causasRiesgosService: CausasRiesgosService)(
                 complete(StatusCodes.NotFound, "Registro no encontrado")
               )
           case Failure(ex) =>
+            logsAuditoriaService.error(
+              s"Ha ocurrido un error en traerCausasRiesgoPorId",
+              this.getClass.toString,
+              ex)
             complete(StatusCodes.InternalServerError, ex.getMessage)
         }
       }
@@ -76,6 +86,10 @@ class CausasRiesgosRoute(causasRiesgosService: CausasRiesgosService)(
           case Success(resultado) =>
             complete(StatusCodes.OK, resultado.asJson)
           case Failure(ex) =>
+            logsAuditoriaService.error(
+              s"Ha ocurrido un error en traerCausasRiesgos",
+              this.getClass.toString,
+              ex)
             complete(StatusCodes.InternalServerError, ex.getMessage)
         }
       }
@@ -93,6 +107,10 @@ class CausasRiesgosRoute(causasRiesgosService: CausasRiesgosService)(
                 complete(StatusCodes.OK, "Registro borrado correctamente")
               else complete(StatusCodes.NotFound, "Registro no encontrado")
             case Failure(ex) =>
+              logsAuditoriaService.error(
+                s"Ha ocurrido un error en borrarCausasRiesgo",
+                this.getClass.toString,
+                ex)
               complete(StatusCodes.InternalServerError, ex.getMessage)
           }
         }
@@ -111,11 +129,14 @@ class CausasRiesgosRoute(causasRiesgosService: CausasRiesgosService)(
                 complete(StatusCodes.OK, "Registro actualizado correctamente")
               else complete(StatusCodes.NotFound, "Registro no encontrado")
             case Failure(ex) =>
+              logsAuditoriaService.error(
+                s"Ha ocurrido un error en actualizarCausasRiesgo",
+                this.getClass.toString,
+                ex)
               complete(StatusCodes.InternalServerError, ex.getMessage)
           }
         }
       }
     }
   }
-
 }

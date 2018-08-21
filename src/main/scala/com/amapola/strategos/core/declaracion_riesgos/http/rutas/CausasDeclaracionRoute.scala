@@ -53,6 +53,7 @@ class CausasDeclaracionRoute(causasDeclaracionService: CausasDeclaracionService)
                 complete(StatusCodes.OK, "Registro actualizado correctamente")
               else complete(StatusCodes.NotFound, "Registro no encontrado")
             case Failure(ex) =>
+              logsAuditoriaService.error("Ha ocurrido un error en actualizarCausaRiesgoPorId()", this.getClass.toString, ex)
               complete(StatusCodes.InternalServerError,
                        s"Ha ocurrido un error interno ${ex.getMessage}")
           }
@@ -74,6 +75,7 @@ class CausasDeclaracionRoute(causasDeclaracionService: CausasDeclaracionService)
               complete(StatusCodes.OK, "Registro borrado correctamente")
             else complete(StatusCodes.NotFound, "Registro no encontrado")
           case Failure(ex) =>
+            logsAuditoriaService.error("Ha ocurrido un error en borrarCausaPorId()", this.getClass.toString, ex)
             complete(StatusCodes.InternalServerError,
                      s"Ha ocurrido un error interno ${ex.getMessage}")
 
@@ -94,9 +96,6 @@ class CausasDeclaracionRoute(causasDeclaracionService: CausasDeclaracionService)
             causasDeclaracionService.listarCausasDeclaracionPorRiesgoId(
               riesgoId.toLong)) {
             case Success(result) =>
-              logsAuditoriaService.info(
-                s"Registros de causas por el riesgoId: ${riesgoId} correctamente consultados",
-                this.getClass.toString)
               complete(StatusCodes.OK, result.asJson)
             case Failure(ex) =>
               logsAuditoriaService.error(

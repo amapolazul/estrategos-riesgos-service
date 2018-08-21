@@ -5,6 +5,7 @@ import akka.http.scaladsl.server.Directives._
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import com.amapola.strategos.core.responsables.servicios.ResponsablesService
 import com.amapola.strategos.utils.http.FileUploadDirectives
+import com.amapola.strategos.utils.logs_auditoria.servicios.LogsAuditoriaService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 
 import scala.concurrent.ExecutionContext
@@ -13,7 +14,8 @@ import io.circe.generic.auto._
 import io.circe.syntax._
 
 class ResponsablesRutas(responsablesService: ResponsablesService)(
-    implicit executionContext: ExecutionContext)
+    implicit executionContext: ExecutionContext,
+    logsAuditoriaService: LogsAuditoriaService)
     extends FailFastCirceSupport
     with FileUploadDirectives {
 
@@ -39,10 +41,13 @@ class ResponsablesRutas(responsablesService: ResponsablesService)(
         onComplete(responsablesService.traerListResponsables()) {
           case Success(result) => complete(StatusCodes.OK, result.asJson)
           case Failure(ex) =>
+            logsAuditoriaService.error(
+              s"Ha ocurrido un error en traerResponsables",
+              this.getClass.toString,
+              ex)
             complete(StatusCodes.InternalServerError, ex.getMessage)
         }
       }
     }
   }
-
 }

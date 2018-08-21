@@ -55,6 +55,7 @@ class ControlesDeclaracionRoute(
                   complete(StatusCodes.OK, "Registro actualizado correctamente")
                 else complete(StatusCodes.NotFound, "Registro no encontrado")
               case Failure(ex) =>
+                logsAuditoriaService.error("Ha ocurrido un error en actualizarControlRiesgoPorId()", this.getClass.toString, ex)
                 complete(StatusCodes.InternalServerError,
                          s"Ha ocurrido un error interno ${ex.getMessage}")
             }
@@ -77,6 +78,7 @@ class ControlesDeclaracionRoute(
               complete(StatusCodes.OK, "Registro borrado correctamente")
             else complete(StatusCodes.NotFound, "Registro no encontrado")
           case Failure(ex) =>
+            logsAuditoriaService.error("Ha ocurrido un error en borrarControlPorId()", this.getClass.toString, ex)
             complete(StatusCodes.InternalServerError,
                      s"Ha ocurrido un error interno ${ex.getMessage}")
 
@@ -97,13 +99,10 @@ class ControlesDeclaracionRoute(
             controlesDeclaracionService.listarControlesDeclaracionPorRiesgoId(
               riesgoId.toLong)) {
             case Success(result) =>
-              logsAuditoriaService.info(
-                s"Registros de controles por el riesgoId: ${riesgoId} correctamente consultados",
-                this.getClass.toString)
               complete(StatusCodes.OK, result.asJson)
             case Failure(ex) =>
               logsAuditoriaService.error(
-                s"Error consultando los controles por el riesgoId: $riesgoId",
+                s"Ha ocurrido un error en traerControlsPorRiesgoId(): $riesgoId",
                 this.getClass.toString,
                 ex)
               complete(StatusCodes.InternalServerError,

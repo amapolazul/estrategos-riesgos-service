@@ -7,6 +7,7 @@ import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.http.json.EjerciciosEvaluacionRiesgosJson
 import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.servicios.EjerciciosEvaluacionesRiesgosService
 import com.amapola.strategos.utils.http.StrategosCorsSettings
+import com.amapola.strategos.utils.logs_auditoria.servicios.LogsAuditoriaService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -16,7 +17,8 @@ import scala.util.{Failure, Success}
 
 class EjerciciosEvaluacionesRiesgosRutas(
     ejerciciosRiesgosService: EjerciciosEvaluacionesRiesgosService)(
-    implicit executionContext: ExecutionContext)
+    implicit executionContext: ExecutionContext,
+    logsAuditoriaService: LogsAuditoriaService)
     extends FailFastCirceSupport
     with StrategosCorsSettings {
 
@@ -49,6 +51,7 @@ class EjerciciosEvaluacionesRiesgosRutas(
                 .getOrElse(
                   complete(StatusCodes.NotFound, "Registro no encontrado"))
             case Failure(ex) =>
+              logsAuditoriaService.error("Ha ocurrido un error en traerEvaluacionRiesgosPorId()", this.getClass.toString, ex)
               complete(StatusCodes.InternalServerError, ex.getMessage)
           }
         }
@@ -65,9 +68,10 @@ class EjerciciosEvaluacionesRiesgosRutas(
       post {
         entity(as[EjerciciosEvaluacionRiesgosJson]) { entity =>
           onComplete(ejerciciosRiesgosService.crearEjerciciosEvaluacion(entity)) {
-            case Success(_) =>
+            case Success(result) =>
               complete(StatusCodes.OK, "Registro creado correctamente")
             case Failure(ex) =>
+              logsAuditoriaService.error("Ha ocurrido un error en crearEjercicioEvaluacionRiesgo()", this.getClass.toString, ex)
               complete(StatusCodes.InternalServerError, ex.getMessage)
           }
         }
@@ -88,10 +92,12 @@ class EjerciciosEvaluacionesRiesgosRutas(
               ejerciciosRiesgosService
                 .actualizarEjercicioEvaluacion(id, entity)) {
               case Success(result) =>
-                if (result)
+                if (result) {
                   complete(StatusCodes.OK, "Registro actualizado correctamente")
+                }
                 else complete(StatusCodes.NotFound, "Registro no encontrado")
               case Failure(ex) =>
+                logsAuditoriaService.error("Ha ocurrido un error en actualizarEvaluacionRiesgo()", this.getClass.toString, ex)
                 complete(StatusCodes.InternalServerError, ex.getMessage)
             }
           }
@@ -111,10 +117,12 @@ class EjerciciosEvaluacionesRiesgosRutas(
           onComplete(
             ejerciciosRiesgosService.borrarEjercicioEvaluacionPorId(id)) {
             case Success(result) =>
-              if (result)
+              if (result) {
                 complete(StatusCodes.OK, "Registro borrado correctamente")
+              }
               else complete(StatusCodes.NotFound, "Registro no encontrado")
             case Failure(ex) =>
+              logsAuditoriaService.error("Ha ocurrido un error en borrarEvaluacionRiesgo()", this.getClass.toString, ex)
               complete(StatusCodes.InternalServerError, ex.getMessage)
           }
         }
@@ -136,6 +144,7 @@ class EjerciciosEvaluacionesRiesgosRutas(
             case Success(result) =>
               complete(StatusCodes.OK, result.asJson)
             case Failure(ex) =>
+              logsAuditoriaService.error("Ha ocurrido un error en traerEvaluacionRiesgosProcesoId()", this.getClass.toString, ex)
               complete(StatusCodes.InternalServerError, ex.getMessage)
           }
         }

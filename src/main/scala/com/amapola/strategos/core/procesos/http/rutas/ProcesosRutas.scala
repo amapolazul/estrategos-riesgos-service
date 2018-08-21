@@ -46,13 +46,10 @@ class ProcesosRutas(procesosService: ProcesosServiciosService,
         entity(as[ProcesoProcedimientoJson]) { entity =>
           onComplete(procesosService.crearProcesos(entity)) {
             case Success(_) =>
-              logsAuditoriaService.info(
-                s"Proceso ${entity.proceso} correctamente",
-                this.getClass.toString)
               complete(StatusCodes.Created, "Proceso creado correctamente")
             case Failure(ex) =>
               logsAuditoriaService.error(
-                s"Creacion de Proceso ${entity.proceso} ha fallado",
+                s"Ha ocurrido un error en crearProcesos",
                 this.getClass.toString,
                 ex)
               complete(StatusCodes.InternalServerError,
@@ -74,6 +71,10 @@ class ProcesosRutas(procesosService: ProcesosServiciosService,
                 .getOrElse(
                   complete(StatusCodes.NotFound, "Proceso no encontrado"))
             case Failure(ex) =>
+              logsAuditoriaService.error(
+                s"Ha ocurrido un error en getProcesoById",
+                this.getClass.toString,
+                ex)
               complete(StatusCodes.InternalServerError, ex.getMessage())
           }
         }
@@ -90,6 +91,10 @@ class ProcesosRutas(procesosService: ProcesosServiciosService,
               case Success(results) =>
                 complete(StatusCodes.OK, results.asJson)
               case Failure(ex) =>
+                logsAuditoriaService.error(
+                  s"Ha ocurrido un error en getProcesosPorPadreId",
+                  this.getClass.toString,
+                  ex)
                 complete(StatusCodes.InternalServerError, ex.getMessage())
             }
           }
@@ -105,6 +110,10 @@ class ProcesosRutas(procesosService: ProcesosServiciosService,
           case Success(results) =>
             complete(StatusCodes.OK, results.asJson)
           case Failure(ex) =>
+            logsAuditoriaService.error(
+              s"Ha ocurrido un error en getProcesos",
+              this.getClass.toString,
+              ex)
             complete(StatusCodes.InternalServerError, ex.getMessage())
         }
       }
@@ -118,14 +127,11 @@ class ProcesosRutas(procesosService: ProcesosServiciosService,
           entity(as[ProcesoProcedimientoJson]) { entity =>
             onComplete(procesosService.actualizarProceso(id, entity)) {
               case Success(_) =>
-                logsAuditoriaService.info(
-                  s"Proceso ${entity.proceso.proceso_Id} actualizado correctamente",
-                  this.getClass.toString)
                 complete(StatusCodes.OK,
                          "Proceso actualizado correctamente")
               case Failure(ex) =>
                 logsAuditoriaService.error(
-                  s"La actualizacion de Proceso ${entity.proceso.proceso_Id} ha fallado",
+                  s"Ha ocurrido un error en actualizarProceso",
                   this.getClass.toString,
                   ex)
                 complete(StatusCodes.InternalServerError,

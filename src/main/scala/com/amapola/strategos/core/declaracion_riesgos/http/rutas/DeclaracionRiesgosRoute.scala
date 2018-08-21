@@ -126,9 +126,6 @@ class DeclaracionRiesgosRoute(
         entity(as[DeclaracionRiesgosRequestJson]) { entity =>
           onComplete(declaracionRiesgoService.crearDeclaracionRiesgo(entity)) {
             case Success(result) =>
-              logsAuditoriaService.info(
-                s"Registro de declaracion riesgo con Id:${result} creado correctamente",
-                this.getClass.toString)
               complete(StatusCodes.OK,
                        s"Registro creado correctamente: ${result}")
             case Failure(ex) =>
@@ -158,9 +155,6 @@ class DeclaracionRiesgosRoute(
                                                                entity)) {
               case Success(result) =>
                 if (result) {
-                  logsAuditoriaService.info(
-                    s"Registro de declaracion riesgo con Id:${riesgoId} actualizado correctamente",
-                    this.getClass.toString)
                   complete(
                     StatusCodes.OK,
                     s"Registro actualizado correctamente correctamente: ${result}")
@@ -197,6 +191,7 @@ class DeclaracionRiesgosRoute(
                   s"Registro borrado correctamente correctamente: ${result}")
               else complete(StatusCodes.NotFound, "Registro no encontrado")
             case Failure(ex) =>
+              logsAuditoriaService.error("Ha ocurrido un error en borrarDeclaracionRiesgo()", this.getClass.toString, ex)
               complete(StatusCodes.InternalServerError,
                        s"Ha ocurrido un error: ${ex.getMessage}")
           }

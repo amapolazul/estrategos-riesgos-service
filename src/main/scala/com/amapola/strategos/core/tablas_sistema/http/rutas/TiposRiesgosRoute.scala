@@ -6,10 +6,8 @@ import akka.http.scaladsl.server.Directives.{entity, _}
 import com.amapola.strategos.core.tablas_sistema.http.json._
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import com.amapola.strategos.core.tablas_sistema.servicios.TipoRiesgosService
-import com.amapola.strategos.utils.http.{
-  FileUploadDirectives,
-  StrategosCorsSettings
-}
+import com.amapola.strategos.utils.http.{FileUploadDirectives, StrategosCorsSettings}
+import com.amapola.strategos.utils.logs_auditoria.servicios.LogsAuditoriaService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -23,7 +21,8 @@ import scala.util.{Failure, Success}
   * @param executionContext
   */
 class TiposRiesgosRoute(tipoRiesgosServie: TipoRiesgosService)(
-    implicit executionContext: ExecutionContext)
+    implicit executionContext: ExecutionContext,
+    logsAuditoriaService: LogsAuditoriaService)
     extends FailFastCirceSupport
     with FileUploadDirectives
     with StrategosCorsSettings {
@@ -51,6 +50,10 @@ class TiposRiesgosRoute(tipoRiesgosServie: TipoRiesgosService)(
                 .getOrElse(
                   complete(StatusCodes.NotFound, "Registro no encontrado"))
             case Failure(ex) =>
+              logsAuditoriaService.error(
+                s"Ha ocurrido un error en traerTipoRiesgoPorId",
+                this.getClass.toString,
+                ex)
               complete(StatusCodes.InternalServerError, ex.getMessage)
           }
         }
@@ -64,6 +67,10 @@ class TiposRiesgosRoute(tipoRiesgosServie: TipoRiesgosService)(
         onComplete(tipoRiesgosServie.traerTipoRiesgos()) {
           case Success(result) => complete(StatusCodes.OK, result.asJson)
           case Failure(ex) =>
+            logsAuditoriaService.error(
+              s"Ha ocurrido un error en traerTipoRiesgo",
+              this.getClass.toString,
+              ex)
             complete(StatusCodes.InternalServerError, ex.getMessage)
         }
       }
@@ -78,6 +85,10 @@ class TiposRiesgosRoute(tipoRiesgosServie: TipoRiesgosService)(
             case Success(_) =>
               complete(StatusCodes.OK, "Registro creado correctamente")
             case Failure(ex) =>
+              logsAuditoriaService.error(
+                s"Ha ocurrido un error en crearTipoRiesgo",
+                this.getClass.toString,
+                ex)
               complete(StatusCodes.InternalServerError, ex.getMessage)
           }
         }
@@ -98,6 +109,10 @@ class TiposRiesgosRoute(tipoRiesgosServie: TipoRiesgosService)(
                   complete(StatusCodes.OK, "Registro actualizado correctamente")
                 else complete(StatusCodes.NotFound, "Registro no encontrado")
               case Failure(ex) =>
+                logsAuditoriaService.error(
+                  s"Ha ocurrido un error en actualizarTipoRiesgo",
+                  this.getClass.toString,
+                  ex)
                 complete(StatusCodes.InternalServerError, ex.getMessage)
             }
           }
@@ -116,6 +131,10 @@ class TiposRiesgosRoute(tipoRiesgosServie: TipoRiesgosService)(
                 complete(StatusCodes.OK, "Registro borrado correctamente")
               else complete(StatusCodes.NotFound, "Registro no encontrado")
             case Failure(ex) =>
+              logsAuditoriaService.error(
+                s"Ha ocurrido un error en borrarTipoRiesgo",
+                this.getClass.toString,
+                ex)
               complete(StatusCodes.InternalServerError, ex.getMessage)
           }
         }

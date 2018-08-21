@@ -7,10 +7,8 @@ import akka.http.scaladsl.server.directives.MarshallingDirectives.{as, entity}
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import com.amapola.strategos.core.tablas_sistema.http.json._
 import com.amapola.strategos.core.tablas_sistema.servicios.RespuestasRiesgosService
-import com.amapola.strategos.utils.http.{
-  FileUploadDirectives,
-  StrategosCorsSettings
-}
+import com.amapola.strategos.utils.http.{FileUploadDirectives, StrategosCorsSettings}
+import com.amapola.strategos.utils.logs_auditoria.servicios.LogsAuditoriaService
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -24,7 +22,8 @@ import scala.util.{Failure, Success}
   * @param executionContext
   */
 class RespuestasRiesgoRoute(repuestasRiesgosService: RespuestasRiesgosService)(
-    implicit executionContext: ExecutionContext)
+    implicit executionContext: ExecutionContext,
+    logsAuditoriaService: LogsAuditoriaService)
     extends FailFastCirceSupport
     with FileUploadDirectives
     with StrategosCorsSettings {
@@ -50,6 +49,10 @@ class RespuestasRiesgoRoute(repuestasRiesgosService: RespuestasRiesgosService)(
                 .getOrElse(
                   complete(StatusCodes.NotFound, "Registro no encontrado"))
             case Failure(ex) =>
+              logsAuditoriaService.error(
+                s"Ha ocurrido un error en traerRespuestasRiesgoPorId",
+                this.getClass.toString,
+                ex)
               complete(StatusCodes.InternalServerError, ex.getMessage)
           }
         }
@@ -63,6 +66,10 @@ class RespuestasRiesgoRoute(repuestasRiesgosService: RespuestasRiesgosService)(
         onComplete(repuestasRiesgosService.traerRespuestasRiesgo()) {
           case Success(result) => complete(StatusCodes.OK, result.asJson)
           case Failure(ex) =>
+            logsAuditoriaService.error(
+              s"Ha ocurrido un error en traerImpactosRiesgo",
+              this.getClass.toString,
+              ex)
             complete(StatusCodes.InternalServerError, ex.getMessage)
         }
       }
@@ -77,6 +84,10 @@ class RespuestasRiesgoRoute(repuestasRiesgosService: RespuestasRiesgosService)(
             case Success(_) =>
               complete(StatusCodes.OK, "Registro creado correctamente")
             case Failure(ex) =>
+              logsAuditoriaService.error(
+                s"Ha ocurrido un error en crearRespuestasRiesgo",
+                this.getClass.toString,
+                ex)
               complete(StatusCodes.InternalServerError, ex.getMessage)
           }
         }
@@ -98,6 +109,10 @@ class RespuestasRiesgoRoute(repuestasRiesgosService: RespuestasRiesgosService)(
                   complete(StatusCodes.NotFound,
                            "No se encuentra el registro a actualizar")
               case Failure(ex) =>
+                logsAuditoriaService.error(
+                  s"Ha ocurrido un error en actualizarRespuestasRiesgo",
+                  this.getClass.toString,
+                  ex)
                 complete(StatusCodes.InternalServerError, ex.getMessage)
             }
           }
@@ -118,6 +133,10 @@ class RespuestasRiesgoRoute(repuestasRiesgosService: RespuestasRiesgosService)(
                 complete(StatusCodes.NotFound,
                          "No se encuentra el registro a borrar")
             case Failure(ex) =>
+              logsAuditoriaService.error(
+                s"Ha ocurrido un error en borrarRespuestasRiesgo",
+                this.getClass.toString,
+                ex)
               complete(StatusCodes.InternalServerError, ex.getMessage)
           }
         }
