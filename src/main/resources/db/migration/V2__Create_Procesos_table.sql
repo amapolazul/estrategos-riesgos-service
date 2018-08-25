@@ -5,7 +5,7 @@ CREATE TABLE procesos (
     proceso_descripcion VARCHAR(255),
     proceso_codigo VARCHAR(255),
     proceso_tipo VARCHAR(255),
-    proceso_responsable_id BIGINT,
+    proceso_responsable_id VARCHAR (255),
     proceso_documento VARCHAR(255)
 );
 

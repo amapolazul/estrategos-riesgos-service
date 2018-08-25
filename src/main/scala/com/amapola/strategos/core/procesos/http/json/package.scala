@@ -11,7 +11,7 @@ package object json {
       proceso_Descripcion: Option[String] = None,
       proceso_Codigo: Option[String] = None,
       proceso_Tipo: Option[Long] = None,
-      proceso_Responsable_Id: Option[Long] = None,
+      proceso_Responsable_Id: Option[String] = None,
       proceso_Documento: Option[String]
   )
   object Proceso {

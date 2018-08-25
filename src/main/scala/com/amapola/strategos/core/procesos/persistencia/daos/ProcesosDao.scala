@@ -128,7 +128,7 @@ class ProcesosDaoImpl(val databaseConnector: DatabaseConnector)(
             actualizado.proceso_Codigo.getOrElse(""),
             actualizado.proceso_Descripcion.getOrElse(""),
             actualizado.proceso_Tipo.getOrElse(0l),
-            actualizado.proceso_Responsable_Id.getOrElse(0l),
+            actualizado.proceso_Responsable_Id.getOrElse(""),
             actualizado.proceso_Documento.getOrElse("")
           )))
           .map(_ == 1)

@@ -18,7 +18,7 @@ trait ProcesosTable {
     def procesoDescripcion = column[String]("proceso_descripcion")
     def procesoCodigo = column[String]("proceso_codigo")
     def procesoTipo = column[Long]("proceso_tipo")
-    def procesoResponsable = column[Long]("proceso_responsable_id")
+    def procesoResponsable = column[String]("proceso_responsable_id")
     def procesoDocumento = column[String]("proceso_documento")
 
     def * =
