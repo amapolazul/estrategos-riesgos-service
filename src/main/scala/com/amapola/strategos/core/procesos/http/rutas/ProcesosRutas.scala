@@ -30,7 +30,13 @@ class ProcesosRutas(procesosService: ProcesosServiciosService,
 
   def getPaths = cors(settings) {
     pathPrefix("procesos") {
-      crearProcesos ~ cargarArchivosProceso ~ getProcesosPorPadreId ~ getProcesoById ~ getProcesos ~ actualizarProceso
+      crearProcesos ~
+        cargarArchivosProceso ~
+        getProcesosPorPadreId ~
+        getProcesoById ~
+        getProcesos ~
+        actualizarProceso ~
+        borrarProceso
     }
   }
 
@@ -110,10 +116,9 @@ class ProcesosRutas(procesosService: ProcesosServiciosService,
           case Success(results) =>
             complete(StatusCodes.OK, results.asJson)
           case Failure(ex) =>
-            logsAuditoriaService.error(
-              s"Ha ocurrido un error en getProcesos",
-              this.getClass.toString,
-              ex)
+            logsAuditoriaService.error(s"Ha ocurrido un error en getProcesos",
+                                       this.getClass.toString,
+                                       ex)
             complete(StatusCodes.InternalServerError, ex.getMessage())
         }
       }
@@ -127,8 +132,7 @@ class ProcesosRutas(procesosService: ProcesosServiciosService,
           entity(as[ProcesoProcedimientoJson]) { entity =>
             onComplete(procesosService.actualizarProceso(id, entity)) {
               case Success(_) =>
-                complete(StatusCodes.OK,
-                         "Proceso actualizado correctamente")
+                complete(StatusCodes.OK, "Proceso actualizado correctamente")
               case Failure(ex) =>
                 logsAuditoriaService.error(
                   s"Ha ocurrido un error en actualizarProceso",
@@ -137,6 +141,40 @@ class ProcesosRutas(procesosService: ProcesosServiciosService,
                 complete(StatusCodes.InternalServerError,
                          s"Ocurrio un error: ${ex.getMessage}")
             }
+          }
+        }
+      }
+    }
+  }
+
+  def borrarProceso: Route = {
+    pathPrefix(LongNumber) { id =>
+      pathEndOrSingleSlash {
+        delete {
+          onComplete(procesosService.borrarProceso(id)) {
+            case Success((caract, produc, proc)) =>
+              val stringBuilder = new StringBuilder()
+              if (!caract)
+                stringBuilder.append(
+                  "Borrado de caracterizaciones ha fallado\n")
+              if (!produc)
+                stringBuilder.append(
+                  "Borrado de productos servicios ha fallado\n")
+              if (!proc) stringBuilder.append("Borrado de proceso ha fallado\n")
+
+              if (caract && produc && proc)
+                complete(StatusCodes.OK, "Proceso borrado correctamente")
+              else
+                complete(StatusCodes.InternalServerError,
+                         stringBuilder.toString())
+            case Failure(ex) =>
+              ex.printStackTrace()
+              logsAuditoriaService.error(
+                s"Ha ocurrido un error en borrarProceso",
+                this.getClass.toString,
+                ex)
+              complete(StatusCodes.InternalServerError,
+                       s"Ocurrio un error: ${ex.getMessage}")
           }
         }
       }

@@ -53,6 +53,13 @@ trait CaracterizacionDao {
     * @return
     */
   def borrarCaracterizacionPorId(caracterizacionId: Long): Future[Boolean]
+
+  /**
+    * Borra todas las caracterizaciones de un proceso
+    * @param procesoId
+    * @return
+    */
+  def borrarCaracterizacionesPorProcesoId(procesoId: Long): Future[Boolean]
 }
 
 class CaracterizacionDaoImpl(val databaseConnector: DatabaseConnector)(
@@ -152,4 +159,18 @@ class CaracterizacionDaoImpl(val databaseConnector: DatabaseConnector)(
           .filter(_.caracterizacionId === caracterizacionId)
           .delete)
       .map(_ == 1)
+
+  /**
+    * Borra todas las caracterizaciones de un proceso
+    *
+    * @param procesoId
+    * @return
+    */
+  override def borrarCaracterizacionesPorProcesoId(procesoId: Long): Future[Boolean] = {
+    db.run(
+      caracterizaciones
+        .filter(_.procesoId === procesoId)
+        .delete)
+      .map(_ == 1)
+  }
 }

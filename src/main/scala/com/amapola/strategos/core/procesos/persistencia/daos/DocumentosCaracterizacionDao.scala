@@ -96,12 +96,13 @@ class DocumentosCaracterizacionDaoImpl(val databaseConnector: DatabaseConnector)
     * @return
     */
   override def borrarDocumentoCaracterizacion(
-      prodDocId: Long): Future[Boolean] =
+      prodDocId: Long): Future[Boolean] = {
     db.run(
         caracterizacionDocumentos
           .filter(_.procedimientoDocumentoId === prodDocId)
           .delete)
       .map(_ == 1)
+  }
 
   /**
     * Actualiza un archivo de una caracterizacion dado un prodDocId

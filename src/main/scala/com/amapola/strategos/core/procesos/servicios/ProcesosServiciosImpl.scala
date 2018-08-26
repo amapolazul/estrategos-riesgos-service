@@ -18,14 +18,14 @@ import scala.concurrent.{ExecutionContext, Future}
 /**
   * Clase que expone los servicios asociados a los procesos, productos/servicios y caracterizaciones
   * con los nombres de los archivos asociados
-  * @param caracterizacionDao
+  * @param caracterizacionService
   * @param procesosDao
   * @param productosServiciosDao
   * @param documentosCaracterizacionDao
   * @param executionContext
   */
 class ProcesosServiciosImpl(
-    caracterizacionDao: CaracterizacionDao,
+    caracterizacionService: CaracterizacionService,
     procesosDao: ProcesosDao,
     productosServiciosDao: ProductosServiciosDao,
     documentosCaracterizacionDao: DocumentosCaracterizacionDao)(
@@ -65,9 +65,15 @@ class ProcesosServiciosImpl(
 
     for {
       procesoActualizado <- procesosDao.actualizarProceso(id, procesoEntity)
-      productosActualizados <- crearActualizarListaProductosServicios(prodcutosServicios, id)
-      caracterizacionesActualizadas <- crearActualizarListaCaracterizacionesArchivos(caracterizaciones, id)
-    } yield procesoActualizado && !productosActualizados.exists(_ == 0) && !caracterizacionesActualizadas.flatten.exists(_ == 0)
+      productosActualizados <- crearActualizarListaProductosServicios(
+        prodcutosServicios,
+        id)
+      caracterizacionesActualizadas <- crearActualizarListaCaracterizacionesArchivos(
+        caracterizaciones,
+        id)
+    } yield
+      procesoActualizado && !productosActualizados.exists(_ == 0) && !caracterizacionesActualizadas.flatten
+        .exists(_ == 0)
   }
 
   /**
@@ -86,7 +92,7 @@ class ProcesosServiciosImpl(
       x.caraceterizacion_id match {
         case Some(caractId) =>
           val caractEntidad = Caracterizacion.toEntity(x)
-          caracterizacionDao
+          caracterizacionService
             .actualizarCaracterizacion(caractId, caractEntidad)
             .flatMap(upd => {
               val archivos = x.documentosCaracterizacion
@@ -111,7 +117,7 @@ class ProcesosServiciosImpl(
           val caractEntidad =
             Caracterizacion.toEntity(x).copy(proceso_Id = Some(procesoId))
 
-          caracterizacionDao
+          caracterizacionService
             .crearCaracterizacion(caractEntidad)
             .flatMap(caracterizacionId => {
               val archivos = x.documentosCaracterizacion
@@ -199,7 +205,7 @@ class ProcesosServiciosImpl(
             for {
               productoServicios <- productosServiciosDao
                 .getProductoServiciosPorProcesoId(pr.proceso_Id.getOrElse(0l))
-              caract <- caracterizacionDao.darCaracterizacionesPorProcesoId(
+              caract <- caracterizacionService.darCaracterizacionesPorProcesoId(
                 pr.proceso_Id.getOrElse(0l))
               caractArchivos <- crearListaCaracterizacionesArchivosJson(caract)
             } yield {
@@ -228,5 +234,21 @@ class ProcesosServiciosImpl(
       .map(list => {
         list.map(Proceso.fromEntity(_))
       })
+  }
+
+  /**
+    * Borra el proceso por su id y toda la información relacionada a el tal como productos servicios, caracterizaciones
+    * y archivos
+    *
+    * @param procesoId
+    */
+  override def borrarProceso(procesoId: Long): Future[(Boolean, Boolean, Boolean)] = {
+    for {
+      borrarCaracterizaciones <- caracterizacionService.borrarCaracterizacionesPorProcesoId(procesoId)
+      borrarProductosServicios <- productosServiciosDao.borrarProductosServiciosPorProcesoId(procesoId)
+      borrarProceso <- procesosDao.borrarProceso(procesoId)
+    } yield {
+      (borrarCaracterizaciones, borrarProductosServicios, borrarProceso)
+    }
   }
 }

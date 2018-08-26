@@ -54,6 +54,13 @@ sealed trait ProductosServiciosDao {
     */
   def borrarProductoServicios(prodServicioId: Long): Future[Boolean]
 
+  /**
+    * Borra todos los Productos servicios de un proceso
+    * @param procesoId
+    * @return
+    */
+  def borrarProductosServiciosPorProcesoId(procesoId: Long): Future[Boolean]
+
 }
 
 class ProductosServiciosDaoImpl(val databaseConnector: DatabaseConnector)(
@@ -153,4 +160,19 @@ class ProductosServiciosDaoImpl(val databaseConnector: DatabaseConnector)(
           .filter(_.productoServicioId === prodServicioId)
           .delete)
       .map(_ == 1)
+
+  /**
+    * Borra todos los Productos servicios de un proceso
+    *
+    * @param procesoId
+    * @return
+    */
+  override def borrarProductosServiciosPorProcesoId(
+      procesoId: Long): Future[Boolean] = {
+    db.run(
+        productosServicios
+          .filter(_.procesoId === procesoId)
+          .delete)
+      .map(_ >= 0)
+  }
 }

@@ -50,7 +50,7 @@ class LogsAuditoriaServiceImpl(logsAuditoriaDao: LogsAuditoriaDao) extends LogsA
     */
   override def error(mensaje: String, claseOrigen: String, throwable: Throwable): Unit = {
     val entidad = LogsAuditoriaEntidad(
-      tipo_log = TipoMensajeLogs.info.toString,
+      tipo_log = TipoMensajeLogs.error.toString,
       clase_origen = claseOrigen,
       mensaje = s"$mensaje ${throwable.getMessage}",
       fecha_creacion = new Date().getTime

@@ -3,7 +3,11 @@ package com.amapola.strategos.infraestructura
 import java.io.File
 import java.nio.file.Files
 
+import me.archdev.restapi.utils.Config
+
 trait AdministradorArchivosService {
+
+  val directorio = Config.load().archivos.directorio
 
   /**
     * Escribe el archivo dentro del destio especificado
@@ -12,6 +16,12 @@ trait AdministradorArchivosService {
     * @param destino
     */
   def crearArchivo(archivo: File,  nombreArchivo: String, destino: String): Unit
+
+  /**
+    * Borra el archivo del repositorio
+    * @param nombreArchivo
+    */
+  def borrarArchivo(nombreArchivo: String): Boolean
 
 }
 
@@ -35,4 +45,15 @@ object AdministradorArchivosServiceImpl extends AdministradorArchivosService {
     Files.copy(archivoTmp.toPath, archivoFinal)
 
   }
+
+
+  /**
+    * Borra el archivo del repositorio
+    * @param nombreArchivo
+    */
+  def borrarArchivo(nombreArchivo: String): Boolean = {
+    val archivo = new File(s"$directorio/$nombreArchivo")
+    archivo.delete()
+  }
+
 }

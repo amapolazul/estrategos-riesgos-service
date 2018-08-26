@@ -44,6 +44,13 @@ trait ProcesosServiciosService {
     */
   def actualizarProceso(id:Long, request: ProcesoProcedimientoJson) : Future[Boolean]
 
+  /**
+    * Borra el proceso por su id y toda la información relacionada a el tal como productos servicios, caracterizaciones
+    * y archivos
+    * @param procesoId
+    */
+  def borrarProceso(procesoId: Long) : Future[(Boolean, Boolean, Boolean)]
+
 }
 
 

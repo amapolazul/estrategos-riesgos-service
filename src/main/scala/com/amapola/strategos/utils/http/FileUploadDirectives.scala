@@ -2,20 +2,26 @@ package com.amapola.strategos.utils.http
 
 import java.io.File
 
-import akka.annotation.ApiMayChange
-import akka.http.scaladsl.model.Multipart
+import akka.http.scaladsl.model.{HttpEntity, MediaTypes, Multipart}
 import akka.http.scaladsl.server.Directive1
 import akka.http.scaladsl.server.directives.BasicDirectives.extractRequestContext
 import akka.http.scaladsl.server.directives.FileInfo
 import akka.http.scaladsl.server.directives.FutureDirectives.onSuccess
 import akka.http.scaladsl.server.directives.MarshallingDirectives.{as, entity}
 import akka.stream.scaladsl.{FileIO, Sink, Source}
-import akka.util.ByteString
+
+import akka.http.scaladsl.server.Directives.{
+  complete,
+  get,
+  onComplete,
+  pathEndOrSingleSlash,
+  _
+}
 
 import scala.collection.immutable
 
 trait FileUploadDirectives {
-   def tempDestination(fileInfo: FileInfo): File =
+  def tempDestination(fileInfo: FileInfo): File =
     File.createTempFile(fileInfo.fileName, ".tmp")
 }
 
@@ -27,7 +33,8 @@ object FileUploadDirectives {
     * @param destFn
     * @return
     */
-  def customStoreUploadedFiles(implicit destFn: FileInfo ⇒ File): Directive1[immutable.Seq[(FileInfo, File)]] =
+  def customStoreUploadedFiles(implicit destFn: FileInfo ⇒ File)
+    : Directive1[immutable.Seq[(FileInfo, File)]] =
     entity(as[Multipart.FormData]).flatMap { formData ⇒
       extractRequestContext.flatMap { ctx ⇒
         implicit val mat = ctx.materializer
@@ -42,7 +49,8 @@ object FileUploadDirectives {
             }
           }
           .mapAsync(1) { part ⇒
-            val fileInfo = FileInfo(part.name, part.filename.get, part.entity.contentType)
+            val fileInfo =
+              FileInfo(part.name, part.filename.get, part.entity.contentType)
             val dest = destFn(fileInfo)
 
             part.entity.dataBytes.runWith(FileIO.toPath(dest.toPath)).map { _ ⇒
@@ -55,4 +63,5 @@ object FileUploadDirectives {
         onSuccess(uploadedF)
       }
     }
+
 }

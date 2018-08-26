@@ -1,7 +1,5 @@
 package com.amapola.strategos
 
-import java.io.File
-
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives._
@@ -12,9 +10,9 @@ import com.amapola.strategos.core.declaracion_riesgos.servicios._
 import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.http.rutas.{EjerciciosEvaluacionesEstatusRutas, EjerciciosEvaluacionesRiesgosRutas}
 import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.persistencia.daos.{EjerciciosEvaluacionEstatusDaoImpl, EjerciciosEvaluacionRiesgosDaoImpl}
 import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.servicios.{EjerciciosEvaluacionesEstatusServiceImpl, EjerciciosEvaluacionesRiesgosServiceImpl}
-import com.amapola.strategos.core.procesos.http.rutas.ProcesosRutas
+import com.amapola.strategos.core.procesos.http.rutas.{CaracterizacionRutas, DocumentosCaracterizacionRutas, ProcesosRutas, ProductosServiciosRutas}
 import com.amapola.strategos.core.procesos.persistencia.daos.{CaracterizacionDaoImpl, DocumentosCaracterizacionDaoImpl, ProcesosDaoImpl, ProductosServiciosDaoImpl}
-import com.amapola.strategos.core.procesos.servicios.ProcesosServiciosImpl
+import com.amapola.strategos.core.procesos.servicios.{CaracterizacionServiceImpl, DocumentosCaracterizacionServiceImpl, ProcesosServiciosImpl, ProductosServiciosServiceImpl}
 import com.amapola.strategos.core.responsables.http.rutas.ResponsablesRutas
 import com.amapola.strategos.core.responsables.persistencia.daos.ResponsablesDaoImpl
 import com.amapola.strategos.core.responsables.servicios.ResponsablesServiceImpl
@@ -101,8 +99,18 @@ object Boot extends App {
     val calificacionRiesgoService = new CalificacionRiesgosServiceImpl(
       calificacionRiesgosDao)
 
-    val procesosService = new ProcesosServiciosImpl(
+    val caracterizacionService = new CaracterizacionServiceImpl(
       caracterizacionDao,
+      documentosCaracterizacionDao)
+
+    val productoServiciosService = new ProductosServiciosServiceImpl(
+      productosServiciosDao)
+
+    val documentosCaracterizacionService =
+      new DocumentosCaracterizacionServiceImpl(documentosCaracterizacionDao)
+
+    val procesosService = new ProcesosServiciosImpl(
+      caracterizacionService,
       procesosDao,
       productosServiciosDao,
       documentosCaracterizacionDao)
@@ -133,13 +141,20 @@ object Boot extends App {
       efectosDeclaracionService,
       controlesDeclaracionService,
       ejerciciosRiesgosService,
-      calificacionRiesgoService)
+      calificacionRiesgoService
+    )
 
-    implicit val logsAuditoriaService = new LogsAuditoriaServiceImpl(logsAuditoriaDao)
+    implicit val logsAuditoriaService = new LogsAuditoriaServiceImpl(
+      logsAuditoriaDao)
 
     //Rutas
     val procesosRutes =
       new ProcesosRutas(procesosService, config.archivos.directorio)
+    val caracterizacionRutas = new CaracterizacionRutas(caracterizacionService)
+
+    val productosServiciosRutas = new ProductosServiciosRutas(productoServiciosService)
+
+    val documentosCaracterizacionRutas = new DocumentosCaracterizacionRutas(documentosCaracterizacionService)
 
     val responsablesRoute = new ResponsablesRutas(responsablesService)
 
@@ -192,7 +207,10 @@ object Boot extends App {
       controlesDeclaracionRoute.getPaths ~
       efectosDeclaracionRoute.getPaths ~
       declaracionRiesgosEstatusRoute.getPaths ~
-      declaracionRiesgosRoute.getPaths
+      declaracionRiesgosRoute.getPaths ~
+      caracterizacionRutas.getPaths ~
+      productosServiciosRutas.getPaths ~
+      documentosCaracterizacionRutas.getPaths
 
     Http().bindAndHandle(routes, config.http.host, config.http.port)
   }
