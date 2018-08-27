@@ -49,6 +49,13 @@ trait CausasDeclaracionDao {
     */
   def borrarCausaDeclaracionPorId(id: Long): Future[Boolean]
 
+  /**
+    * Borra todas las causas de riesgo asociadas a una declaración de riesgo
+    * @param riesgoId
+    * @return
+    */
+  def borrarCausasDeclaracionRiesgoPorRiesgoId(riesgoId: Long): Future[Boolean]
+
 }
 
 class CausasDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
@@ -97,17 +104,23 @@ class CausasDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
       result match {
         case Some(causaDecl) =>
           val merge = entidad.merge(causaDecl)
-          db.run(causasDeclaracionRiesgos.filter(_.id === id).map(x => {
-            (
-              x.probabilidad_riesgo_id,
-              x.causa,
-              x.descripcion
-            )
-          }).update((
-            merge.probabilidad_riesgo_id,
-            merge.causa,
-            merge.descripcion.getOrElse("")
-          ))).map(_ == 1)
+          db.run(
+              causasDeclaracionRiesgos
+                .filter(_.id === id)
+                .map(x => {
+                  (
+                    x.probabilidad_riesgo_id,
+                    x.causa,
+                    x.descripcion
+                  )
+                })
+                .update(
+                  (
+                    merge.probabilidad_riesgo_id,
+                    merge.causa,
+                    merge.descripcion.getOrElse("")
+                  )))
+            .map(_ == 1)
         case None => Future.successful(false)
       }
     })
@@ -135,5 +148,20 @@ class CausasDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
     */
   override def borrarCausaDeclaracionPorId(id: Long): Future[Boolean] = {
     db.run(causasDeclaracionRiesgos.filter(_.id === id).delete).map(_ == 1)
+  }
+
+  /**
+    * Borra todas las causas de riesgo asociadas a una declaración de riesgo
+    *
+    * @param riesgoId
+    * @return
+    */
+  override def borrarCausasDeclaracionRiesgoPorRiesgoId(
+      riesgoId: Long): Future[Boolean] = {
+    db.run(
+        causasDeclaracionRiesgos
+          .filter(_.declaracion_riesgo_id === riesgoId)
+          .delete)
+      .map(_ >= 0)
   }
 }

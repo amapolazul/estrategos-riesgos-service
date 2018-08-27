@@ -33,6 +33,13 @@ trait CausasDeclaracionService {
   def borrarCausaDeclaracion(id: Long): Future[Boolean]
 
   /**
+    * Borrar los registros de causas de riesgo de una declaracion de riesgo
+    * @param riesgoId
+    * @return
+    */
+  def borrarCausasDeclaracionPorRiesgoId(riesgoId: Long): Future[Boolean]
+
+  /**
     * Lista los controles declaracion de un riesgo por el id del riesgo
     * @param riesgoId
     * @return
@@ -95,5 +102,16 @@ class CausasDeclaracionServiceImpl(causasDeclaracionDao: CausasDeclaracionDao)(
     result.map(list => {
       list.map(CausasDeclaracionRiesgosJson.fromEntity(_)).toList
     })
+  }
+
+  /**
+    * Borrar los registros de causas de riesgo de una declaracion de riesgo
+    *
+    * @param riesgoId
+    * @return
+    */
+  override def borrarCausasDeclaracionPorRiesgoId(
+      riesgoId: Long): Future[Boolean] = {
+    causasDeclaracionDao.borrarCausasDeclaracionRiesgoPorRiesgoId(riesgoId)
   }
 }

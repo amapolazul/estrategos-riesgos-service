@@ -33,6 +33,13 @@ trait ControlesDeclaracionService {
   def borrarControlDeclaracion(id: Long): Future[Boolean]
 
   /**
+    * Borra los registros de controles de riesgo de una declaracion de riesgo
+    * @param riesgoId
+    * @return
+    */
+  def borrarControlesDeclaracionPorRiesgoId(riesgoId: Long): Future[Boolean]
+
+  /**
     * Lista los controles declaracion de un riesgo por el id del riesgo
     * @param riesgoId
     * @return
@@ -96,5 +103,17 @@ class ControlesDeclaracionServiceImpl(
     result.map(list => {
       list.map(ControlesDeclaracionRiesgosJson.fromEntity(_)).toList
     })
+  }
+
+  /**
+    * Borra los registros de controles de riesgo de una declaracion de riesgo
+    *
+    * @param riesgoId
+    * @return
+    */
+  override def borrarControlesDeclaracionPorRiesgoId(
+      riesgoId: Long): Future[Boolean] = {
+    controlesDeclaracionDao.borrarControlesDeclaracionRiesgoPorRiesgoId(
+      riesgoId)
   }
 }

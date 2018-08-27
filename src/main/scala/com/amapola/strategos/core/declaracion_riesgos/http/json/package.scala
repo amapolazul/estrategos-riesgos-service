@@ -220,7 +220,6 @@ package object json {
       controlesDeclaracionRiesgo: List[ControlesDeclaracionRiesgosJson],
   ) {
     require(causasDeclaracionRiesgo.size >= 1, "Debe existir por lo menos una causa")
-    require(controlesDeclaracionRiesgo.size >= 1, "Debe existir por lo menos un control")
     require(efectosDeclaracionRiesgo.size >= 1, "Debe existir por lo menos un efecto")
   }
 }

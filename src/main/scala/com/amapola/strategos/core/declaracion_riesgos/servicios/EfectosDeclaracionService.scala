@@ -33,6 +33,13 @@ trait EfectosDeclaracionService {
   def borrarEfectoDeclaracion(id: Long): Future[Boolean]
 
   /**
+    * Borra los registros de efectos de riesgo de una declaracion de riesgo
+    * @param riesgoId
+    * @return
+    */
+  def borrarEfectosDeclaracionPorRiesgoId(riesgoId: Long): Future[Boolean]
+
+  /**
     * Lista los controles declaracion de un riesgo por el id del riesgo
     * @param riesgoId
     * @return
@@ -96,5 +103,16 @@ class EfectosDeclaracionServiceImpl(
     result.map(list => {
       list.map(EfectosDeclaracionRiesgosJson.fromEntity(_)).toList
     })
+  }
+
+  /**
+    * Borra los registros de efectos de riesgo de una declaracion de riesgo
+    *
+    * @param riesgoId
+    * @return
+    */
+  override def borrarEfectosDeclaracionPorRiesgoId(
+      riesgoId: Long): Future[Boolean] = {
+    controlesDeclaracionDao.borrarEfectosDeclaracionPorRiesgoId(riesgoId)
   }
 }

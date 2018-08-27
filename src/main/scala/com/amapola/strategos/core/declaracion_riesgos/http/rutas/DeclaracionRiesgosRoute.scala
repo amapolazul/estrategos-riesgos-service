@@ -158,8 +158,7 @@ class DeclaracionRiesgosRoute(
                   complete(
                     StatusCodes.OK,
                     s"Registro actualizado correctamente correctamente: ${result}")
-                }
-                else complete(StatusCodes.NotFound, "Registro no encontrado")
+                } else complete(StatusCodes.NotFound, "Registro no encontrado")
               case Failure(ex) =>
                 logsAuditoriaService.error(
                   "Ha ocurrido un error en actualizarDeclaracionRiesgo",
@@ -185,13 +184,33 @@ class DeclaracionRiesgosRoute(
           onComplete(
             declaracionRiesgoService.borrarDeclaracionRiesgos(riesgoId)) {
             case Success(result) =>
-              if (result)
+              val (elimCausas, elimEfectos, elimControles, elimRiesgo) = result
+              val stringBuilder = new StringBuilder()
+
+              if (!elimCausas)
+                stringBuilder.append(
+                  "Error al eliminar las causas del riesgo\n")
+              if (!elimEfectos)
+                stringBuilder.append(
+                  "Error al eliminar los efectos del riesgo\n")
+              if (!elimControles)
+                stringBuilder.append(
+                  "Error al eliminar los controles del riesgo\n")
+              if (!elimRiesgo)
+                stringBuilder.append("Error al eliminar el riesgo")
+              if (elimCausas && elimEfectos && elimControles && elimRiesgo) {
                 complete(
                   StatusCodes.OK,
                   s"Registro borrado correctamente correctamente: ${result}")
-              else complete(StatusCodes.NotFound, "Registro no encontrado")
+              } else {
+                complete(StatusCodes.InternalServerError,
+                         stringBuilder.toString())
+              }
             case Failure(ex) =>
-              logsAuditoriaService.error("Ha ocurrido un error en borrarDeclaracionRiesgo()", this.getClass.toString, ex)
+              logsAuditoriaService.error(
+                "Ha ocurrido un error en borrarDeclaracionRiesgo()",
+                this.getClass.toString,
+                ex)
               complete(StatusCodes.InternalServerError,
                        s"Ha ocurrido un error: ${ex.getMessage}")
           }

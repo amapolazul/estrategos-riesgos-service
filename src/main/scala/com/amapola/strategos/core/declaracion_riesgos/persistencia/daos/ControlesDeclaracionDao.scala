@@ -49,6 +49,14 @@ trait ControlesDeclaracionDao {
     */
   def borrarControlDeclaracionPorId(id: Long): Future[Boolean]
 
+  /**
+    * Borra los controles de riesgo dado una declaracion de riesgo
+    * @param riesgoId
+    * @return
+    */
+  def borrarControlesDeclaracionRiesgoPorRiesgoId(
+      riesgoId: Long): Future[Boolean]
+
 }
 
 class ControlesDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
@@ -142,5 +150,20 @@ class ControlesDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
     */
   override def borrarControlDeclaracionPorId(id: Long): Future[Boolean] = {
     db.run(controlDeclaracionRiesgos.filter(_.id === id).delete).map(_ == 1)
+  }
+
+  /**
+    * Borra los controles de riesgo dado una declaracion de riesgo
+    *
+    * @param riesgoId
+    * @return
+    */
+  override def borrarControlesDeclaracionRiesgoPorRiesgoId(
+      riesgoId: Long): Future[Boolean] = {
+    db.run(
+        controlDeclaracionRiesgos
+          .filter(_.declaracion_riesgo_id === riesgoId)
+          .delete)
+      .map(_ >= 0)
   }
 }

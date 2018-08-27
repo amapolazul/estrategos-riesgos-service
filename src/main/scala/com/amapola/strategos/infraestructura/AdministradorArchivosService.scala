@@ -52,8 +52,7 @@ object AdministradorArchivosServiceImpl extends AdministradorArchivosService {
     * @param nombreArchivo
     */
   def borrarArchivo(nombreArchivo: String): Boolean = {
-    val archivo = new File(s"$directorio/$nombreArchivo")
+    val archivo = new File(directorio, nombreArchivo)
     archivo.delete()
   }
-
 }

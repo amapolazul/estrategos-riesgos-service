@@ -49,6 +49,13 @@ trait EfectosDeclaracionDao {
     */
   def borrarEfectoDeclaracionPorId(id: Long): Future[Boolean]
 
+  /**
+    * Borra todos los efectos de una declaracion de riesgo
+    * @param riesgoId
+    * @return
+    */
+  def borrarEfectosDeclaracionPorRiesgoId(riesgoId: Long): Future[Boolean]
+
 }
 
 class EfectosDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
@@ -98,21 +105,22 @@ class EfectosDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
         case Some(causaDecl) =>
           val merge = entidad.merge(causaDecl)
           db.run(
-            efectosDeclaracionRiesgos
-              .filter(_.id === id)
-              .map(x => {
-                (
-                  x.impacto_riesgos_id,
-                  x.impacto,
-                  x.descripcion,
-                )
-              })
-              .update(
-                (
-                  merge.impacto_riesgos_id,
-                  merge.impacto,
-                  merge.descripcion.getOrElse(""),
-                ))).map(_ == 1)
+              efectosDeclaracionRiesgos
+                .filter(_.id === id)
+                .map(x => {
+                  (
+                    x.impacto_riesgos_id,
+                    x.impacto,
+                    x.descripcion,
+                  )
+                })
+                .update(
+                  (
+                    merge.impacto_riesgos_id,
+                    merge.impacto,
+                    merge.descripcion.getOrElse(""),
+                  )))
+            .map(_ == 1)
         case None => Future.successful(false)
       }
     })
@@ -140,5 +148,20 @@ class EfectosDeclaracionDaoImpl(val databaseConnector: DatabaseConnector)(
     */
   override def borrarEfectoDeclaracionPorId(id: Long): Future[Boolean] = {
     db.run(efectosDeclaracionRiesgos.filter(_.id === id).delete).map(_ == 1)
+  }
+
+  /**
+    * Borra todos los efectos de una declaracion de riesgo
+    *
+    * @param riesgoId
+    * @return
+    */
+  override def borrarEfectosDeclaracionPorRiesgoId(
+      riesgoId: Long): Future[Boolean] = {
+    db.run(
+        efectosDeclaracionRiesgos
+          .filter(_.declaracion_riesgo_id === riesgoId)
+          .delete)
+      .map(_ == 1)
   }
 }
