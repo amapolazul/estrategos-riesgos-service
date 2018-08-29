@@ -200,9 +200,61 @@ class DeclaracionRiesgoServiceImpl(
       controlAct <- crearActualizarControlesDeclaracion(
         id,
         declaracionRiesgo.controlesDeclaracionRiesgo)
+      efectoBor <- eliminarEfectosDeclaracion(declaracionRiesgo.efectosEliminar)
+      causasBor <- eliminarCausasDeclaracion(declaracionRiesgo.causasEliminar)
+      controlBor <- eliminarControlesDeclaracion(
+        declaracionRiesgo.controlesEliminar)
     } yield {
       riesgoActualizacion && !causaAct.exists(_ == 0) && !efectpAct.exists(
-        _ == 0l) && !controlAct.exists(_ == 0l)
+        _ == 0l) && !controlAct.exists(_ == 0l) && efectoBor && causasBor && controlBor
+    }
+  }
+
+  /**
+    * Elimina los efectos de una declaracion de riesgo
+    * @param listOpt
+    * @return
+    */
+  private def eliminarEfectosDeclaracion(listOpt: Option[List[Long]]) = {
+    listOpt match {
+      case Some(efectos) =>
+        val borrarFuture =
+          efectos.map(x => efectosDeclaracionService.borrarEfectoDeclaracion(x))
+        Future.sequence(borrarFuture).map(x => x.reduce(_ && _))
+      case None =>
+        Future.successful(true)
+    }
+  }
+
+  /**
+    * Elimina las causas de una declaracion de riesgo
+    * @param listOpt
+    * @return
+    */
+  private def eliminarCausasDeclaracion(listOpt: Option[List[Long]]) = {
+    listOpt match {
+      case Some(causas) =>
+        val borrarFuture =
+          causas.map(x => causasDeclaracionService.borrarCausaDeclaracion(x))
+        Future.sequence(borrarFuture).map(x => x.reduce(_ && _))
+      case None =>
+        Future.successful(true)
+    }
+  }
+
+  /**
+    * Elimina las controles de una declaracion de riesgo
+    * @param listOpt
+    * @return
+    */
+  private def eliminarControlesDeclaracion(listOpt: Option[List[Long]]) = {
+    listOpt match {
+      case Some(controles) =>
+        val borrarFuture = controles.map(x =>
+          controlesDeclaracionService.borrarControlDeclaracion(x))
+        Future.sequence(borrarFuture).map(x => x.reduce(_ && _))
+      case None =>
+        Future.successful(true)
     }
   }
 
@@ -246,8 +298,12 @@ class DeclaracionRiesgoServiceImpl(
             } yield {
               val declaracion = DeclaracionRiesgosJson.fromEntity(x)
               val fechaEjercicio = ejercicio.map(_.fecha_creacion_ejercicio)
+              val color = calificacion match {
+                case Some(e) => Some(e.color)
+                case None => Some("Rojo")
+              }
               declaracion.copy(fecha_ejercicio = fechaEjercicio,
-                               calificacion_riesgo = calificacion.map(_.color))
+                               calificacion_riesgo = color)
             }
           })
           .toList
@@ -277,8 +333,12 @@ class DeclaracionRiesgoServiceImpl(
             } yield {
               val declaracion = DeclaracionRiesgosJson.fromEntity(x)
               val fechaEjercicio = ejercicio.map(_.fecha_creacion_ejercicio)
+              val color = calificacion match {
+                case Some(e) => Some(e.color)
+                case None => Some("Rojo")
+              }
               declaracion.copy(fecha_ejercicio = fechaEjercicio,
-                               calificacion_riesgo = calificacion.map(_.color))
+                calificacion_riesgo = color)
             }
           })
           .toList

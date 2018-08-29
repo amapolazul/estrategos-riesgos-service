@@ -162,7 +162,7 @@ class DeclaracionRiesgosDaoImpl(val databaseConnector: DatabaseConnector)(
     db.run(
       declaracionesRiesgos
         .filter(_.proceso_id === procesoId)
-        .filter(_.tipo_riesgo_id === 1l)
+        .filter(_.estatus_riesgo_id === 1l)
         .result)
   }
 

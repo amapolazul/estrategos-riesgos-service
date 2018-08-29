@@ -218,6 +218,9 @@ package object json {
       causasDeclaracionRiesgo: List[CausasDeclaracionRiesgosJson],
       efectosDeclaracionRiesgo: List[EfectosDeclaracionRiesgosJson],
       controlesDeclaracionRiesgo: List[ControlesDeclaracionRiesgosJson],
+      causasEliminar: Option[List[Long]] = None,
+      efectosEliminar: Option[List[Long]] = None,
+      controlesEliminar: Option[List[Long]] = None,
   ) {
     require(causasDeclaracionRiesgo.size >= 1, "Debe existir por lo menos una causa")
     require(efectosDeclaracionRiesgo.size >= 1, "Debe existir por lo menos un efecto")
