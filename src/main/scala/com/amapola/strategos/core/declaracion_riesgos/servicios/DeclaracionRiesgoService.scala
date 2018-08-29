@@ -33,7 +33,8 @@ trait DeclaracionRiesgoService {
     * @param id
     * @return
     */
-  def borrarDeclaracionRiesgos(id: Long): Future[(Boolean, Boolean, Boolean ,Boolean)]
+  def borrarDeclaracionRiesgos(
+      id: Long): Future[(Boolean, Boolean, Boolean, Boolean)]
 
   /**
     * Lista todas las declaraciones de riesgo por un ejercicio de evaluacion de riesgo
@@ -191,13 +192,13 @@ class DeclaracionRiesgoServiceImpl(
         id,
         declaracionEntity)
       causaAct <- crearActualizarCausasDeclaracion(
-        declaracionEntity.ejercicio_riesgo_id,
+        id,
         declaracionRiesgo.causasDeclaracionRiesgo)
       efectpAct <- crearActualizarEfectosDeclaracion(
-        declaracionEntity.ejercicio_riesgo_id,
+        id,
         declaracionRiesgo.efectosDeclaracionRiesgo)
       controlAct <- crearActualizarControlesDeclaracion(
-        declaracionEntity.ejercicio_riesgo_id,
+        id,
         declaracionRiesgo.controlesDeclaracionRiesgo)
     } yield {
       riesgoActualizacion && !causaAct.exists(_ == 0) && !efectpAct.exists(
@@ -211,7 +212,8 @@ class DeclaracionRiesgoServiceImpl(
     * @param id
     * @return
     */
-  override def borrarDeclaracionRiesgos(id: Long): Future[(Boolean, Boolean, Boolean ,Boolean)] = {
+  override def borrarDeclaracionRiesgos(
+      id: Long): Future[(Boolean, Boolean, Boolean, Boolean)] = {
     for {
       elimCausas <- causasDeclaracionService.borrarCausasDeclaracionPorRiesgoId(
         id)
