@@ -244,9 +244,9 @@ class ProcesosServiciosImpl(
     */
   override def borrarProceso(procesoId: Long): Future[(Boolean, Boolean, Boolean)] = {
     for {
+      borrarProceso <- procesosDao.borrarProceso(procesoId)
       borrarCaracterizaciones <- caracterizacionService.borrarCaracterizacionesPorProcesoId(procesoId)
       borrarProductosServicios <- productosServiciosDao.borrarProductosServiciosPorProcesoId(procesoId)
-      borrarProceso <- procesosDao.borrarProceso(procesoId)
     } yield {
       (borrarCaracterizaciones, borrarProductosServicios, borrarProceso)
     }
