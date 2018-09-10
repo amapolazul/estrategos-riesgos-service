@@ -6,7 +6,7 @@ import com.amapola.strategos.utils.db.DatabaseConnector
 /**
   * clase que modela la tabla de causas_riesgos en la base de datos
   */
-private[tablas_sistema] trait CausasRiesgosTable {
+trait CausasRiesgosTable {
 
   protected val databaseConnector: DatabaseConnector
   import databaseConnector.profile.api._

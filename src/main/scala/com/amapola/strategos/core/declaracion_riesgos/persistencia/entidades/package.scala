@@ -51,7 +51,7 @@ package object entidades {
       id: Option[Long] = None,
       probabilidad_riesgo_id: Long,
       declaracion_riesgo_id: Option[Long],
-      causa: String,
+      causa: Long,
       descripcion: Option[String]
   ) {
 

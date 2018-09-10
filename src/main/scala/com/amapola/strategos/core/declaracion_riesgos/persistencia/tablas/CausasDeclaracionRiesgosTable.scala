@@ -4,8 +4,12 @@ import com.amapola.strategos.core.declaracion_riesgos.persistencia.entidades.{
   CausasDeclaracionRiesgosEntidad,
   DeclaracionRiesgosEntidad
 }
+import com.amapola.strategos.core.tablas_sistema.persistencia.entidades
 import com.amapola.strategos.core.tablas_sistema.persistencia.entidades.ProbabilidadRiesgosEntidad
-import com.amapola.strategos.core.tablas_sistema.persistencia.tablas.ProbabilidadRiesgosTable
+import com.amapola.strategos.core.tablas_sistema.persistencia.tablas.{
+  CausasRiesgosTable,
+  ProbabilidadRiesgosTable
+}
 import com.amapola.strategos.utils.db.DatabaseConnector
 import slick.lifted.ForeignKeyQuery
 
@@ -14,18 +18,21 @@ import slick.lifted.ForeignKeyQuery
   */
 private[declaracion_riesgos] trait CausasDeclaracionRiesgosTable
     extends ProbabilidadRiesgosTable
-    with DeclaracionRiesgosTable {
+    with DeclaracionRiesgosTable
+    with CausasRiesgosTable {
 
   protected val databaseConnector: DatabaseConnector
   import databaseConnector.profile.api._
 
   class CausasDeclaracionRiesgos(tag: Tag)
-      extends Table[CausasDeclaracionRiesgosEntidad](tag, "causas_declaracion_riesgos") {
+      extends Table[CausasDeclaracionRiesgosEntidad](
+        tag,
+        "causas_declaracion_riesgos") {
 
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def probabilidad_riesgo_id = column[Long]("probabilidad_riesgo_id")
     def declaracion_riesgo_id = column[Long]("declaracion_riesgo_id")
-    def causa = column[String]("causa")
+    def causa = column[Long]("causa")
     def descripcion = column[String]("descripcion")
 
     def causasProbabilidadRiesgosFk
@@ -43,6 +50,13 @@ private[declaracion_riesgos] trait CausasDeclaracionRiesgosTable
                  declaracionesRiesgos)(_.id,
                                        onUpdate = ForeignKeyAction.Restrict,
                                        onDelete = ForeignKeyAction.Cascade)
+
+    def causasRiesgosFk
+      : ForeignKeyQuery[CausasRiesgos, entidades.CausasRiesgosEntidad] =
+      foreignKey("CAUSAS_RIESGO_FK", declaracion_riesgo_id, causasRiesgos)(
+        _.id,
+        onUpdate = ForeignKeyAction.Restrict,
+        onDelete = ForeignKeyAction.Cascade)
 
     override def * =
       (

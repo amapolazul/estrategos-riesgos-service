@@ -39,7 +39,7 @@ CREATE TABLE causas_declaracion_riesgos (
     id BIGINT IDENTITY(1,1) PRIMARY KEY,
     probabilidad_riesgo_id BIGINT FOREIGN KEY REFERENCES probabilidad_riesgos(id) ON UPDATE CASCADE ON DELETE NO ACTION,
     declaracion_riesgo_id BIGINT FOREIGN KEY REFERENCES declaracion_riesgos(id) ON UPDATE CASCADE ON DELETE NO ACTION,
-    causa VARCHAR(255) NOT NULL,
+    causa BIGINT FOREIGN KEY REFERENCES causas_riesgos(id) ON UPDATE CASCADE ON DELETE NO ACTION,
     descripcion VARCHAR(255)
 );
 

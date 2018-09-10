@@ -116,12 +116,11 @@ package object json {
       id: Option[Long] = None,
       probabilidad_riesgo_id: Long,
       declaracion_riesgo_id: Option[Long],
-      causa: String,
+      causa: Long,
       descripcion: Option[String] = None
   ) {
     require(probabilidad_riesgo_id > 0,
             "El campo probabilidad_riesgo_id debe ser mayor a 0")
-    require(!causa.isEmpty, "El campo causa no puede ser vacio")
   }
 
   object CausasDeclaracionRiesgosJson {
