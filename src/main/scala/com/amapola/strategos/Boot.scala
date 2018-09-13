@@ -141,7 +141,8 @@ object Boot extends App {
       efectosDeclaracionService,
       controlesDeclaracionService,
       ejerciciosRiesgosService,
-      calificacionRiesgoService
+      calificacionRiesgoService,
+      causasRiesgosServiceImpl
     )
 
     implicit val logsAuditoriaService = new LogsAuditoriaServiceImpl(

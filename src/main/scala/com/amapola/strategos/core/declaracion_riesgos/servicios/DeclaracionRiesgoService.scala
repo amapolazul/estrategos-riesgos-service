@@ -3,7 +3,10 @@ package com.amapola.strategos.core.declaracion_riesgos.servicios
 import com.amapola.strategos.core.declaracion_riesgos.http.json._
 import com.amapola.strategos.core.declaracion_riesgos.persistencia.daos.DeclaracionRiesgosDao
 import com.amapola.strategos.core.ejercicios_evaluacion_riesgos.servicios.EjerciciosEvaluacionesRiesgosService
-import com.amapola.strategos.core.tablas_sistema.servicios.CalificacionRiesgosService
+import com.amapola.strategos.core.tablas_sistema.servicios.{
+  CalificacionRiesgosService,
+  CausasRiesgosService
+}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -59,6 +62,13 @@ trait DeclaracionRiesgoService {
     */
   def traerDeclaracionRiesgoPorId(
       declaracionRiesgoId: Long): Future[Option[DeclaracionRiesgosRequestJson]]
+
+  /**
+    * Consulta todas las declaraciones de riesgo de un ejercicio y las clasifica por la causa
+    * @param ejercicioId
+    */
+  def traerDeclaracionesPorCausasDeRiesgo(
+      ejercicioId: Long): Future[List[DeclaracionRiesgosCausa]]
 }
 
 class DeclaracionRiesgoServiceImpl(
@@ -67,7 +77,8 @@ class DeclaracionRiesgoServiceImpl(
     efectosDeclaracionService: EfectosDeclaracionService,
     controlesDeclaracionService: ControlesDeclaracionService,
     ejerciciosEvaluacionesRiesgosService: EjerciciosEvaluacionesRiesgosService,
-    calificacionRiesgosService: CalificacionRiesgosService)(
+    calificacionRiesgosService: CalificacionRiesgosService,
+    causasRiesgosService: CausasRiesgosService)(
     implicit executionContext: ExecutionContext)
     extends DeclaracionRiesgoService {
 
@@ -300,7 +311,7 @@ class DeclaracionRiesgoServiceImpl(
               val fechaEjercicio = ejercicio.map(_.fecha_creacion_ejercicio)
               val color = calificacion match {
                 case Some(e) => Some(e.color)
-                case None => Some("Rojo")
+                case None    => Some("Rojo")
               }
               declaracion.copy(fecha_ejercicio = fechaEjercicio,
                                calificacion_riesgo = color)
@@ -335,10 +346,10 @@ class DeclaracionRiesgoServiceImpl(
               val fechaEjercicio = ejercicio.map(_.fecha_creacion_ejercicio)
               val color = calificacion match {
                 case Some(e) => Some(e.color)
-                case None => Some("Rojo")
+                case None    => Some("Rojo")
               }
               declaracion.copy(fecha_ejercicio = fechaEjercicio,
-                calificacion_riesgo = color)
+                               calificacion_riesgo = color)
             }
           })
           .toList
@@ -373,5 +384,39 @@ class DeclaracionRiesgoServiceImpl(
         )
       })
     }
+  }
+
+  /**
+    * Consulta todas las declaraciones de riesgo de un ejercicio y las clasifica por la causa
+    *
+    * @param ejercicioId
+    */
+  override def traerDeclaracionesPorCausasDeRiesgo(
+      ejercicioId: Long): Future[List[DeclaracionRiesgosCausa]] = {
+    val result: Future[Future[List[DeclaracionRiesgosCausa]]] = for {
+      causas <- causasRiesgosService.traerCausasRiesgo()
+      riesgosEjercicio <- listarDeclaracionesRiesgoPorEjercicioId(ejercicioId)
+    } yield {
+      val results = causas.flatMap(causa => {
+        riesgosEjercicio.map(riesgo => {
+          val riesgoId = riesgo.id.getOrElse(
+            throw new Exception("Id de riesgo no encontrado"))
+          causasDeclaracionService
+            .listarCausasDeclaracionPorRiesgoId(riesgoId)
+            .map(declaraciones => {
+              DeclaracionRiesgosCausa(
+                name = causa.causa_riesgo,
+                value = declaraciones
+                  .count(_.causa == causa.id.getOrElse(
+                    throw new Exception("Causa no encontrada")))
+                  .toLong
+              )
+            })
+        })
+      })
+      Future.sequence(results)
+    }
+
+    result.flatten
   }
 }

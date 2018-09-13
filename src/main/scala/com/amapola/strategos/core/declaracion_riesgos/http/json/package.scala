@@ -23,7 +23,6 @@ package object json {
       fecha_actualizacion: Long,
       fecha_ejercicio: Option[Long] = None,
       calificacion_riesgo: Option[String] = None
-
   ) {
     require(proceso_id > 0, "El campo proceso_id debe ser mayor a 0")
     require(ejercicio_riesgo_id > 0,
@@ -34,7 +33,8 @@ package object json {
     require(estatus_riesgo_id > 0,
             "El campo estatus_riesgo_id debe ser mayor a 0")
     require(!factor_riesgo.isEmpty, "El campo factor_riesgo no puede ser vacio")
-    require(!efectividad_controles.isEmpty, "El campo efectividad_controles no puede ser vacio")
+    require(!efectividad_controles.isEmpty,
+            "El campo efectividad_controles no puede ser vacio")
     require(!probabilidad.isEmpty, "El campo probabilidad no puede ser vacio")
     require(!impacto.isEmpty, "El campo impacto no puede ser vacio")
     require(!severidad.isEmpty, "El campo severidad no puede ser vacio")
@@ -221,7 +221,14 @@ package object json {
       efectosEliminar: Option[List[Long]] = None,
       controlesEliminar: Option[List[Long]] = None,
   ) {
-    require(causasDeclaracionRiesgo.size >= 1, "Debe existir por lo menos una causa")
-    require(efectosDeclaracionRiesgo.size >= 1, "Debe existir por lo menos un efecto")
+    require(causasDeclaracionRiesgo.size >= 1,
+            "Debe existir por lo menos una causa")
+    require(efectosDeclaracionRiesgo.size >= 1,
+            "Debe existir por lo menos un efecto")
   }
+
+  case class DeclaracionRiesgosCausa(
+      name: String,
+      value: Long
+  )
 }

@@ -37,7 +37,8 @@ class DeclaracionRiesgosRoute(
         traerRiesgoCompletoPorId() ~
         crearDeclaracionRiesgo() ~
         actualizarDeclaracionRiesgo() ~
-        borrarDeclaracionRiesgo()
+        borrarDeclaracionRiesgo() ~
+        declaracionRiesgosPorCausa()
 
     }
   }
@@ -213,6 +214,26 @@ class DeclaracionRiesgosRoute(
                 ex)
               complete(StatusCodes.InternalServerError,
                        s"Ha ocurrido un error: ${ex.getMessage}")
+          }
+        }
+      }
+    }
+  }
+
+  private def declaracionRiesgosPorCausa() = pathPrefix("charts") {
+    pathPrefix("causas") {
+      pathEndOrSingleSlash {
+        get {
+          parameter('ejercicioId) { ejercicioId =>
+            onComplete(
+              declaracionRiesgoService.traerDeclaracionesPorCausasDeRiesgo(
+                ejercicioId.toLong)) {
+              case Success(result) =>
+                complete(StatusCodes.OK, result)
+              case Failure(ex) =>
+                complete(StatusCodes.InternalServerError,
+                         s"Ha ocurrido un error: ${ex.getMessage}")
+            }
           }
         }
       }
