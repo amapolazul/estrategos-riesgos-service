@@ -220,6 +220,10 @@ class DeclaracionRiesgosRoute(
     }
   }
 
+  /**
+    * Consulta los datos para crear la grafica de
+    * @return
+    */
   private def declaracionRiesgosPorCausa() = pathPrefix("charts") {
     pathPrefix("causas") {
       pathEndOrSingleSlash {
