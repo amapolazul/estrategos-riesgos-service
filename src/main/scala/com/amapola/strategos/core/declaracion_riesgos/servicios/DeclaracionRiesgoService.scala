@@ -393,30 +393,28 @@ class DeclaracionRiesgoServiceImpl(
     */
   override def traerDeclaracionesPorCausasDeRiesgo(
       ejercicioId: Long): Future[List[DeclaracionRiesgosCausa]] = {
-    val result: Future[Future[List[DeclaracionRiesgosCausa]]] = for {
+    val result = for {
       causas <- causasRiesgosService.traerCausasRiesgo()
       riesgosEjercicio <- listarDeclaracionesRiesgoPorEjercicioId(ejercicioId)
     } yield {
-      val results = causas.flatMap(causa => {
-        riesgosEjercicio.map(riesgo => {
+      val results = causas.map(causa => {
+        val riesgosTotal = riesgosEjercicio.map(riesgo => {
           val riesgoId = riesgo.id.getOrElse(
             throw new Exception("Id de riesgo no encontrado"))
           causasDeclaracionService
             .listarCausasDeclaracionPorRiesgoId(riesgoId)
             .map(declaraciones => {
-              DeclaracionRiesgosCausa(
-                name = causa.causa_riesgo,
-                value = declaraciones
-                  .count(_.causa == causa.id.getOrElse(
-                    throw new Exception("Causa no encontrada")))
-                  .toLong
-              )
+              declaraciones
+                .count(_.causa == causa.id.getOrElse(
+                  throw new Exception("Causa no encontrada")))
+                .toLong
             })
         })
+
+        Future.sequence(riesgosTotal).map(x => DeclaracionRiesgosCausa(causa.causa_riesgo, x.reduce(_ + _)))
       })
       Future.sequence(results)
     }
-
     result.flatten
   }
 }
